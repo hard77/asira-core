@@ -56,14 +56,10 @@ const kukie =new Cookies()
                 <DropdownToggle nav caret style={{ color:"inherit",textDecoration:"none"}}>
                 <label><i className="fas fa-university"></i> Bank</label>
                 </DropdownToggle>
-                <DropdownMenu className="menuDropDown" style={{border:"1px solid black",marginBottom:"20px"}}>
-                  <DropdownItem>
-                 <Link to="/tambahbank" style={{color:"inherit",textDecoration:"none"}}>Tambah</Link>                   
-                  </DropdownItem>
-                  <DropdownItem>
-                  <Link to="/listbank" style={{color:"inherit",textDecoration:"none"}}>List</Link>                
-                  </DropdownItem>   
-                </DropdownMenu>
+              <DropdownMenu className="menuDropDown" style={{border:"1px solid black",marginBottom:"20px"}}>
+                 <Link to="/tambahbank" style={{color:"inherit",textDecoration:"none"}}><DropdownItem>Tambah</DropdownItem></Link>                   
+                 <Link to="/listbank" style={{color:"inherit",textDecoration:"none"}}>  <DropdownItem>List </DropdownItem>   </Link>                
+              </DropdownMenu>
               </UncontrolledDropdown>
             <Link to="/profileNasabah" ><label><i className="fas fa-user-friends"></i> Nasabah</label></Link>
             <Link to="/permintaanpinjaman"><label><i className="fas fa-hand-holding-usd"></i> Pinjaman</label></Link>
@@ -72,12 +68,8 @@ const kukie =new Cookies()
                 <label><i className="fas fa-concierge-bell"></i> Layanan</label>
                 </DropdownToggle>
                 <DropdownMenu className="menuDropDown" style={{border:"1px solid black",marginBottom:"20px"}}>
-                  <DropdownItem>
-                 <Link to="/tambahlayanan" style={{color:"inherit",textDecoration:"none"}}>Tambah</Link>                   
-                  </DropdownItem>
-                  <DropdownItem>
-                  <Link to="/listlayanan" style={{color:"inherit",textDecoration:"none"}}>List</Link>                
-                  </DropdownItem>   
+                  <Link to="/tambahlayanan" style={{color:"inherit",textDecoration:"none"}}><DropdownItem>Tambah</DropdownItem></Link>                   
+                  <Link to="/listlayanan" style={{color:"inherit",textDecoration:"none"}}> <DropdownItem>List</DropdownItem></Link>                
                 </DropdownMenu>
               </UncontrolledDropdown>
             
@@ -86,12 +78,8 @@ const kukie =new Cookies()
                 <label><i className="fas fa-money-check-alt"></i> Product</label>
                 </DropdownToggle>
                 <DropdownMenu className="menuDropDown" style={{border:"1px solid black",marginBottom:"20px"}}>
-                  <DropdownItem>
-                 <Link to="/" style={{color:"inherit",textDecoration:"none"}}>Tambah</Link>                   
-                  </DropdownItem>
-                  <DropdownItem>
-                  <Link to="/" style={{color:"inherit",textDecoration:"none"}}>List</Link>                
-                  </DropdownItem>   
+                 <Link to="/" style={{color:"inherit",textDecoration:"none"}}><DropdownItem>Tambah </DropdownItem></Link>                   
+                 <Link to="/" style={{color:"inherit",textDecoration:"none"}}><DropdownItem>List </DropdownItem>  </Link>                                  
                 </DropdownMenu>
               </UncontrolledDropdown>
            
