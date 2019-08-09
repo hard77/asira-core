@@ -1,0 +1,27 @@
+.loginContainer{
+    width: 450px;
+    height: 400px;
+    background-color: #f7f7f7;
+    position: absolute;
+    top:150px;
+    right: 15%;
+  
+}
+.form-control{
+    width: 50%;
+    margin-left: 112px;
+    margin-top: 5px;
+}
+.loginBtn{
+    border: 1px solid black;
+    margin-top: 10px;
+    width: 50%;
+    height: 40px;
+    border-radius: 5px;
+    background-color: #47525E;
+    color: white;
+}
+.loginBtn:hover{
+    color: black;
+    background-color: white;
+}
