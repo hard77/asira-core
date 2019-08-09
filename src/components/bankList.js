@@ -2,35 +2,56 @@ import React from 'react'
 import Cookies from 'universal-cookie';
 import { Redirect } from 'react-router-dom'
 import Loader from 'react-loader-spinner'
+import {Link} from 'react-router-dom'
 
 const cookie = new Cookies()
 
 class BankList extends React.Component{
     state={
-        loading:true
+        loading:true,rows:[{
+            "id":1
+        }]
     }
 
     renderJSX = () => {
-        if (this.state.loading){
-            return  (
-              <tr  key="zz">
-                <td align="center" colSpan={6}>
-                      <Loader 
-                  type="Circles"
-                  color="#00BFFF"
-                  height="40"	
-                  width="40"
-              />   
-                </td>
-              </tr>
-            )
-        }else{
+        // if (this.state.loading){
+        //     return  (
+        //       <tr  key="zz">
+        //         <td align="center" colSpan={6}>
+        //               <Loader 
+        //           type="Circles"
+        //           color="#00BFFF"
+        //           height="40"	
+        //           width="40"
+        //       />   
+        //         </td>
+        //       </tr>
+        //     )
+        // }else{
           
-        }
-            
-            
-         
-        
+        // }
+        var jsx = this.state.rows.map((val,index)=>{
+            return(
+                <tr key={index}>
+                <td align="center">{val.id}</td>
+                <td align="center">Bla bla bla</td>
+                <td align="center">Bla bla bla</td>
+                <td align="center">Bla bla bla</td>
+                <td align="center">
+                    <Link to={`/bankedit/${val.id}`} className="mr-2">
+                         <i class="fas fa-edit" style={{color:"black",fontSize:"18px"}}/>
+                    </Link>
+                    <Link to={`/bankdetail/${val.id}`} >
+                         <i class="fas fa-eye" style={{color:"black",fontSize:"18px"}}/>
+                    </Link>
+                </td>
+        </tr>  
+            )
+                   
+        })
+                     
+        return jsx;
+
     }
 
     render(){

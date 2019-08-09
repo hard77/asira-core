@@ -12,6 +12,11 @@ import PageNotFound from './components/404'
 
 import TambahBank from './components/bankAdd'
 import ListBank from './components/bankList'
+import EditBank from './components/bankEdit'
+import DetailBank from './components/bankDetail'
+
+
+
 import LayananAdd from './components/layananAdd'
 import LayananList from './components/layananList'
 
@@ -119,8 +124,14 @@ class App extends React.Component {
                     <Route path="/permintaanpinjamanDetail/:idLoan/:idBorrower" component={PermintaanPinjamanDetail}></Route>
                     <Route path='/pinjamansetuju' component={PinjamanSetuju}></Route>
                     <Route path='/pinjamanrejected' component={PinjamanRejected}></Route>
+
                     <Route path='/tambahbank' component={TambahBank}></Route>
                     <Route path='/listbank' component={ListBank}></Route>
+                    <Route path='/bankedit/:id' component={EditBank}></Route>
+                    <Route path='/bankdetail/:id' component={DetailBank}></Route>
+
+
+
                     <Route path='/tambahlayanan' component={LayananAdd}></Route>
                     <Route path='/listlayanan' component={LayananList}></Route>
 
