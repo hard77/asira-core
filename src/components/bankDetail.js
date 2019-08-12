@@ -13,70 +13,76 @@ class BankDetail extends React.Component{
                    
                    <form>
                         <div className="form-group row">
-                            <label className="col-sm-2 col-form-label">ID Bank</label>
-                            <div className="col-sm-10">
+                            <label className="col-sm-4 col-form-label">ID Bank</label>
+                            <div className="col-sm-8">
+                            : BABABA
 
                             </div>
                         </div>
                         <div className="form-group row">
-                            <label className="col-sm-2 col-form-label">Nama Bank</label>
-                            <div className="col-sm-10">
+                            <label className="col-sm-4 col-form-label">Nama Bank</label>
+                            <div className="col-sm-8">
+                            : BABABA
 
                             </div>
                         </div>
                         <div className="form-group row">
-                            <label className="col-sm-2 col-form-label">Tipe Bank</label>
-                            <div className="col-sm-10">
+                            <label className="col-sm-4 col-form-label">Tipe Bank</label>
+                            <div className="col-sm-8">
+                                : BABABA
+                            </div>
+                        </div>
+                        <div className="form-group row">
+                            <label className="col-sm-4 col-form-label">Alamat Bank</label>
+                            <div className="col-sm-8">
+                                 : BABABA
+                            </div>
+                        </div>
+                        <div className="form-group row">
+                            <label className="col-sm-4 col-form-label">Provinsi</label>
+                            <div className="col-sm-8">
+                                 : BABABA
+                            </div>
+                        </div>
+                        <div className="form-group row">
+                            <label className="col-sm-4 col-form-label">Kota</label>
+                            <div className="col-sm-8">
+                                 : BABABA
+                            </div>
+                        </div>
+                        <div className="form-group row">
+                            <label className="col-sm-4 col-form-label">Jenis Layanan</label>
+                            <div className="col-sm-8">
+                            : BABABA
 
                             </div>
                         </div>
                         <div className="form-group row">
-                            <label className="col-sm-2 col-form-label">Alamak Bank</label>
-                            <div className="col-sm-10">
+                            <label className="col-sm-4 col-form-label">Jenis Product</label>
+                            <div className="col-sm-8">
+                            : BABABA
 
                             </div>
                         </div>
                         <div className="form-group row">
-                            <label className="col-sm-2 col-form-label">Provinsi</label>
-                            <div className="col-sm-10">
+                            <label className="col-sm-4 col-form-label">Nama PIC</label>
+                            <div className="col-sm-8">
+                            : BABABA
 
                             </div>
                         </div>
                         <div className="form-group row">
-                            <label className="col-sm-2 col-form-label">Kota</label>
-                            <div className="col-sm-10">
+                            <label className="col-sm-4 col-form-label">Tanggal Bergabung</label>
+                            <div className="col-sm-8">
+                                 : BABABA
 
                             </div>
                         </div>
                         <div className="form-group row">
-                            <label className="col-sm-2 col-form-label">Jenis Layanan</label>
-                            <div className="col-sm-10">
-
-                            </div>
-                        </div>
-                        <div className="form-group row">
-                            <label className="col-sm-2 col-form-label">Jenis Product</label>
-                            <div className="col-sm-10">
-
-                            </div>
-                        </div>
-                        <div className="form-group row">
-                            <label className="col-sm-2 col-form-label">Nama PIC</label>
-                            <div className="col-sm-10">
-
-                            </div>
-                        </div>
-                        <div className="form-group row">
-                            <label className="col-sm-2 col-form-label">Tanggal Bergabung</label>
-                            <div className="col-sm-10">
-
-                            </div>
-                        </div>
-                        <div className="form-group row">
-                            <label className="col-sm-2 col-form-label">
-                                <input type="button" className="btn btn btn-secondary" value="Back" onClick={()=>  window.history.back()}/>
+                            <label className="col-sm-4 col-form-label">
+                                <input type="button" className="btn btn btn-secondary" value="Kembali" onClick={()=>  window.history.back()}/>
                             </label>
-                            <div className="col-sm-10">
+                            <div className="col-sm-8">
 
                             </div>
                         </div>

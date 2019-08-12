@@ -122,7 +122,7 @@ class Main extends React.Component{
                             </div>
                         </div>
                         <div className="form-group row">
-                            <label className="col-sm-2 col-form-label">Jenis Product</label>
+                            <label className="col-sm-2 col-form-label">Jenis Produk</label>
                             <div className="col-sm-10">
                                 <div>
                                 <Select
@@ -131,7 +131,7 @@ class Main extends React.Component{
                                 isMulti={true}
                                 options={options}
                                 styles={customStyles}
-                                placeholder="Jenis Product"
+                                placeholder="Jenis Produk"
                             />
 
                                 </div>
