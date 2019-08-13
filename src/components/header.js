@@ -78,8 +78,8 @@ const kukie =new Cookies()
                 <label><i className="fas fa-money-check-alt"></i> Product</label>
                 </DropdownToggle>
                 <DropdownMenu className="menuDropDown" style={{border:"1px solid black",marginBottom:"20px"}}>
-                 <Link to="/" style={{color:"inherit",textDecoration:"none"}}><DropdownItem>Tambah </DropdownItem></Link>                   
-                 <Link to="/" style={{color:"inherit",textDecoration:"none"}}><DropdownItem>List </DropdownItem>  </Link>                                  
+                 <Link to="/tambahproduct" style={{color:"inherit",textDecoration:"none"}}><DropdownItem>Tambah </DropdownItem></Link>                   
+                 <Link to="/listproduct" style={{color:"inherit",textDecoration:"none"}}><DropdownItem>List </DropdownItem>  </Link>                                  
                 </DropdownMenu>
               </UncontrolledDropdown>
            

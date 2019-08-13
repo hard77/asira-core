@@ -31,6 +31,10 @@ import PermintaanPinjaman from './components/permintaanPinjaman'
 import PermintaanPinjamanDetail from './components/permintaanPinjamanDetail'
 import PinjamanSetuju from './components/pinjamanSetuju'
 import PinjamanRejected from './components/pinjamanRejected'
+
+import ProductAdd from './components/productAdd'
+import ProductList from './components/productList'
+
 import Cookies from 'universal-cookie';
 import axios from 'axios'
 
@@ -130,7 +134,9 @@ class App extends React.Component {
                     <Route path='/bankedit/:id' component={EditBank}></Route>
                     <Route path='/bankdetail/:id' component={DetailBank}></Route>
 
-
+                    <Route path='/tambahproduct' component={ProductAdd}></Route>
+                    <Route path='/listproduct' component={ProductList}></Route>
+                  
 
                     <Route path='/tambahlayanan' component={LayananAdd}></Route>
                     <Route path='/listlayanan' component={LayananList}></Route>

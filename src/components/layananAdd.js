@@ -37,20 +37,17 @@ class LayananAdd extends React.Component{
         var str=''
         var layanan =this.refs.namaLayanan.value
         var nilai =  document.querySelector('.messageCheckbox').checked;
-        nilai ? str+="Aktif" : str +="tidak aktif"
-  
+        //nilai ? str+="Aktif" : str +="tidak aktif"
+        
         var pic = this.state.selectedFile
-        // var this_function= function(result){
-        //     console.log(result)
-        // }
-        // this.getBase64(pic,this_function)
+  
         var reader = new FileReader();
         reader.readAsDataURL(pic);
         reader.onload = function () {
-            alert(str)
+            alert(nilai)
             alert(reader.result.replace("data:image/jpeg;base64,",""))
             alert(layanan)
-               
+           
         };
         reader.onerror = function (error) {
           console.log('Error: ', error);
@@ -86,7 +83,7 @@ class LayananAdd extends React.Component{
                             <label className="col-sm-3 col-form-label">Status</label>
                             <div className="col-sm-9">
                             <input className="form-check-input messageCheckbox AddStyleButtonCheckbox" value="active" type="checkbox" /> 
-                            <label style={{position:"relative",left:"150px",paddingTop:"2px"}} >Aktif</label>           
+                            <label style={{position:"relative",left:"145px",paddingTop:"5px"}} >Aktif</label>           
                             </div>
                     </div>
                     <div className="form-group row">
