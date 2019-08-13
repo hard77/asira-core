@@ -1,7 +1,7 @@
 import React from 'react'
 import Cookies from 'universal-cookie';
 import { Redirect } from 'react-router-dom'
-import Loader from 'react-loader-spinner'
+//import Loader from 'react-loader-spinner'
 import {Link} from 'react-router-dom'
 
 const cookie = new Cookies()

@@ -34,13 +34,12 @@ class LayananAdd extends React.Component{
 
     btnSimpanLayanan = ()=>{
       
-        var str=''
         var layanan =this.refs.namaLayanan.value
         var nilai =  document.querySelector('.messageCheckbox').checked;
+        //var str=''
         //nilai ? str+="Aktif" : str +="tidak aktif"
         
         var pic = this.state.selectedFile
-  
         var reader = new FileReader();
         reader.readAsDataURL(pic);
         reader.onload = function () {

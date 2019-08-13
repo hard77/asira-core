@@ -36,7 +36,6 @@ class ProductAdd extends React.Component{
         this.setState({ selectedOption });
         console.log(`Option selected:`, selectedOption);
       };
-   
     render(){
         if(cookie.get('token') && cookie.get('tokenClient')){
             return(
@@ -52,15 +51,10 @@ class ProductAdd extends React.Component{
                         </div>
                         </div>
                         <div className="form-group row">
-                        <label className="col-sm-2 col-form-label">Jangka Waktu</label>
+                        <label className="col-sm-2 col-form-label">Jangka Waktu (Bulan)</label>
                             <div className="col-sm-10 form-inline" >
-                                <select ref="jangkaWaktu" className="form-control" style={{width:"80px"}}>
-                                        <option defaultValue={0}>...</option>
-                                        <option value={1}>1 </option>
-                                        <option value={2}>2 </option>
-                                        <option value={3}>3 </option>
-                                        <option value={4}>4 </option>
-                                        <option value={5}>5 </option>
+                                <select ref="jangkaWaktuDari" className="form-control" style={{width:"150px"}}>
+                                        <option defaultValue={0}>=== DARI ===</option>
                                         <option value={6}>6 </option>
                                         <option value={7}>7 </option>
                                         <option value={8}>8 </option>
@@ -68,13 +62,61 @@ class ProductAdd extends React.Component{
                                         <option value={10}>10 </option>
                                         <option value={11}>11 </option>
                                         <option value={12}>12 </option> 
+                                        <option value={13}>13 </option>
+                                        <option value={14}>14 </option>
+                                        <option value={15}>15 </option> 
+                                        <option value={16}>16 </option>
+                                        <option value={17}>17 </option>
+                                        <option value={18}>18 </option> 
+                                        <option value={19}>19 </option>
+                                        <option value={20}>20 </option>
+                                        <option value={21}>21 </option>
+                                        <option value={22}>22 </option>
+                                        <option value={23}>23 </option> 
+                                        <option value={24}>24 </option>
+                                        <option value={25}>25 </option>
+                                        <option value={26}>26 </option> 
+                                        <option value={27}>27 </option>
+                                        <option value={28}>28 </option>
+                                        <option value={29}>29 </option> 
+                                        <option value={30}>30 </option>    
+
                                 </select>
-                                <label className="ml-2">Bulan</label>
+                                <label className="ml-5">s/d</label>
+                                
+                                <select  ref="jangkaWaktuSampai" className="form-control" style={{width:"150px"}}>
+                                        <option defaultValue={0}>=== HINGGA ===</option>
+                                        <option value={12}>12 </option> 
+                                        <option value={13}>13 </option>
+                                        <option value={14}>14 </option>
+                                        <option value={15}>15 </option> 
+                                        <option value={16}>16 </option>
+                                        <option value={17}>17 </option>
+                                        <option value={18}>18 </option> 
+                                        <option value={19}>19 </option>
+                                        <option value={20}>20 </option>
+                                        <option value={21}>21 </option>
+                                        <option value={22}>22 </option>
+                                        <option value={23}>23 </option> 
+                                        <option value={24}>24 </option>
+                                        <option value={25}>25 </option>
+                                        <option value={26}>26 </option> 
+                                        <option value={27}>27 </option>
+                                        <option value={28}>28 </option>
+                                        <option value={29}>29 </option> 
+                                        <option value={30}>30 </option>
+                                        <option value={31}>31 </option>
+                                        <option value={32}>32 </option>
+                                        <option value={33}>33 </option>
+                                        <option value={34}>34 </option>
+                                        <option value={35}>35 </option>
+                                        <option value={36}>36 </option>
+                                </select>
                             </div>
                         </div>
 
                         <div className="form-group row">
-                        <label className="col-sm-2 col-form-label">Bunga/ Imbal Hasil</label>
+                        <label className="col-sm-2 col-form-label">Imbal Hasil</label>
                         <div className="col-sm-10 form-inline">
                             <input type="text" className="form-control" ref="bunga" style={{width:"80px"}} placeholder="" /> 
                             <label className="ml-2">%</label>
@@ -159,7 +201,7 @@ class ProductAdd extends React.Component{
                                 <div className="col">
                                     <div className="form-check form-check-inline">
                                     <input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1" style={{marginLeft:"110px"}}/>
-                                    <label className="form-check-label" >Kios/ Lapak</label>
+                                    <label className="form-check-label">Kios/ Lapak</label>
                                     </div>
 
                                     <div className="form-check form-check-inline">

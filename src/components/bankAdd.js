@@ -31,23 +31,41 @@ const options = [
   }
 class Main extends React.Component{
       state = {
-        selectedOption: null,
+        selectedOption: null, errorMessage: null
       };
+      componentWillReceiveProps(newProps){
+        this.setState({errorMessage:newProps.error})
+    }
       handleChange = (selectedOption) => {
         this.setState({ selectedOption });
         console.log(`Option selected:`, selectedOption);
       };
 
     btnSaveBank =()=>{
+        var arr = []
         // console.log(this.refs.namaBank.value)
         // console.log(this.refs.tipeBank.value)
         // console.log(this.refs.alamat.value)
         // console.log(this.refs.provinsi.value)
         // console.log(this.refs.kota.value)
         // console.log(this.refs.layanan.value)
-        
+        //console.log(this.state.selectedOption)
+       
+
+        // if(this.refs.namaBank.value === "" || this.refs.tipeBank.value ==="0" || this.refs.alamat.value ==="" ||
+        // this.refs.provinsi.value==="0" || this.refs.kota.value==="0" || this.refs.PIC.value ==="" || this.refs.telp.value===""){
+        //     this.setState({errorMessage:"Data masih ada yang kosong"})
+        // }else{
+        //     this.setState({errorMessage:null})
+        //   alert("gas axios kl ke isi semua")
+        // }
       
-       alert(this.state.selectedOption)
+        for (var i=0; i<this.state.selectedOption.length;i++){
+            arr.push (this.state.selectedOption[i].value)
+        }
+        
+        console.log(arr)
+      
 
 
 
@@ -57,20 +75,27 @@ class Main extends React.Component{
             return(
                 <div className="container mt-2">
                      <h3>Bank - Tambah</h3>
+                 
                      <hr/>
-                     
+                     <div className="form-group row">
+                            <div className="col-12" style={{color:"red",fontSize:"15px",textAlign:'center'}}>
+                                    {this.state.errorMessage}
+                            </div>
+                                
+                     </div>
                     <form>
                         <div className="form-group row">
+                            
                         <label className="col-sm-2 col-form-label">Nama Bank</label>
                         <div className="col-sm-10">
-                            <input type="text" className="form-control" ref="namaBank" placeholder="Input Nama Bank.." />
+                            <input type="text" required className="form-control" ref="namaBank" placeholder="Input Nama Bank.." />
                         </div>
                         </div>
                         <div className="form-group row">
                         <label className="col-sm-2 col-form-label">Tipe Bank</label>
                         <div className="col-sm-10" >
                             <select ref="tipeBank" className="form-control">
-                                <option defaultValue={0}>Choose...</option>
+                                <option value={0}>====== Pilih Tipe Bank =====</option>
                                 <option value={1}>One</option>
                                 <option value={2}>Two</option>
                                 <option value={3}>Three</option>
@@ -88,7 +113,7 @@ class Main extends React.Component{
                             <label className="col-sm-2 col-form-label">Provinsi</label>
                             <div className="col-sm-10">
                             <select ref="provinsi" className="form-control">
-                                <option defaultValue={0}>Choose...</option>
+                                <option value={0}>===== Pilih Provinsi =====</option>
                                 <option value={1}>One</option>
                                 <option value={2}>Two</option>
                                 <option value={3}>Three</option>
@@ -99,7 +124,7 @@ class Main extends React.Component{
                             <label className="col-sm-2 col-form-label">Kota</label>
                             <div className="col-sm-10">
                             <select ref="kota" className="form-control">
-                                <option defaultValue={0}>Choose...</option>
+                                <option value={0}>===== Pilih Kota =====</option>
                                 <option value={1}>One</option>
                                 <option value={2}>Two</option>
                                 <option value={3}>Three</option>
@@ -154,6 +179,7 @@ class Main extends React.Component{
 
 
                     </form>
+                    
                    
                 </div>
             )
