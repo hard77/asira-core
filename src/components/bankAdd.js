@@ -8,18 +8,18 @@ import swal from 'sweetalert'
 
 const cookie = new Cookies()
 
-const options = [
-    { value: 'chocolate', label: 'Chocolate'},
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' },
-  ];
+// const options = [
+//     { value: 'chocolate', label: 'Chocolate'},
+//     { value: 'strawberry', label: 'Strawberry' },
+//     { value: 'vanilla', label: 'Vanilla' },
+//   ];
 
   const customStyles = {
     option: (provided, state) => ({
       ...provided,
       borderBottom: '1px dotted pink',
       color: state.isSelected ? 'red' : 'grey',
-      padding: 20,
+      padding: 20, 
     }),
     control: () => ({
       // none of react-select's styles are passed to <Control />
@@ -40,8 +40,11 @@ class Main extends React.Component{
       state = {
        jenisProduct:null, jenisLayanan: null, 
        errorMessage: null, diKlik:false,
-       typeBank:[]
+       typeBank:[],bankService:[],bankProduct:[],
+       provinsi:[],kabupaten:[],idProvinsi:null
       };
+
+
 
       componentWillReceiveProps(newProps){
         this.setState({errorMessage:newProps.error})
@@ -59,7 +62,84 @@ class Main extends React.Component{
 
       componentDidMount(){
           this.getBankType()
+          this.getBankService()
+          this.getBankProduct()
+          this.getAllProvinsi()
       }
+      getAllProvinsi = () =>{
+        axios.get("https://cors-anywhere.herokuapp.com/http://dev.farizdotid.com/api/daerahindonesia/provinsi")
+        .then((res)=>{
+            console.log(res.data.semuaprovinsi)
+            this.setState({provinsi:res.data.semuaprovinsi})
+           
+        })
+        .catch((err)=> console.log(err))
+      }
+
+      getAllKabupaten = (id) =>{
+        axios.get(`https://cors-anywhere.herokuapp.com/http://dev.farizdotid.com/api/daerahindonesia/provinsi/${id}/kabupaten`)
+        .then((res)=>{
+            console.log(res.data.kabupatens)
+            this.setState({kabupaten:res.data.kabupatens})
+           
+        })
+        .catch((err)=> console.log(err))
+      }
+      getBankProduct = ()=>{
+        var config = {
+            headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
+          };
+        axios.get(serverUrl+'admin/service_products',config)
+        .then((res)=>{
+            console.log(res.data)
+            this.setState({bankProduct:res.data.data})
+        })
+        .catch((err)=> console.log(err))
+      }
+
+      getBankService = ()=>{
+        var config = {
+            headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
+          };
+        axios.get(serverUrl+'admin/bank_services',config)
+        .then((res)=>{
+            console.log(res.data)
+            this.setState({bankService:res.data.data})
+        })
+        .catch((err)=> console.log(err))
+      }
+      renderJenisLayananJsx = ()=>{
+          var jsx = this.state.bankService.map((val,index)=>{
+              return {id:val.id, value: val.name, label: val.name}
+          })
+          return jsx
+      }
+        renderJenisProductJsx = ()=>{
+        var jsx = this.state.bankProduct.map((val,index)=>{
+            return {id:val.id, value: val.service, label: val.service}
+        })
+        return jsx
+         }
+
+        
+       renderProvinsiJsx = ()=>{
+            var jsx = this.state.provinsi.map((val,index)=>{
+                return (
+                    <option key={index} value={val.id+"T"+val.nama} > {val.nama} </option>
+                )
+            })
+            return jsx
+        }
+        renderKabupatenJsx = ()=>{
+            var jsx = this.state.kabupaten.map((val,index)=>{
+                return (
+                    <option key={index} value={val.nama}>{val.id_prov} - {val.nama}</option>
+                )
+            })
+            return jsx
+        }
+
+
       getBankType = () => {
         var config = {
             headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
@@ -87,19 +167,16 @@ class Main extends React.Component{
         var name = this.refs.namaBank.value
         var type = this.refs.tipeBank.value
         var address = this.refs.alamat.value
-        var province =  this.refs.provinsi.value
+        var province =  this.refs.provinsi.value.slice(this.refs.provinsi.value.indexOf('T')+1,this.refs.provinsi.value.length)
         var city = this.refs.kota.value
         var pic_name = this.refs.pic_name.value
         var phone = this.refs.telp.value
-        
-        //service dan product
-       
 
         if(this.state.jenisLayanan===null || this.state.jenisProduct===null || 
         this.refs.namaBank.value === "" || this.refs.tipeBank.value ==="0" || 
         this.refs.alamat.value ==="" || this.refs.provinsi.value==="0" || 
         this.refs.kota.value==="0" || this.refs.pic_name.value ==="" || this.refs.telp.value===""){
-            this.setState({errorMessage:"Data masih ada yang kosong"})
+            this.setState({errorMessage:"Harap cek ulang masih ada data yang belum terisi"})
         }else{
             
             
@@ -171,11 +248,9 @@ class Main extends React.Component{
                         <div className="form-group row">
                             <label className="col-sm-2 col-form-label">Provinsi</label>
                             <div className="col-sm-10">
-                            <select ref="provinsi" className="form-control">
+                            <select onChange={()=>this.getAllKabupaten(this.refs.provinsi.value.slice(0,this.refs.provinsi.value.indexOf('T')))} ref="provinsi" className="form-control">
                                 <option value={0}>===== Pilih Provinsi =====</option>
-                                <option value={1}>One</option>
-                                <option value={2}>Two</option>
-                                <option value={3}>Three</option>
+                               {this.renderProvinsiJsx()}
                             </select>
                             </div>
                         </div>
@@ -184,9 +259,7 @@ class Main extends React.Component{
                             <div className="col-sm-10">
                             <select ref="kota" className="form-control">
                                 <option value={0}>===== Pilih Kota =====</option>
-                                <option value={1}>One</option>
-                                <option value={2}>Two</option>
-                                <option value={3}>Three</option>
+                                {this.renderKabupatenJsx()}
                             </select>
                             </div>
                         </div>
@@ -198,7 +271,7 @@ class Main extends React.Component{
                                 value={this.state.jenisLayanan}
                                 onChange={this.handleChangejenisLayanan}
                                 isMulti={true}
-                                options={options}
+                                options={this.renderJenisLayananJsx()}
                                 styles={customStyles}
                                 placeholder="Jenis Layanan"
                                 
@@ -210,10 +283,11 @@ class Main extends React.Component{
                             <div className="col-sm-10">
                                 <div>
                                 <Select
-                                value={this.state.selectedOption}
+                                
+                                value={this.state.jenisProduct}
                                 onChange={this.handleChangejenisProduct}
                                 isMulti={true}
-                                options={options}
+                                options={this.renderJenisProductJsx()}
                                 styles={customStyles}
                                 placeholder="Jenis Produk"
                             />
