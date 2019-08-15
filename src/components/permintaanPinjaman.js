@@ -8,6 +8,8 @@ import {serverUrl} from './url'
 import {Link} from 'react-router-dom'
 import Loader from 'react-loader-spinner'
 import QueryString from 'query-string'
+import Moment from 'react-moment'
+
 
 
 const kukie = new Cookie()
@@ -304,7 +306,7 @@ getDataPreviousPage=()=>{
     if (this.state.loading){
       return  (
         <tr>
-          <td align="center" colSpan={6}>
+          <td align="center" colSpan={9}>
                 <Loader 
             type="Circles"
             color="#00BFFF"
@@ -321,7 +323,7 @@ getDataPreviousPage=()=>{
     if(this.state.rows.length===0){
       return(
         <tr>
-           <td align="center" colSpan={6}>Data empty</td>
+           <td align="center" colSpan={9}>Data empty</td>
         </tr>
       )
     }else{
@@ -331,7 +333,11 @@ getDataPreviousPage=()=>{
               <td align="center">{this.state.page >0 ? index+1 + (this.state.rowsPerPage*(this.state.page -1)) : index+1}</td>
               <td align="center">{val.id}</td>
               <td align="center">{val.owner_name}</td>
-              <td align="center">{val.created_time.substr(0, val.created_time.indexOf('T'))}</td>
+              <td align="center"> - </td>
+              <td align="center"> - </td>
+              <td align="center"> - </td>
+              <td align="center"><Moment date={val.created_time} format=" DD  MMMM  YYYY" /></td>
+              <td align="center">{val.status}</td>
               <td align="center">
               <Link style={{textDecoration:"none"}} to={`/permintaanpinjamanDetail/${val.id}/${val.owner.Int64}`}>
               <input type="button" className="btn btn-primary" value="Details"></input>
@@ -353,25 +359,32 @@ if(kukie.get("tokenClient")&&kukie.get("token")){
       
     return (
         <div className="container">
-        <nav className="navbar">
-          <h2>Permintaan Pinjaman</h2>
-          <input type="text" className="form-control" placeholder="Search" ref="search" style={{width:"300px"}}></input>
-          <input type="button" className="btn btn-primary" onClick={this.onBtnSearch} value="Search"></input>
-        </nav>
+        <div className="row">
+                        <div className="col-7">
+                             <h2 className="mt-3">Permintaan Pinjaman</h2>
+                        </div>
+                        <div className="col-4 mt-3 ml-5">
+                        <div className="input-group">
+                            <input type="text" className="form-control" ref="search" placeholder="Search Bank.." />
+                            <span className="input-group-addon ml-2" style={{border:"1px solid grey",width:"35px",height:"35px",paddingTop:"2px",borderRadius:"4px",paddingLeft:"2px",marginTop:"6px",cursor:"pointer"}} onClick={this.onBtnSearch}> 
+                            <i className="fas fa-search" style={{fontSize:"28px"}} ></i></span>
+                        </div>
+                        </div>
+                    </div>
         <hr></hr>
           <table className="table table-hover">
           <thead className="table-warning" style={{fontWeight:'bold'}}>
 
               <tr>
-              <td align="center">#</td>
-                  <td align="center">Id Pinjaman</td>
-                  <td align="center">Nama Nasabah</td>
-                  <td align="center">Bank Akun</td>
-                  <td align="center">Layanan</td>
-                  <td align="center">Product</td>
-                  <td align="center">Tanggal Pengajuan</td>
-                  <td align="center">Status Pinjaman</td>
-                  <td align="center">Action</td>
+                  <th className="text-center" scope="col">#</th>
+                  <th className="text-center" scope="col">Id Pinjaman</th>
+                  <th className="text-center" scope="col">Nama Nasabah</th>
+                  <th className="text-center" scope="col">Bank Akun</th>
+                  <th className="text-center" scope="col">Layanan</th>
+                  <th className="text-center" scope="col">Produk</th>
+                  <th className="text-center" scope="col">Tanggal Pengajuan</th>
+                  <th className="text-center" scope="col">Status Pinjaman</th>
+                  <th className="text-center" scope="col">Action</th>
               </tr>     
           </thead>
             <tbody>
@@ -383,9 +396,9 @@ if(kukie.get("tokenClient")&&kukie.get("token")){
           </table>
           <hr></hr>
           <nav className="navbar" style={{float:"right"}}> 
-                  <p className="mr-2" style={{cursor:"pointer"}} onClick={this.getDataPreviousPage}>Prev</p> 
-                  {this.getNumberOfPages()} 
-                  <p style={{cursor:"pointer"}} onClick={this.getDataNextPage}>Next</p>
+            <p className="mr-2" style={{cursor:"pointer"}} onClick={this.getDataPreviousPage}><i className="fas fa-arrow-left"></i></p> 
+                {this.getNumberOfPages()} 
+            <p style={{cursor:"pointer"}}  onClick={this.getDataNextPage}><i className="fas fa-arrow-right"></i></p>
           </nav>
         </div>
       
