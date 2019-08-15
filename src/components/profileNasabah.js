@@ -128,9 +128,9 @@ getLink = ()=>{
       };
       if(this.state.searchRows){
         if (!isNaN(this.state.searchRows)){
-          newLink += `id=${this.state.rowsPerPage}&page=${this.state.page-1}`
+          newLink += `id=${this.state.searchRows}&page=${this.state.page-1}`
         }else{
-          newLink += `fullname=${this.state.rowsPerPage}&page=${this.state.page-1}`
+          newLink += `fullname=${this.state.searchRows}&page=${this.state.page-1}`
         }
       }else{
         newLink+=`page=${this.state.page-1}`
@@ -368,21 +368,28 @@ getLink = ()=>{
 if(kukie.get("tokenClient")&&kukie.get("token")){
     return (
         <div className="container">
-        <nav className="navbar">
-          <h2>Nasabah List</h2>
-          <input type="text" className="form-control" placeholder="Search" ref="search"></input>
-          <input type="button" className="btn btn-primary" onClick={this.onBtnSearch} value="Search"></input>
-        </nav>
+         <div className="row">
+                        <div className="col-6">
+                             <h2 className="mt-3">Nasabah - List</h2>
+                        </div>
+                        <div className="col-5 mt-3 ml-5">
+                        <div className="input-group">
+                            <input type="text" className="form-control" ref="search" placeholder="Search.." style={{width:"150px"}} />
+                            <span className="input-group-addon ml-2" style={{border:"1px solid grey",width:"35px",height:"35px",paddingTop:"2px",borderRadius:"4px",paddingLeft:"2px",marginTop:"6px",cursor:"pointer"}} onClick={this.onBtnSearch}> 
+                            <i className="fas fa-search" style={{fontSize:"28px"}} ></i></span>
+                        </div>
+                        </div>
+          </div>
         <hr></hr>
           <table className="table table-hover">
           <thead className="table-warning">
               <tr>
-              <td align="center">#</td>
-                  <td align="center">Id Nasabah</td>
-                  <td align="center">Nama Nasabah</td>
-                  <td align="center">Tanggal Registrasi</td>
+                  <th className="text-center" scope="col">#</th>
+                  <th className="text-center" scope="col">Id Nasabah</th>
+                  <th className="text-center" scope="col">Nama Nasabah</th>
+                  <th  className="text-center" scope="col">Tanggal Registrasi</th>
                   {/* <TableCell align="center">Status Nasabah</TableCell> */}
-                  <td align="center">Action</td>
+                  <th  className="text-center" scope="col">Action</th>
                  
               </tr>     
           </thead>
@@ -395,9 +402,9 @@ if(kukie.get("tokenClient")&&kukie.get("token")){
           </table>
                 <hr/>
                 <nav className="navbar" style={{float:"right"}}> 
-                <p className="mr-2" style={{cursor:"pointer"}} onClick={this.getDataPreviousPage}>Prev</p> 
+                <p className="mr-2" style={{cursor:"pointer"}} onClick={this.getDataPreviousPage}><i className="fas fa-arrow-left"></i></p> 
                 {this.getNumberOfPages()} 
-                <p style={{cursor:"pointer"}}  onClick={this.getDataNextPage}>Next</p>
+                <p style={{cursor:"pointer"}}  onClick={this.getDataNextPage}><i className="fas fa-arrow-right"></i></p>
                
           </nav>
         </div>
