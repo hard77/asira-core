@@ -3,7 +3,7 @@ import axios from 'axios'
 import swal from 'sweetalert'
 
 import Loader from 'react-loader-spinner'
-
+import Moment from 'react-moment';
 import {connect } from 'react-redux'
 import Cookie from 'universal-cookie'
 import { Redirect } from 'react-router-dom'
@@ -344,11 +344,11 @@ getLink = ()=>{
             <td align="center">{this.state.page >0 ? index+1 + (this.state.rowsPerPage*(this.state.page -1)) : index+1}</td>
             <td align="center">{val.id}</td>
             <td align="center">{val.fullname}</td>
-            <td align="center">{val.created_time.substr(0, val.created_time.indexOf('T'))}</td>
+            <td align="center"><Moment date={val.created_time} format=" DD  MMMM  YYYY" /></td>
             {/* <TableCell align="center">{val.status}</TableCell> */}
             <td align="center">
             <Link style={{textDecoration:"none"}} to={`/profileNasabahDetail/${val.id}`}>
-                <input type="button" className="btn btn-primary" value="Details"/>
+              <i class="fas fa-eye" style={{color:"black",fontSize:"28px",marginRight:"10px"}}/>
             </Link>
             </td>
         </tr>
