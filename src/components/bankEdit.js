@@ -176,7 +176,7 @@ class BankEdit extends React.Component{
             var config = {
                 headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
               };
-           // axios.patch(serverUrl+'admin/banks/[bank_id]',newData,config)
+           
             axios.patch(serverUrl+`admin/banks/${id}`,newData,config)
             .then((res)=>{
                 swal("Success","Data berhasil di edit","success")
