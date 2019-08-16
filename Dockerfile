@@ -19,4 +19,5 @@ CMD npm install\
 && npm start
 
 EXPOSE 3000
+EXPOSE 3001
 EXPOSE 35729
