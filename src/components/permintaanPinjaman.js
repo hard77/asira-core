@@ -340,7 +340,7 @@ getDataPreviousPage=()=>{
               <td align="center">{val.status}</td>
               <td align="center">
               <Link style={{textDecoration:"none"}} to={`/permintaanpinjamanDetail/${val.id}/${val.owner.Int64}`}>
-              <input type="button" className="btn btn-primary" value="Details"></input>
+              <i class="fas fa-eye" style={{color:"black",fontSize:"28px",marginRight:"10px"}}/>
               </Link>
               </td>
             </tr>
