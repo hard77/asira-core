@@ -9,12 +9,15 @@ class LayananList extends React.Component{
     state={
         loading:true
     }
+    componentDidMount (){
+        
+    }
 
     renderJSX = () => {
         if (this.state.loading){
             return  (
               <tr  key="zz">
-                <td align="center" colSpan={6}>
+                <td align="center" colSpan={5}>
                       <Loader 
                   type="Circles"
                   color="#00BFFF"
@@ -25,7 +28,8 @@ class LayananList extends React.Component{
               </tr>
             )
         }else{
-          
+
+            
         }
             
             
@@ -41,11 +45,11 @@ class LayananList extends React.Component{
                    <table className="table table-hover">
                    <thead className="table-warning">
                         <tr >
-                            <td align="center">#</td>
-                            <td align="center">Id Layanan</td>
-                            <td align="center">Nama Layanan</td>
-                            <td align="center">Status Layanan</td>
-                            <td align="center">Action</td>
+                            <th className="text-center" scope="col">#</th>
+                            <th className="text-center" scope="col">Id Layanan</th>
+                            <th className="text-center" scope="col">Nama Layanan</th>
+                            <th className="text-center" scope="col">Status Layanan</th>
+                            <th className="text-center" scope="col">Action</th>  
                         </tr>     
                     </thead>
                        <tbody>
