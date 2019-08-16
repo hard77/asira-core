@@ -61,7 +61,7 @@ class BankEdit extends React.Component{
         this.getBankDataById()
     }
     getBankDataById = ()=>{
-        
+        var id = this.props.match.params.id
         var config = {
             headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
           };
