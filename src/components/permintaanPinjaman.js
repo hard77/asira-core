@@ -333,9 +333,9 @@ getDataPreviousPage=()=>{
               <td align="center">{this.state.page >0 ? index+1 + (this.state.rowsPerPage*(this.state.page -1)) : index+1}</td>
               <td align="center">{val.id}</td>
               <td align="center">{val.owner_name}</td>
-              <td align="center"> - </td>
-              <td align="center"> - </td>
-              <td align="center"> - </td>
+              <td align="center"> {val.type} </td>
+              <td align="center"> {val.services === undefined ? "null" : val.services.toString()} </td>
+              <td align="center"> {val.products === undefined ? "null" : val.products.toString()} </td>
               <td align="center"><Moment date={val.created_time} format=" DD  MMMM  YYYY" /></td>
               <td align="center">{val.status}</td>
               <td align="center">
