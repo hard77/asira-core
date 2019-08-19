@@ -54,12 +54,15 @@ class LayananList extends React.Component{
                       <tr key={index}>
                         <td align="center">{this.state.page >0 ? index+1 + (this.state.rowsPerPage*(this.state.page -1)) : index+1}</td>
                         <td align="center">{val.id}</td>
-                        <td align="center">{val.owner_name}</td>
-               
+                        <td align="center">{val.name}</td>
+                        <td align="center">{val.status}</td>               
                         <td align="center">
-                        <Link style={{textDecoration:"none"}} to={`/permintaanpinjamanDetai}`}>
-                        <input type="button" className="btn btn-primary" value="Details"></input>
-                        </Link>
+                        <Link to={`/layananedit/${val.id}`} className="mr-2">
+                         <i className="fas fa-edit" style={{color:"black",fontSize:"18px"}}/>
+                         </Link>
+                        <Link to={`/layanandetail/${val.id}`} >
+                         <i className="fas fa-eye" style={{color:"black",fontSize:"18px"}}/>
+                    </Link>
                         </td>
                       </tr>
                   )
