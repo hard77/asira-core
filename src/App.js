@@ -16,7 +16,7 @@ import EditBank from './components/bankEdit'
 import DetailBank from './components/bankDetail'
 
 
-
+import LayananEdit from './components/layananEdit'
 import LayananAdd from './components/layananAdd'
 import LayananList from './components/layananList'
 
@@ -137,7 +137,7 @@ class App extends React.Component {
                     <Route path='/tambahproduct' component={ProductAdd}></Route>
                     <Route path='/listproduct' component={ProductList}></Route>
                   
-
+                    <Route path='/layananedit/:id' component={LayananEdit}></Route>
                     <Route path='/tambahlayanan' component={LayananAdd}></Route>
                     <Route path='/listlayanan' component={LayananList}></Route>
 
