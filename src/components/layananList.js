@@ -2,6 +2,9 @@ import React from 'react'
 import Cookies from 'universal-cookie';
 import { Redirect } from 'react-router-dom'
 import Loader from 'react-loader-spinner'
+import { serverUrl } from './url';
+import axios from 'axios'
+import {Link} from 'react-router-dom'
 
 const cookie = new Cookies()
 
@@ -9,12 +12,26 @@ class LayananList extends React.Component{
     state={
         loading:true
     }
+    componentDidMount (){
+        this.getAllList()
+    }
+    getAllList = ()=>{
+        var config = {
+            headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
+          };
+
+        axios.get(serverUrl+`admin/bank_services`,config)
+        .then((res)=>{
+            this.setState({loading:false,rows:res.data.data})
+        })
+        .catch((err)=>console.log(err))
+    }
 
     renderJSX = () => {
         if (this.state.loading){
             return  (
               <tr  key="zz">
-                <td align="center" colSpan={6}>
+                <td align="center" colSpan={5}>
                       <Loader 
                   type="Circles"
                   color="#00BFFF"
@@ -25,7 +42,36 @@ class LayananList extends React.Component{
               </tr>
             )
         }else{
-          
+            if(this.state.rows.length===0){
+                return(
+                  <tr>
+                     <td align="center" colSpan={6}>Data empty</td>
+                  </tr>
+                )
+              }else{
+                var jsx = this.state.rows.map((val,index)=>{
+                  return (
+                      <tr key={index}>
+                        <td align="center">{this.state.page >0 ? index+1 + (this.state.rowsPerPage*(this.state.page -1)) : index+1}</td>
+                        <td align="center">{val.id}</td>
+                        <td align="center">{val.name}</td>
+                        <td align="center">{val.status}</td>               
+                        <td align="center">
+                        <Link to={`/layananedit/${val.id}`} className="mr-2">
+                         <i className="fas fa-edit" style={{color:"black",fontSize:"18px"}}/>
+                         </Link>
+                        <Link to={`/layanandetail/${val.id}`} >
+                         <i className="fas fa-eye" style={{color:"black",fontSize:"18px"}}/>
+                    </Link>
+                        </td>
+                      </tr>
+                  )
+              })
+               return jsx;
+              }
+
+
+            
         }
             
             
@@ -41,11 +87,11 @@ class LayananList extends React.Component{
                    <table className="table table-hover">
                    <thead className="table-warning">
                         <tr >
-                            <td align="center">#</td>
-                            <td align="center">Id Layanan</td>
-                            <td align="center">Nama Layanan</td>
-                            <td align="center">Status Layanan</td>
-                            <td align="center">Action</td>
+                            <th className="text-center" scope="col">#</th>
+                            <th className="text-center" scope="col">Id Layanan</th>
+                            <th className="text-center" scope="col">Nama Layanan</th>
+                            <th className="text-center" scope="col">Status Layanan</th>
+                            <th className="text-center" scope="col">Action</th>  
                         </tr>     
                     </thead>
                        <tbody>
