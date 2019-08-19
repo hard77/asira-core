@@ -2,6 +2,9 @@ import React from 'react'
 import Cookies from 'universal-cookie';
 import { Redirect } from 'react-router-dom'
 import Loader from 'react-loader-spinner'
+import { serverUrl } from './url';
+import axios from 'axios'
+import {Link} from 'react-router-dom'
 
 const cookie = new Cookies()
 
@@ -10,7 +13,18 @@ class LayananList extends React.Component{
         loading:true
     }
     componentDidMount (){
-        
+        this.getAllList()
+    }
+    getAllList = ()=>{
+        var config = {
+            headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
+          };
+
+        axios.get(serverUrl+`admin/bank_services`,config)
+        .then((res)=>{
+            this.setState({loading:false,rows:res.data.data})
+        })
+        .catch((err)=>console.log(err))
     }
 
     renderJSX = () => {
@@ -28,6 +42,31 @@ class LayananList extends React.Component{
               </tr>
             )
         }else{
+            if(this.state.rows.length===0){
+                return(
+                  <tr>
+                     <td align="center" colSpan={6}>Data empty</td>
+                  </tr>
+                )
+              }else{
+                var jsx = this.state.rows.map((val,index)=>{
+                  return (
+                      <tr key={index}>
+                        <td align="center">{this.state.page >0 ? index+1 + (this.state.rowsPerPage*(this.state.page -1)) : index+1}</td>
+                        <td align="center">{val.id}</td>
+                        <td align="center">{val.owner_name}</td>
+               
+                        <td align="center">
+                        <Link style={{textDecoration:"none"}} to={`/permintaanpinjamanDetai}`}>
+                        <input type="button" className="btn btn-primary" value="Details"></input>
+                        </Link>
+                        </td>
+                      </tr>
+                  )
+              })
+               return jsx;
+              }
+
 
             
         }
