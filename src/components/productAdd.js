@@ -3,6 +3,9 @@ import Cookies from 'universal-cookie';
 import { Redirect } from 'react-router-dom'
 import Select from 'react-select';
 import './../support/css/productAdd.css'
+import NumberFormat from 'react-number-format';
+import axios from 'axios'
+import {serverUrl} from './url'
 
 const cookie = new Cookies()
 const options = [
@@ -33,22 +36,56 @@ const customStyles = {
 
 class ProductAdd extends React.Component{
     state = {
-        selectedOption: null,
+        selectedOption: null, errorMessage:0,rentangDari:0,rentangAkhir:0,
+        bankService:[]
       };
-    handleChange = (selectedOption) => {
+
+      componentDidMount(){
+          this.getBankService()
+      }
+      handleChange = (selectedOption) => {
         this.setState({ selectedOption });
         console.log(`Option selected:`, selectedOption);
       };
 
       btnSaveProduct = ()=>{
-        var name = this.refs.namaProduct.value
+        var service = this.refs.namaProduct.value
         var from = this.refs.jangkaWaktuDari.value
         var until = this.refs.jangkaWaktuSampai.value
+        var interest = this.refs.imbalHasil.value
+        var loan_min = this.state.rentangDari
+        var loan_max = this.state.rentangAkhir 
+        var asnfee = this.refs.adminFee.value
+        console.log(asnfee)
+        // console.log("----- Testing -----")
+        // console.log(service + " - " + from + " - "+ until + " - "+ interest +" - ")
 
-        console.log("----- Testing -----")
-        console.log(name + " - " + from + " - "+ until)
+        
+        // if (parseInt(from) > parseInt(until)){
+        //     alert("ga bisa")
+        // } else if(parseInt(loan_min) > parseInt(loan_max)){
+        //     alert("ga bisa duid")
+        // }else{
+        //     var time_span = until - from
+        //     console.log(parseInt(time_span))
+        // }
+
+
+
 
       }
+      getBankService = ()=>{
+        var config = {
+            headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
+          };
+        axios.get(serverUrl+'admin/bank_services',config)
+        .then((res)=>{
+            console.log(res.data)
+            this.setState({bankService:res.data.data})
+        })
+        .catch((err)=> console.log(err))
+      }
+  
     render(){
         if(cookie.get('token') && cookie.get('tokenClient')){
             return(
@@ -137,7 +174,7 @@ class ProductAdd extends React.Component{
                                     </td>
                                     <td>
                                     <div className="form-inline">
-                                        <input type="text" className="form-control" ref="bunga" style={{width:"80px"}} placeholder="" /><label className="ml-2">%</label>
+                                        <input type="number" className="form-control" ref="imbalHasil" style={{width:"80px"}} placeholder="0" /><label>%</label>
                                     </div>  
                                     </td>
                             </tr>
@@ -147,9 +184,9 @@ class ProductAdd extends React.Component{
                                     </td>
                                     <td>
                                     <div className="form-inline">
-                                        <input type="text" className="form-control textfield" ref="moneyFrom" placeholder="" />
+                                        <NumberFormat placeholder="Rp. 0" onValueChange={(values) => {this.setState({rentangDari:values.value})}} className="form-control textfield" ref="rentangDari" thousandSeparator={true} prefix={'Rp.'} />
                                         <label style={{marginLeft:"20px",marginRight:"-95px"}}> s/d </label>
-                                        <input type="text" className="form-control textfield" ref="moneyTo" placeholder="" /> 
+                                        <NumberFormat placeholder="Rp. 0" onValueChange={(values) => {this.setState({rentangAkhir:values.value})}} className="form-control textfield" ref="rentangHingga" thousandSeparator={true} prefix={'Rp.'} />
                                     </div>
                                     </td>
 
@@ -160,7 +197,7 @@ class ProductAdd extends React.Component{
                                 </td>
                                 <td>
                                 <div className="form-inline">
-                                    <input type="text" className="form-control" ref="adminFee" style={{width:"80px"}} placeholder="" />   <label>%</label>
+                                    <input type="number" className="form-control" ref="adminFee" style={{width:"80px"}} placeholder="0" />   <label>%</label>
                                 </div>
                                 </td>
                             </tr>
