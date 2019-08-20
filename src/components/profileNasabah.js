@@ -348,7 +348,7 @@ getLink = ()=>{
             {/* <TableCell align="center">{val.status}</TableCell> */}
             <td align="center">
             <Link style={{textDecoration:"none"}} to={`/profileNasabahDetail/${val.id}`}>
-              <i class="fas fa-eye" style={{color:"black",fontSize:"28px",marginRight:"10px"}}/>
+              <i className="fas fa-eye" style={{color:"black",fontSize:"28px",marginRight:"10px"}}/>
             </Link>
             </td>
         </tr>
