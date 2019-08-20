@@ -2,6 +2,7 @@ import React from 'react'
 import Cookies from 'universal-cookie';
 import { Redirect } from 'react-router-dom'
 import Select from 'react-select';
+import './../support/css/productAdd.css'
 
 const cookie = new Cookies()
 const options = [
@@ -40,21 +41,27 @@ class ProductAdd extends React.Component{
         if(cookie.get('token') && cookie.get('tokenClient')){
             return(
                 <div className="container">
-                    <h2>Product Tambah</h2>
-                    <hr></hr>
+                    <h2 className="mb-5">Produk - Tambah</h2>
+                  
 
                     <form>
-                        <div className="form-group row">
-                        <label className="col-sm-2 col-form-label">Nama Produk</label>
-                        <div className="col-sm-10">
-                            <input type="text" className="form-control" ref="namaProduct" placeholder="Input Nama Produk" />
-                        </div>
-                        </div>
-                        <div className="form-group row">
-                        <label className="col-sm-2 col-form-label">Jangka Waktu (Bulan)</label>
-                            <div className="col-sm-10 form-inline" >
-                                <select ref="jangkaWaktuDari" className="form-control" style={{width:"150px"}}>
-                                        <option defaultValue={0}>=== DARI ===</option>
+                        <table className="table">
+                            <tbody>
+                            <tr>
+                                <td>
+                                   <label>Nama Produk</label>
+                                </td>
+                                <td>
+                                   <input type="text" ref="namaProduct" className="form-control textfield" placeholder="Input Nama Produk" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                   <label>Jangka Waktu (Bulan)</label>
+                                </td>
+                                <td>
+                                <select ref="jangkaWaktuDari" className="form-control option" style={{width:"150px"}}>
+                                        <option defaultValue={0}> DARI </option>
                                         <option value={6}>6 </option>
                                         <option value={7}>7 </option>
                                         <option value={8}>8 </option>
@@ -80,12 +87,10 @@ class ProductAdd extends React.Component{
                                         <option value={28}>28 </option>
                                         <option value={29}>29 </option> 
                                         <option value={30}>30 </option>    
-
                                 </select>
-                                <label className="ml-5">s/d</label>
-                                
-                                <select  ref="jangkaWaktuSampai" className="form-control" style={{width:"150px"}}>
-                                        <option defaultValue={0}>=== HINGGA ===</option>
+                              
+                                <select  ref="jangkaWaktuSampai" className="form-control option" style={{width:"150px"}}>
+                                        <option defaultValue={0}>HINGGA</option>
                                         <option value={12}>12 </option> 
                                         <option value={13}>13 </option>
                                         <option value={14}>14 </option>
@@ -112,72 +117,86 @@ class ProductAdd extends React.Component{
                                         <option value={35}>35 </option>
                                         <option value={36}>36 </option>
                                 </select>
-                            </div>
-                        </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                    <td>
+                                       <label>Imbal Hasil</label>
+                                    </td>
+                                    <td>
+                                    <div className="form-inline">
+                                        <input type="text" className="form-control" ref="bunga" style={{width:"80px"}} placeholder="" /><label className="ml-2">%</label>
+                                    </div>  
+                                    </td>
+                            </tr>
+                            <tr>
+                                    <td>
+                                        <label>Rentang Pengajuan</label>
+                                    </td>
+                                    <td>
+                                    <div className="form-inline">
+                                        <input type="text" className="form-control textfield" ref="moneyFrom" placeholder="" />
+                                        <label style={{marginLeft:"20px",marginRight:"-95px"}}> s/d </label>
+                                        <input type="text" className="form-control textfield" ref="moneyTo" placeholder="" /> 
+                                    </div>
+                                    </td>
 
-                        <div className="form-group row">
-                        <label className="col-sm-2 col-form-label">Imbal Hasil</label>
-                        <div className="col-sm-10 form-inline">
-                            <input type="text" className="form-control" ref="bunga" style={{width:"80px"}} placeholder="" /> 
-                            <label className="ml-2">%</label>
-                       
-                        </div>
-                        </div>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>Admin fee</label>
+                                </td>
+                                <td>
+                                <div className="form-inline">
+                                    <input type="text" className="form-control" ref="adminFee" style={{width:"80px"}} placeholder="" />   <label>%</label>
+                                </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>Convinience Fee</label>
+                                </td>
+                                <td>
+                                <div className="form-inline">
+                                    <input type="text" className="form-control" ref="convinienceFee" style={{width:"80px"}} placeholder="" />   <label>%</label>
+                                </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                     <label>Layanan</label>
+                                </td>
+                                <td>
+                                    <select ref="layanan" className="form-control">
+                                            <option defaultValue={0}>Pilih Layanan...</option>
+                                            <option value={1}>1 </option>
+                                            <option value={2}>2 </option>
+                                    </select>
+                                </td>
 
-                        <div className="form-group row">
-                        <label className="col-sm-2 col-form-label">Rentang Pengajuan</label>
-                        <div className="col-sm-10 form-inline">
-                            <input type="text" className="form-control" ref="moneyFrom" style={{width:"300px"}} placeholder="" />
-                            <label className="ml-5"> s/d </label>
-                            <input type="text" className="form-control" ref="moneyTo" style={{width:"300px"}} placeholder="" /> 
-                        </div>
-                        </div>
-
-                        <div className="form-group row">
-                        <label className="col-sm-2 col-form-label">Admin fee</label>
-                        <div className="col-sm-10 form-inline">
-                            <input type="text" className="form-control" ref="adminFee" style={{width:"80px"}} placeholder="" /> 
-                            <label className="ml-2">%</label>
-                       
-                        </div>
-                        </div>
-
-                        <div className="form-group row">
-                        <label className="col-sm-2 col-form-label">Convinience Fee</label>
-                        <div className="col-sm-10 form-inline">
-                            <input type="text" className="form-control" ref="convinienceFee" style={{width:"80px"}} placeholder="" /> 
-                            <label className="ml-2">%</label>
-                       
-                        </div>
-                        </div>
-
-                        <div className="form-group row">
-                        <label className="col-sm-2 col-form-label">Layanan</label>
-                        <div className="col-sm-10">
-                               <select ref="layanan" className="form-control">
-                                        <option defaultValue={0}>Pilih Layanan...</option>
-                                        <option value={1}>1 </option>
-                                        <option value={2}>2 </option>
-                                </select>
-                        </div>
-                        </div>
-                        <div className="form-group row">
-                        <label className="col-sm-2 col-form-label">Bank Pengguna</label>
-                        <div className="col-sm-10">
-                        <Select
-                                value={this.state.selectedOption}
-                                onChange={this.handleChange}
-                                isMulti={true}
-                                options={options}
-                                styles={customStyles}
-                                placeholder="Jenis Layanan"
-                                
-                            />
-                        </div>
-                        </div>
-                        <div className="form-group row">
-                        <label className="col-sm-2 col-form-label">Angunan</label>
-                        <div className="col-sm-10">
+                            </tr>
+                            <tr>
+                                 <td>
+                                    <label>Bank Pengguna</label>
+                                </td>
+                                <td>
+                                    <Select
+                                        value={this.state.selectedOption}
+                                        onChange={this.handleChange}
+                                        isMulti={true}
+                                        options={options}
+                                        styles={customStyles}
+                                        placeholder="Jenis Layanan"
+                                        
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                     <label>Angunan</label>
+                                </td>
+                                <td>
+                                <div className="col-sm-10">
                             <div className="row">
                                 <div className="col ">
                                     <div className="form-check form-check-inline">
@@ -212,32 +231,73 @@ class ProductAdd extends React.Component{
                                     <div className="form-check form-check-inline">
                                     <input className="form-check-input" type="checkbox" id="BPKB" value="option1"/>
                                     <label className="form-check-label">Lainnya</label> 
-                                    <input type="text" ref="lainnya" placeholder="Lainnya.." className="form-control ml-2"/>
+                                    <input type="text" ref="lainnya" style={{width:"100px"}} placeholder="Lainnya.." className="form-control ml-2"/>
                                     </div> 
                                 </div>
                             </div>
                       
 
                         </div>
-                        </div>
+                                    
+                                </td>
+                            </tr>
 
-                        <div className="form-group row">
-                        <label className="col-sm-2 col-form-label">Sektor Pembiayaan</label>
-                        <div className="col-sm-10">
-                        <Select
-                                value={this.state.selectedOption}
-                                onChange={this.handleChange}
-                                isMulti={true}
-                                options={options}
-                                styles={customStyles}
-                                placeholder="Jenis Layanan"
-                                
-                            />
+                            <tr>
+                                <td>
+                                    <label >Sektor Pembiayaan</label>
+                                </td>
+                                <td>
+                                    <Select
+                                        value={this.state.selectedOption}
+                                        onChange={this.handleChange}
+                                        isMulti={true}
+                                        options={options}
+                                        styles={customStyles}
+                                        placeholder="Jenis Layanan"
+                                        
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label >Jenis Bank Pengguna</label>
+                                </td>
+                                <td>
+                                    <div className="row">
+                                        <div className="col ml-3">
+                                            <div className="form-check form-check-inline">
+                                            <input className="form-check-input" type="checkbox" value="bpd" style={{marginLeft:"110px"}}/>
+                                            <label className="form-check-label">BPD</label>
+                                            </div>
 
-                        </div>
-                        </div>
+                                            <div className="form-check form-check-inline">
+                                            <input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="bpr"/>
+                                            <label className="form-check-label" >BPR</label>
+                                            </div>
 
-
+                                            <div className="form-check form-check-inline">
+                                            <input className="form-check-input" type="checkbox" id="BPKB" value="koperasi"/>
+                                            <label className="form-check-label">Koperasi</label>
+                                            </div> 
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label >Asuransi</label>
+                                </td>
+                                <td>
+                                   
+                                <div className="form-check form-check-inline">
+                                            <input className="form-check-input" type="checkbox" id="BPKB" value="koperasi"/>
+                                            <label className="form-check-label">Koperasi</label>
+                                            </div> 
+                                </td>
+                            </tr>
+                            </tbody>
+                            
+                        </table>
                     </form>
 
 
