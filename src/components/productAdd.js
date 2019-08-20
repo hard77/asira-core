@@ -6,15 +6,14 @@ import './../support/css/productAdd.css'
 
 const cookie = new Cookies()
 const options = [
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' },
+    { value: 'pendidikan', label: 'Pendidikan' },
+    { value: 'konsumtif', label: 'Konsumtif' }
   ];
 const customStyles = {
     option: (provided, state) => ({
       ...provided,
       borderBottom: '1px dotted pink',
-      color: state.isSelected ? 'red' : 'blue',
+      color: state.isSelected ? 'red' : 'grey',
       padding: 20,
     }),
     control: () => ({
@@ -29,6 +28,9 @@ const customStyles = {
       return { ...provided, opacity, transition };
     }
   }
+
+ 
+
 class ProductAdd extends React.Component{
     state = {
         selectedOption: null,
@@ -37,6 +39,16 @@ class ProductAdd extends React.Component{
         this.setState({ selectedOption });
         console.log(`Option selected:`, selectedOption);
       };
+
+      btnSaveProduct = ()=>{
+        var name = this.refs.namaProduct.value
+        var from = this.refs.jangkaWaktuDari.value
+        var until = this.refs.jangkaWaktuSampai.value
+
+        console.log("----- Testing -----")
+        console.log(name + " - " + from + " - "+ until)
+
+      }
     render(){
         if(cookie.get('token') && cookie.get('tokenClient')){
             return(
@@ -175,22 +187,7 @@ class ProductAdd extends React.Component{
                                 </td>
 
                             </tr>
-                            <tr>
-                                 <td>
-                                    <label>Bank Pengguna</label>
-                                </td>
-                                <td>
-                                    <Select
-                                        value={this.state.selectedOption}
-                                        onChange={this.handleChange}
-                                        isMulti={true}
-                                        options={options}
-                                        styles={customStyles}
-                                        placeholder="Jenis Layanan"
-                                        
-                                    />
-                                </td>
-                            </tr>
+                         
                             <tr>
                                 <td>
                                      <label>Angunan</label>
@@ -258,31 +255,7 @@ class ProductAdd extends React.Component{
                                     />
                                 </td>
                             </tr>
-                            <tr>
-                                <td>
-                                    <label >Jenis Bank Pengguna</label>
-                                </td>
-                                <td>
-                                    <div className="row">
-                                        <div className="col ml-3">
-                                            <div className="form-check form-check-inline">
-                                            <input className="form-check-input" type="checkbox" value="bpd" style={{marginLeft:"110px"}}/>
-                                            <label className="form-check-label">BPD</label>
-                                            </div>
-
-                                            <div className="form-check form-check-inline">
-                                            <input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="bpr"/>
-                                            <label className="form-check-label" >BPR</label>
-                                            </div>
-
-                                            <div className="form-check form-check-inline">
-                                            <input className="form-check-input" type="checkbox" id="BPKB" value="koperasi"/>
-                                            <label className="form-check-label">Koperasi</label>
-                                            </div> 
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
+                           
                             <tr>
                                 <td>
                                     <label >Asuransi</label>
@@ -292,13 +265,25 @@ class ProductAdd extends React.Component{
                                 <div className="form-check-inline" style={{marginLeft:"125px"}}>
                                             <input className="form-check-input" type="checkbox" id="BPKB" value="koperasi"/>
                                             <label className="form-check-label">Tersedia</label>
-                                            <input type="text" ref="asuransi"></input>
+                                            <input type="text" ref="asuransi" placeholder="Masukan asuransi"></input>
                                 </div> 
                                 </td>
                             </tr>
                             <tr>
                                 <td>
                                      <label >Status</label>
+                                </td>
+                                <td>
+                                <div className="form-check-inline" style={{marginLeft:"125px"}}>
+                                            <input className="form-check-input" type="checkbox" id="BPKB" value="koperasi"/>
+                                            <label className="form-check-label">Aktif</label>
+                                </div> 
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colSpan={2}>
+                                    <input type="button" className="btn btn-success" value="Simpan" onClick={this.btnSaveProduct}/>
+                                    <input type="button" className="btn btn-warning ml-2" value="Batal" onClick={this.btnSaveProduct}/>
                                 </td>
                             </tr>
                             </tbody>
