@@ -289,10 +289,16 @@ class ProductAdd extends React.Component{
                                 </td>
                                 <td>
                                    
-                                <div className="form-check form-check-inline">
+                                <div className="form-check-inline" style={{marginLeft:"125px"}}>
                                             <input className="form-check-input" type="checkbox" id="BPKB" value="koperasi"/>
-                                            <label className="form-check-label">Koperasi</label>
-                                            </div> 
+                                            <label className="form-check-label">Tersedia</label>
+                                            <input type="text" ref="asuransi"></input>
+                                </div> 
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                     <label >Status</label>
                                 </td>
                             </tr>
                             </tbody>
