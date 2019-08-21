@@ -121,6 +121,7 @@ class App extends React.Component {
             }
               <div className="col-10 col-md-9">
               <Switch> 
+                    <Route path='/test' component={Testing}></Route>
                     <Route path='/' component={Home} exact></Route>
                     <Route path='/profileNasabah' component={Nasabah}></Route>
                     <Route path="/profileNasabahDetail/:id" component={profileNasabahDetail}></Route>
@@ -140,7 +141,7 @@ class App extends React.Component {
 
                     <Route path='/tambahlayanan' component={LayananAdd}></Route>
                     <Route path='/listlayanan' component={LayananList}></Route>
-                    <Route path='/test' component={Testing}></Route>
+                   
 
 
                     
