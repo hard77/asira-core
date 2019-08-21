@@ -37,7 +37,7 @@ const customStyles = {
 class ProductAdd extends React.Component{
     state = {
         selectedOption: null, errorMessage:null,rentangDari:0,rentangAkhir:0,
-        bankService:[]
+        bankService:[],diKlik:false
       };
 
       componentDidMount(){
@@ -58,7 +58,7 @@ class ProductAdd extends React.Component{
         var adminfee = this.refs.adminFee.value ? this.refs.adminFee.value : this.refs.adminFee.placeholder
 
         var asn_fee = this.refs.convinienceFee.value ? this.refs.convinienceFee.value : this.refs.convinienceFee.placeholder
-        var layanan = this.refs.layanan.value
+        var service = this.refs.layanan.value
         
         var fees= []
         var status =  document.querySelector('.messageCheckbox').checked;
@@ -68,7 +68,7 @@ class ProductAdd extends React.Component{
         var i
        
         status = status ? status = "active" : status ="inactive"
-        assurance = assurance ? assurance = this.refs.asuransi.value : asuransi=""
+        assurance = assurance ? assurance = this.refs.asuransi.value : assurance=""
         otheragunan = otheragunan ? otheragunan = this.refs.lainnya.value : otheragunan =""
 
      
@@ -88,7 +88,7 @@ class ProductAdd extends React.Component{
             this.setState({errorMessage:"Admin Fee tidak benar - Harap cek ulang"})
         }else if(parseFloat(asn_fee) <0){
             this.setState({errorMessage:"Convinience Fee tidak benar - Harap cek ulang"})
-        }else if(parseInt(layanan)===0){
+        }else if(parseInt(service)===0){
             this.setState({errorMessage:"Layanan belum terpilih - Harap cek ulang"})
         }else if(this.state.selectedOption===null){
             this.setState({errorMessage:"Sektor Pembiayaan belum terpilih - Harap cek ulang"})
@@ -122,10 +122,22 @@ class ProductAdd extends React.Component{
                         collaterals.push(otheragunan)
                     }
            
-
+                    asn_fee = asn_fee +"%"
             var newData = {
-                name,min_timespan,max_timespan,interest , min_loan,max_loan,fees,asn_fee = asn_fee+"%",service,collaterals,financing_sector,assurance,status
+                name,min_timespan,max_timespan,interest,min_loan,max_loan,fees,asn_fee,service,collaterals,financing_sector,assurance,status
             }
+            var config = {
+                headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
+            };
+            axios.post(serverUrl+'admin/banks',newData,config)
+            .then((res)=>{
+                console.log(res.data)
+                swal("Berhasil","Produk berhasil bertambah","success")
+                this.setState({errorMessage:null,diKlik:true})
+            })
+            .catch((err)=>console.log(err))
+         
+
        }
 
 
