@@ -49,14 +49,52 @@ class ProductAdd extends React.Component{
       };
 
       btnSaveProduct = ()=>{
-        var service = this.refs.namaProduct.value
-        var from = this.refs.jangkaWaktuDari.value
-        var until = this.refs.jangkaWaktuSampai.value
-        var interest = this.refs.imbalHasil.value
-        var loan_min = this.state.rentangDari
-        var loan_max = this.state.rentangAkhir 
-        var asnfee = this.refs.adminFee.value
-        console.log(asnfee)
+        // var service = this.refs.namaProduct.value
+        // var from = this.refs.jangkaWaktuDari.value
+        // var until = this.refs.jangkaWaktuSampai.value
+        // var interest = this.refs.imbalHasil.value
+        // var loan_min = this.state.rentangDari
+        // var loan_max = this.state.rentangAkhir 
+        // var asnfee = this.refs.adminFee.value
+        // var convinienceFee = this.refs.convinienceFee.value
+         var layanan = this.refs.layanan.value
+        
+        var status =  document.querySelector('.messageCheckbox').checked;
+        var asuransi =  document.querySelector('.asuransi').checked;
+        var otheragunan =  document.querySelector('.otheragunan').checked;
+
+
+        status = status ? status = "aktif" : status ="inactive"
+        asuransi = asuransi ? asuransi = this.refs.asuransi.value : asuransi=""
+        otheragunan = otheragunan ? otheragunan = this.refs.lainnya.value : otheragunan =""
+
+
+        //===========CODING BAGIAN SEKTOR PEMBIAYAAN
+
+        // var sektorpembiayaan = []
+        // for (var i=0 ; i < this.state.selectedOption.length; i++){
+        //     sektorpembiayaan.push(this.state.selectedOption[i].value)
+        // }
+
+
+       //======= CODING BAGIAN AGUNAN
+        var arr =[]
+        var agunan = document.querySelectorAll('.agunan:checked')
+
+
+        for (var i = 0; i < agunan.length; i++) {
+            arr.push(agunan[i].value)   
+        }
+        if (otheragunan){
+            arr.push(otheragunan)
+        }
+        
+        
+        console.log(layanan)
+
+
+
+
         // console.log("----- Testing -----")
         // console.log(service + " - " + from + " - "+ until + " - "+ interest +" - ")
 
@@ -84,6 +122,13 @@ class ProductAdd extends React.Component{
             this.setState({bankService:res.data.data})
         })
         .catch((err)=> console.log(err))
+      }
+
+      renderBankService = ()=>{
+          var jsx = this.state.bankService.map((val,index)=>{
+                 return   (<option key={index} value={val.name}>{val.name}</option>)
+          })
+          return jsx;
       }
   
     render(){
@@ -207,7 +252,7 @@ class ProductAdd extends React.Component{
                                 </td>
                                 <td>
                                 <div className="form-inline">
-                                    <input type="text" className="form-control" ref="convinienceFee" style={{width:"80px"}} placeholder="" />   <label>%</label>
+                                    <input type="text" className="form-control" ref="convinienceFee" style={{width:"80px"}} placeholder="0" />   <label>%</label>
                                 </div>
                                 </td>
                             </tr>
@@ -218,8 +263,7 @@ class ProductAdd extends React.Component{
                                 <td>
                                     <select ref="layanan" className="form-control">
                                             <option defaultValue={0}>Pilih Layanan...</option>
-                                            <option value={1}>1 </option>
-                                            <option value={2}>2 </option>
+                                           {this.renderBankService()}
                                     </select>
                                 </td>
 
@@ -227,51 +271,58 @@ class ProductAdd extends React.Component{
                          
                             <tr>
                                 <td>
-                                     <label>Angunan</label>
+                                     <label>Agunan</label>
                                 </td>
                                 <td>
+                             
                                 <div className="col-sm-10">
                             <div className="row">
                                 <div className="col ">
+                              
+
                                     <div className="form-check form-check-inline">
-                                    <input className="form-check-input" type="checkbox" value="option1" style={{marginLeft:"110px"}}/>
+                                    <input className="form-check-input agunan" type="checkbox" value="setifikat tanah" style={{marginLeft:"110px"}}/>
                                     <label className="form-check-label">Sertifikat Tanah</label>
                                     </div>
 
                                     <div className="form-check form-check-inline">
-                                    <input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1"/>
+                                    <input className="form-check-input agunan" type="checkbox" value="sertifikat rumah"/>
                                     <label className="form-check-label" >Sertifikat Rumah</label>
                                     </div>
 
                                     <div className="form-check form-check-inline">
-                                    <input className="form-check-input" type="checkbox" id="BPKB" value="option1"/>
+                                    <input className="form-check-input agunan" type="checkbox" value="bpkb kendaraan"/>
                                     <label className="form-check-label">BPKB Kendaraan</label>
                                     </div> 
+                                
+                                   
                                 </div>
                             </div>
 
                             <div className="row">
                                 <div className="col">
                                     <div className="form-check form-check-inline">
-                                    <input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1" style={{marginLeft:"110px"}}/>
+                                    <input className="form-check-input agunan" type="checkbox" name="agunan" value="kios/lapak" style={{marginLeft:"110px"}}/>
                                     <label className="form-check-label">Kios/ Lapak</label>
                                     </div>
 
                                     <div className="form-check form-check-inline">
-                                    <input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1"/>
+                                    <input className="form-check-input agunan" type="checkbox" name="agunan" value="deposito"/>
                                     <label className="form-check-label" >Deposito</label>
                                     </div>
 
                                     <div className="form-check form-check-inline">
-                                    <input className="form-check-input" type="checkbox" id="BPKB" value="option1"/>
-                                    <label className="form-check-label">Lainnya</label> 
+                                    <input className="form-check-input otheragunan" type="checkbox" value="other" />
+                                    <label className="form-check-label ">Lainnya</label> 
                                     <input type="text" ref="lainnya" style={{width:"100px"}} placeholder="Lainnya.." className="form-control ml-2"/>
                                     </div> 
+                                  
                                 </div>
+                                
                             </div>
                       
-
                         </div>
+                       
                                     
                                 </td>
                             </tr>
@@ -300,10 +351,12 @@ class ProductAdd extends React.Component{
                                 <td>
                                    
                                 <div className="form-check-inline" style={{marginLeft:"125px"}}>
-                                            <input className="form-check-input" type="checkbox" id="BPKB" value="koperasi"/>
+                                            <input className="form-check-input asuransi" type="checkbox"/>
                                             <label className="form-check-label">Tersedia</label>
                                             <input type="text" ref="asuransi" placeholder="Masukan asuransi"></input>
                                 </div> 
+
+
                                 </td>
                             </tr>
                             <tr>
@@ -312,7 +365,7 @@ class ProductAdd extends React.Component{
                                 </td>
                                 <td>
                                 <div className="form-check-inline" style={{marginLeft:"125px"}}>
-                                            <input className="form-check-input" type="checkbox" id="BPKB" value="koperasi"/>
+                                            <input className="form-check-input messageCheckbox" type="checkbox" id="BPKB" value="koperasi"/>
                                             <label className="form-check-label">Aktif</label>
                                 </div> 
                                 </td>
