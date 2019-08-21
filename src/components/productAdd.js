@@ -50,6 +50,7 @@ class ProductAdd extends React.Component{
       };
 
       btnSaveProduct = ()=>{
+        var i
         var name = this.refs.namaProduct.value
         var min_timespan = this.refs.jangkaWaktuDari.value
         var max_timespan = this.refs.jangkaWaktuSampai.value
@@ -65,16 +66,11 @@ class ProductAdd extends React.Component{
         var status =  document.querySelector('.messageCheckbox').checked;
         var assurance =  document.querySelector('.asuransi').checked;
         var otheragunan =  document.querySelector('.otheragunan').checked;
-
-        var i
        
         status = status ? status = "active" : status ="inactive"
         assurance = assurance ? assurance = this.refs.asuransi.value : assurance=""
         otheragunan = otheragunan ? otheragunan = this.refs.lainnya.value : otheragunan =""
-
-     
-        
-        
+    
         if(name===""){
             this.setState({errorMessage:"Data Kosong"})
         }else if(min_timespan==="0" || max_timespan==="0"){
@@ -122,7 +118,7 @@ class ProductAdd extends React.Component{
                         collaterals.push(otheragunan)
                     }
            
-                    asn_fee = asn_fee +"%"
+            asn_fee = asn_fee +"%"
             var newData = {
                 name,min_timespan,max_timespan,interest,min_loan,max_loan,fees,asn_fee,service,collaterals,financing_sector,assurance,status
             }
@@ -136,12 +132,9 @@ class ProductAdd extends React.Component{
                 this.setState({errorMessage:null,diKlik:true})
             })
             .catch((err)=>console.log(err))
-         
-
        }
-
-
       }
+      
       getBankService = ()=>{
         var config = {
             headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
