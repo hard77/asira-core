@@ -36,7 +36,7 @@ const customStyles = {
 
 class ProductAdd extends React.Component{
     state = {
-        selectedOption: null, errorMessage:0,rentangDari:0,rentangAkhir:0,
+        selectedOption: null, errorMessage:null,rentangDari:0,rentangAkhir:0,
         bankService:[]
       };
 
@@ -49,66 +49,84 @@ class ProductAdd extends React.Component{
       };
 
       btnSaveProduct = ()=>{
-        // var service = this.refs.namaProduct.value
-        // var from = this.refs.jangkaWaktuDari.value
-        // var until = this.refs.jangkaWaktuSampai.value
-        // var interest = this.refs.imbalHasil.value
-        // var loan_min = this.state.rentangDari
-        // var loan_max = this.state.rentangAkhir 
-        // var asnfee = this.refs.adminFee.value
-        // var convinienceFee = this.refs.convinienceFee.value
-         var layanan = this.refs.layanan.value
+        var name = this.refs.namaProduct.value
+        var min_timespan = this.refs.jangkaWaktuDari.value
+        var max_timespan = this.refs.jangkaWaktuSampai.value
+        var interest = this.refs.imbalHasil.value
+        var min_loan = this.state.rentangDari
+        var max_loan = this.state.rentangAkhir 
+        var adminfee = this.refs.adminFee.value ? this.refs.adminFee.value : this.refs.adminFee.placeholder
+
+        var asn_fee = this.refs.convinienceFee.value ? this.refs.convinienceFee.value : this.refs.convinienceFee.placeholder
+        var layanan = this.refs.layanan.value
         
+        var fees= []
         var status =  document.querySelector('.messageCheckbox').checked;
-        var asuransi =  document.querySelector('.asuransi').checked;
+        var assurance =  document.querySelector('.asuransi').checked;
         var otheragunan =  document.querySelector('.otheragunan').checked;
 
-
-        status = status ? status = "aktif" : status ="inactive"
-        asuransi = asuransi ? asuransi = this.refs.asuransi.value : asuransi=""
+        var i
+       
+        status = status ? status = "active" : status ="inactive"
+        assurance = assurance ? assurance = this.refs.asuransi.value : asuransi=""
         otheragunan = otheragunan ? otheragunan = this.refs.lainnya.value : otheragunan =""
 
-
-        //===========CODING BAGIAN SEKTOR PEMBIAYAAN
-
-        // var sektorpembiayaan = []
-        // for (var i=0 ; i < this.state.selectedOption.length; i++){
-        //     sektorpembiayaan.push(this.state.selectedOption[i].value)
-        // }
-
-
-       //======= CODING BAGIAN AGUNAN
-        var arr =[]
-        var agunan = document.querySelectorAll('.agunan:checked')
-
-
-        for (var i = 0; i < agunan.length; i++) {
-            arr.push(agunan[i].value)   
+     
+        
+        
+        if(name===""){
+            this.setState({errorMessage:"Data Kosong"})
+        }else if(min_timespan==="0" || max_timespan==="0"){
+            this.setState({errorMessage:"Jangka Waktu Kosong"})
+        }else if(parseInt(min_timespan) > parseInt(max_timespan)){
+            this.setState({errorMessage:"Jangka Waktu dari lebih besar - Harap cek ulang"})
+        }else if(parseFloat(interest)<0 || interest===""){
+            this.setState({errorMessage:"Imbal Hasil tidak bole minus/ kosong - Harap cek ulang"})
+        }else if(parseInt(min_loan) > parseInt(max_loan)){
+            this.setState({errorMessage:"Rentang Pengajuan tidak benar - Harap cek ulang"})
+        }else if(parseFloat(adminfee) <0){
+            this.setState({errorMessage:"Admin Fee tidak benar - Harap cek ulang"})
+        }else if(parseFloat(asn_fee) <0){
+            this.setState({errorMessage:"Convinience Fee tidak benar - Harap cek ulang"})
+        }else if(parseInt(layanan)===0){
+            this.setState({errorMessage:"Layanan belum terpilih - Harap cek ulang"})
+        }else if(this.state.selectedOption===null){
+            this.setState({errorMessage:"Sektor Pembiayaan belum terpilih - Harap cek ulang"})
+        }else if(isNaN(adminfee) || isNaN(asn_fee)){
+            this.setState({errorMessage:"Admin atau Convience Fee mesti angka  - Harap cek ulang"})
         }
-        if (otheragunan){
-            arr.push(otheragunan)
-        }
-        
-        
-        console.log(layanan)
+        else{
+            this.setState({errorMessage:"masuk ke axios"})
+            fees.push({
+                "description": "Admin Fee",
+                "amount":`${adminfee}%`
+            })
+
+               //===========CODING BAGIAN SEKTOR PEMBIAYAAN
+
+                    var financing_sector = []
+                    for ( i=0 ; i < this.state.selectedOption.length; i++){
+                        financing_sector.push(this.state.selectedOption[i].value)
+                    }
 
 
+                //======= CODING BAGIAN AGUNAN
+                    var collaterals =[]
+                    var agunan = document.querySelectorAll('.agunan:checked')
 
 
-        // console.log("----- Testing -----")
-        // console.log(service + " - " + from + " - "+ until + " - "+ interest +" - ")
+                    for ( i = 0; i < agunan.length; i++) {
+                        collaterals.push(agunan[i].value)   
+                    }
+                    if (otheragunan){
+                        collaterals.push(otheragunan)
+                    }
+           
 
-        
-        // if (parseInt(from) > parseInt(until)){
-        //     alert("ga bisa")
-        // } else if(parseInt(loan_min) > parseInt(loan_max)){
-        //     alert("ga bisa duid")
-        // }else{
-        //     var time_span = until - from
-        //     console.log(parseInt(time_span))
-        // }
-
-
+            var newData = {
+                name,min_timespan,max_timespan,interest , min_loan,max_loan,fees,asn_fee = asn_fee+"%",service,collaterals,financing_sector,assurance,status
+            }
+       }
 
 
       }
@@ -126,17 +144,26 @@ class ProductAdd extends React.Component{
 
       renderBankService = ()=>{
           var jsx = this.state.bankService.map((val,index)=>{
-                 return   (<option key={index} value={val.name}>{val.name}</option>)
+                 return   (<option key={index} value={val.id}>{val.name}</option>)
           })
           return jsx;
       }
+
+      componentWillReceiveProps(newProps){
+        this.setState({errorMessage:newProps.error})
+       }
   
     render(){
         if(cookie.get('token') && cookie.get('tokenClient')){
             return(
                 <div className="container">
                     <h2 className="mb-5">Produk - Tambah</h2>
-                  
+                    <div className="form-group row">
+                            <div className="col-12" style={{color:"red",fontSize:"15px",textAlign:'center'}}>
+                                    {this.state.errorMessage}
+                            </div>
+                                
+                     </div>
 
                     <form>
                         <table className="table">
@@ -155,7 +182,7 @@ class ProductAdd extends React.Component{
                                 </td>
                                 <td>
                                 <select ref="jangkaWaktuDari" className="form-control option" style={{width:"150px"}}>
-                                        <option defaultValue={0}> DARI </option>
+                                        <option value={0}> DARI </option>
                                         <option value={6}>6 </option>
                                         <option value={7}>7 </option>
                                         <option value={8}>8 </option>
@@ -184,7 +211,7 @@ class ProductAdd extends React.Component{
                                 </select>
                               
                                 <select  ref="jangkaWaktuSampai" className="form-control option" style={{width:"150px"}}>
-                                        <option defaultValue={0}>HINGGA</option>
+                                        <option value={0}>HINGGA</option>
                                         <option value={12}>12 </option> 
                                         <option value={13}>13 </option>
                                         <option value={14}>14 </option>
@@ -219,7 +246,7 @@ class ProductAdd extends React.Component{
                                     </td>
                                     <td>
                                     <div className="form-inline">
-                                        <input type="number" className="form-control" ref="imbalHasil" style={{width:"80px"}} placeholder="0" /><label>%</label>
+                                        <input type="number" className="form-control" ref="imbalHasil" style={{width:"80px"}} placeholder="Imbal.." /><label>%</label>
                                     </div>  
                                     </td>
                             </tr>
@@ -229,9 +256,9 @@ class ProductAdd extends React.Component{
                                     </td>
                                     <td>
                                     <div className="form-inline">
-                                        <NumberFormat placeholder="Rp. 0" onValueChange={(values) => {this.setState({rentangDari:values.value})}} className="form-control textfield" ref="rentangDari" thousandSeparator={true} prefix={'Rp.'} />
+                                        <NumberFormat placeholder="Rp. 0" onValueChange={(values) => {this.setState({rentangDari:values.value})}} className="form-control textfield" ref="rentangDari" thousandSeparator={true} prefix={'Rp. '} />
                                         <label style={{marginLeft:"20px",marginRight:"-95px"}}> s/d </label>
-                                        <NumberFormat placeholder="Rp. 0" onValueChange={(values) => {this.setState({rentangAkhir:values.value})}} className="form-control textfield" ref="rentangHingga" thousandSeparator={true} prefix={'Rp.'} />
+                                        <NumberFormat placeholder="Rp. 0" onValueChange={(values) => {this.setState({rentangAkhir:values.value})}} className="form-control textfield" ref="rentangHingga" thousandSeparator={true} prefix={'Rp. '} />
                                     </div>
                                     </td>
 
@@ -242,7 +269,7 @@ class ProductAdd extends React.Component{
                                 </td>
                                 <td>
                                 <div className="form-inline">
-                                    <input type="number" className="form-control" ref="adminFee" style={{width:"80px"}} placeholder="0" />   <label>%</label>
+                                    <input type="text" className="form-control" ref="adminFee" style={{width:"80px"}} placeholder="0" />   <label>%</label>
                                 </div>
                                 </td>
                             </tr>
@@ -262,7 +289,7 @@ class ProductAdd extends React.Component{
                                 </td>
                                 <td>
                                     <select ref="layanan" className="form-control">
-                                            <option defaultValue={0}>Pilih Layanan...</option>
+                                            <option value={0}>Pilih Layanan...</option>
                                            {this.renderBankService()}
                                     </select>
                                 </td>
@@ -353,7 +380,7 @@ class ProductAdd extends React.Component{
                                 <div className="form-check-inline" style={{marginLeft:"125px"}}>
                                             <input className="form-check-input asuransi" type="checkbox"/>
                                             <label className="form-check-label">Tersedia</label>
-                                            <input type="text" ref="asuransi" placeholder="Masukan asuransi"></input>
+                                            <input type="text" className="ml-2" ref="asuransi" placeholder="Jika ada.."></input>
                                 </div> 
 
 
