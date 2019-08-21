@@ -6,6 +6,7 @@ import './../support/css/productAdd.css'
 import NumberFormat from 'react-number-format';
 import axios from 'axios'
 import {serverUrl} from './url'
+import swal from 'sweetalert'
 
 const cookie = new Cookies()
 const options = [
@@ -52,7 +53,7 @@ class ProductAdd extends React.Component{
         var name = this.refs.namaProduct.value
         var min_timespan = this.refs.jangkaWaktuDari.value
         var max_timespan = this.refs.jangkaWaktuSampai.value
-        var interest = this.refs.imbalHasil.value
+        var interest = this.refs.imbalHasil.value ? this.refs.imbalHasil.value : this.refs.imbalHasil.placeholder
         var min_loan = this.state.rentangDari
         var max_loan = this.state.rentangAkhir 
         var adminfee = this.refs.adminFee.value ? this.refs.adminFee.value : this.refs.adminFee.placeholder
@@ -80,9 +81,9 @@ class ProductAdd extends React.Component{
             this.setState({errorMessage:"Jangka Waktu Kosong"})
         }else if(parseInt(min_timespan) > parseInt(max_timespan)){
             this.setState({errorMessage:"Jangka Waktu dari lebih besar - Harap cek ulang"})
-        }else if(parseFloat(interest)<0 || interest===""){
+        }else if(parseFloat(interest)<0 || parseInt(interest)===0){
             this.setState({errorMessage:"Imbal Hasil tidak bole minus/ kosong - Harap cek ulang"})
-        }else if(parseInt(min_loan) > parseInt(max_loan)){
+        }else if(parseInt(min_loan) > parseInt(max_loan) || parseInt(min_loan) === parseInt(max_loan) ){
             this.setState({errorMessage:"Rentang Pengajuan tidak benar - Harap cek ulang"})
         }else if(parseFloat(adminfee) <0){
             this.setState({errorMessage:"Admin Fee tidak benar - Harap cek ulang"})
@@ -96,7 +97,6 @@ class ProductAdd extends React.Component{
             this.setState({errorMessage:"Admin atau Convience Fee mesti angka  - Harap cek ulang"})
         }
         else{
-            this.setState({errorMessage:"masuk ke axios"})
             fees.push({
                 "description": "Admin Fee",
                 "amount":`${adminfee}%`
@@ -129,7 +129,7 @@ class ProductAdd extends React.Component{
             var config = {
                 headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
             };
-            axios.post(serverUrl+'admin/banks',newData,config)
+            axios.post(serverUrl+'admin/service_products',newData,config)
             .then((res)=>{
                 console.log(res.data)
                 swal("Berhasil","Produk berhasil bertambah","success")
@@ -166,17 +166,14 @@ class ProductAdd extends React.Component{
        }
   
     render(){
+        if(this.state.diKlik){
+            return <Redirect to='/listproduct'/>            
+
+        }
         if(cookie.get('token') && cookie.get('tokenClient')){
             return(
                 <div className="container">
                     <h2 className="mb-5">Produk - Tambah</h2>
-                    <div className="form-group row">
-                            <div className="col-12" style={{color:"red",fontSize:"15px",textAlign:'center'}}>
-                                    {this.state.errorMessage}
-                            </div>
-                                
-                     </div>
-
                     <form>
                         <table className="table">
                             <tbody>
@@ -258,7 +255,7 @@ class ProductAdd extends React.Component{
                                     </td>
                                     <td>
                                     <div className="form-inline">
-                                        <input type="number" className="form-control" ref="imbalHasil" style={{width:"80px"}} placeholder="Imbal.." /><label>%</label>
+                                        <input type="number" className="form-control" ref="imbalHasil" style={{width:"80px"}} placeholder="0" /><label>%</label>
                                     </div>  
                                     </td>
                             </tr>
@@ -410,14 +407,24 @@ class ProductAdd extends React.Component{
                                 </td>
                             </tr>
                             <tr>
-                                <td colSpan={2}>
+                                <td>
                                     <input type="button" className="btn btn-success" value="Simpan" onClick={this.btnSaveProduct}/>
                                     <input type="button" className="btn btn-warning ml-2" value="Batal" onClick={this.btnSaveProduct}/>
+                               
+                                </td>
+                                <td>
+                                <div className="form-group row">
+                                        <div style={{color:"red",fontSize:"15px",textAlign:'center'}}>
+                                                {this.state.errorMessage}
+                                        </div>
+                                            
+                                </div>
                                 </td>
                             </tr>
                             </tbody>
                             
                         </table>
+                        
                     </form>
 
 
