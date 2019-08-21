@@ -6,7 +6,7 @@ import {keepLogin} from './1.actions'
 import {serverUrl} from './components/url'
 import {serverUrlBorrower} from './components/url'
 
-
+import Testing from './components/testing'
 
 import PageNotFound from './components/404'
 
@@ -122,6 +122,7 @@ class App extends React.Component {
             }
               <div className="col-10 col-md-9">
               <Switch> 
+                    <Route path='/test' component={Testing}></Route>
                     <Route path='/' component={Home} exact></Route>
                     <Route path='/profileNasabah' component={Nasabah}></Route>
                     <Route path="/profileNasabahDetail/:id" component={profileNasabahDetail}></Route>
