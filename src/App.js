@@ -141,7 +141,6 @@ class App extends React.Component {
 
                     <Route path='/tambahlayanan' component={LayananAdd}></Route>
                     <Route path='/listlayanan' component={LayananList}></Route>
-                   
 
 
                     
