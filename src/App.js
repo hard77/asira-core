@@ -6,7 +6,7 @@ import {keepLogin} from './1.actions'
 import {serverUrl} from './components/url'
 import {serverUrlBorrower} from './components/url'
 
-
+import Testing from './components/testing'
 
 import PageNotFound from './components/404'
 
@@ -140,6 +140,7 @@ class App extends React.Component {
 
                     <Route path='/tambahlayanan' component={LayananAdd}></Route>
                     <Route path='/listlayanan' component={LayananList}></Route>
+                    <Route path='/test' component={Testing}></Route>
 
 
                     
