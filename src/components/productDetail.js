@@ -19,12 +19,12 @@ class ProductDetail extends React.Component{
         this.getLayananbyId()
     }
     getDetailProduct = ()=>{
-        //var id = this.props.match.params.id
+        var id = this.props.match.params.id
         var config = {
             headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
           };
-          axios.get(serverUrl+`admin/service_products/[bank_id]`,config)
-      //  axios.get(serverUrl+`admin/service_products/${id}`,config)
+         // axios.get(serverUrl+`admin/service_products/[bank_id]`,config)
+      axios.get(serverUrl+`admin/service_products/${id}`,config)
         .then((res)=>{
             console.log(res.data)
             this.setState({rows:res.data,fees:res.data.fees,collaterals:res.data.collaterals,financing_sector:res.data.financing_sector})
@@ -33,12 +33,12 @@ class ProductDetail extends React.Component{
     
     }
     getLayananbyId = ()=>{
-       // var layananid = this.state.rows.service
+       var layananid = this.state.rows.service
         var config = {
             headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
           };
-          axios.get(serverUrl+`admin/bank_services/[bank_service_id]`,config)
-          //axios.get(serverUrl+`admin/bank_services/${layananid}`,config)
+         // axios.get(serverUrl+`admin/bank_services/[bank_service_id]`,config)
+          axios.get(serverUrl+`admin/bank_services/${layananid}`,config)
         .then((res)=>{
             console.log(res.data)
             this.setState({layanan:res.data})
