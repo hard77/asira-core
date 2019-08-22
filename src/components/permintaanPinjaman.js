@@ -4,7 +4,7 @@ import swal from 'sweetalert'
 import {connect } from 'react-redux'
 import Cookie from 'universal-cookie'
 import { Redirect } from 'react-router-dom'
-import {serverUrl} from './url'
+import {serverUrlBorrower} from './url'
 import {Link} from 'react-router-dom'
 import Loader from 'react-loader-spinner'
 import QueryString from 'query-string'
@@ -36,9 +36,9 @@ class PermintaanPinjaman extends React.Component {
 
   getAllData = ()=>{
       var config = {
-        headers: {'Authorization': "Bearer " + kukie.get('tokenClient')}
+        headers: {'Authorization': "Bearer " + kukie.get('token')}
       };
-      var newLink =`lender/loanrequest_list`
+      var newLink =`admin/loan`
       if (this.props.location.search){
         var hasil = this.getLink()
         if(!isNaN(hasil)){
@@ -49,7 +49,7 @@ class PermintaanPinjaman extends React.Component {
       }else{
         newLink += `?status=processing`
       }
-      axios.get(serverUrl+newLink,config)
+      axios.get(serverUrlBorrower+newLink,config)
       .then((res)=>{
           console.log(res.data)
           this.setState({loading:false,rows:res.data.data,rowsPerPage:res.data.rows,totalData:res.data.total_data,last_page:res.data.last_page,page:res.data.current_page})
@@ -92,9 +92,9 @@ class PermintaanPinjaman extends React.Component {
     var searching = this.refs.search.value
     this.setState({loading:true,searchRows:searching})
     var config = {
-      headers: {'Authorization': "Bearer " + kukie.get('tokenClient')}
+      headers: {'Authorization': "Bearer " + kukie.get('token')}
     };
-    var newLink =`lender/loanrequest_list`
+    var newLink =`admin/loan`
     if(searching){
       //search function
       if(!isNaN(searching)){
@@ -102,7 +102,7 @@ class PermintaanPinjaman extends React.Component {
       }else{
         newLink +=`?owner_name=${searching}&status=processing`
       }
-      axios.get(serverUrl+newLink,config)
+      axios.get(serverUrlBorrower+newLink,config)
         .then((res)=>{
             console.log(res.data)
             this.setState({loading:false,rows:res.data.data})
@@ -111,7 +111,7 @@ class PermintaanPinjaman extends React.Component {
             console.log(err)
         })
     }else{
-      axios.get(serverUrl+newLink+`?status=processing`,config)
+      axios.get(serverUrlBorrower+newLink+`?status=processing`,config)
       .then((res)=>{
           this.setState({loading:false,rows:res.data.data,searchRows:null})
       })
@@ -130,7 +130,7 @@ class PermintaanPinjaman extends React.Component {
         this.setState({loading:true})
         var newLink
         var config = {
-          headers: {'Authorization': "Bearer " + kukie.get('tokenClient')}
+          headers: {'Authorization': "Bearer " + kukie.get('token')}
         };
 
         if(this.state.searchRows){
@@ -144,7 +144,7 @@ class PermintaanPinjaman extends React.Component {
           newLink+=`?page=${this.state.page+1}&status=processing`
         }
 
-        axios.get(serverUrl+`lender/loanrequest_list?`+newLink,config)
+        axios.get(serverUrlBorrower+`admin/loan?`+newLink,config)
         .then((res)=>{
             console.log(res.data)
             this.setState({loading:false,rows:res.data.data,rowsPerPage:res.data.rows,page:this.state.page+1})
@@ -164,7 +164,7 @@ getDataPreviousPage=()=>{
     this.setState({loading:true})
     var newLink
     var config = {
-      headers: {'Authorization': "Bearer " + kukie.get('tokenClient')}
+      headers: {'Authorization': "Bearer " + kukie.get('token')}
     };
 
     if(this.state.searchRows){
@@ -178,7 +178,7 @@ getDataPreviousPage=()=>{
       newLink+=`?page=${this.state.page-1}&status=processing`
     }
 
-    axios.get(serverUrl+`lender/loanrequest_list?`+newLink,config)
+    axios.get(serverUrlBorrower+`admin/loan?`+newLink,config)
     .then((res)=>{
         console.log(res.data)
         this.setState({loading:false,rows:res.data.data,rowsPerPage:res.data.rows,page:this.state.page-1})
@@ -249,7 +249,7 @@ getDataPreviousPage=()=>{
       }
       else{
         var config = {
-          headers: {'Authorization': "Bearer " + kukie.get('tokenClient')}
+          headers: {'Authorization': "Bearer " + kukie.get('token')}
         };
         var newLink
         if(this.state.searchRows){
@@ -262,7 +262,7 @@ getDataPreviousPage=()=>{
         }else{
           newLink+=`page=${num}&status=processing`
         }
-        axios.get(serverUrl+`lender/loanrequest_list?`+newLink,config)
+        axios.get(serverUrlBorrower+`admin/loan?`+newLink,config)
         .then((res)=>{
             console.log(res.data)
             this.setState({loading:false,rows:res.data.data,rowsPerPage:res.data.rows,totalData:res.data.total_data,page:num})
@@ -280,7 +280,7 @@ getDataPreviousPage=()=>{
     this.setState({loading:true})
 
     var config = {
-      headers: {'Authorization': "Bearer " + kukie.get('tokenClient')}
+      headers: {'Authorization': "Bearer " + kukie.get('token')}
     };
     var newLink
     if(this.state.searchRows){
@@ -293,7 +293,7 @@ getDataPreviousPage=()=>{
     }else{
       newLink+=`page=${num}&status=processing`
     }
-    axios.get(serverUrl+`lender/loanrequest_list?`+newLink,config)
+    axios.get(serverUrlBorrower+`admin/loan?`+newLink,config)
     .then((res)=>{
         console.log(res.data)
         this.setState({loading:false,rows:res.data.data,rowsPerPage:res.data.rows,totalData:res.data.total_data,page:num})
@@ -355,7 +355,7 @@ getDataPreviousPage=()=>{
   render() {
    
   
-if(kukie.get("tokenClient")&&kukie.get("token")){
+if(kukie.get("token")){
       
     return (
         <div className="container">
@@ -407,7 +407,7 @@ if(kukie.get("tokenClient")&&kukie.get("token")){
   
   
 
-}else if (kukie.get("token")){
+}else if (!kukie.get("token")){
   return  <Redirect to='/login' />
 }
     
