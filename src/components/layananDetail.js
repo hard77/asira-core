@@ -16,7 +16,7 @@ class LayananDetail extends React.Component{
     getDetailLayanan = () =>{
         var id = this.props.match.params.id
         var config = {
-            headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
+            headers: {'Authorization': "Bearer " + cookie.get('token')}
           };
         axios.get(serverUrl+`admin/bank_services/${id}`,config)
        // axios.get(serverUrl+`admin/bank_services/[bank_service_id]`,config)
@@ -27,7 +27,7 @@ class LayananDetail extends React.Component{
         .catch((err)=>console.log(err))
     }
     render(){
-        if(cookie.get('token') && cookie.get('tokenClient')){
+        if(cookie.get('token')){
             return(
                 <div className="container">
                    <h2>Layanan Detail</h2>
@@ -67,7 +67,7 @@ class LayananDetail extends React.Component{
                 </div>
             )
         }
-        if(cookie.get('token')){
+        if(!cookie.get('token')){
             return (
                 <Redirect to='/login' />
             )    
