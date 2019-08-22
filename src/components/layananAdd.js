@@ -56,7 +56,7 @@ class LayananAdd extends React.Component{
                 status ? status= 1: status= 0
 
                 var newData = {name,status,image}
-                var config = {headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}};
+                var config = {headers: {'Authorization': "Bearer " + cookie.get('token')}};
                 axios.post(serverUrl+'admin/bank_services',newData,config)
                 .then((res)=>{
                     swal("Success","Layanan berhasil di tambah","success")
@@ -83,7 +83,7 @@ class LayananAdd extends React.Component{
             return <Redirect to='/listlayanan'/>            
 
         }
-        if(cookie.get('token') && cookie.get('tokenClient')){
+        if(cookie.get('token')){
             return(
                 <div className="container">
                    <h2 className="mt-3">Layanan Tambah</h2>
@@ -122,7 +122,7 @@ class LayananAdd extends React.Component{
                 </div>
             )
         }
-        if(cookie.get('token')){
+        if(!cookie.get('token')){
             return (
                 <Redirect to='/login' />
             )    
