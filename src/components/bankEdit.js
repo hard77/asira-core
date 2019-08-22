@@ -63,7 +63,7 @@ class BankEdit extends React.Component{
     getBankDataById = ()=>{
         var id = this.props.match.params.id
         var config = {
-            headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
+            headers: {'Authorization': "Bearer " + cookie.get('token')}
           };
        // axios.get(serverUrl+'admin/banks/[bank_id]',config)
         axios.get(serverUrl+`admin/banks/${id}`,config)
@@ -94,7 +94,7 @@ class BankEdit extends React.Component{
     }
     getBankProduct = ()=>{
       var config = {
-          headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
+          headers: {'Authorization': "Bearer " + cookie.get('token')}
         };
       axios.get(serverUrl+'admin/service_products',config)
       .then((res)=>{
@@ -106,7 +106,7 @@ class BankEdit extends React.Component{
 
     getBankService = ()=>{
       var config = {
-          headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
+          headers: {'Authorization': "Bearer " + cookie.get('token')}
         };
       axios.get(serverUrl+'admin/bank_services',config)
       .then((res)=>{
@@ -155,7 +155,7 @@ class BankEdit extends React.Component{
         var address = this.refs.alamat.value ? this.refs.alamat.value:this.refs.alamat.placeholder
         var province = this.refs.provinsi.value.includes("T") ? this.refs.provinsi.value.slice(this.refs.provinsi.value.indexOf('T')+1,this.refs.provinsi.length):this.refs.provinsi.value
         var city = this.refs.kota.value.includes("T") ? this.refs.kota.value.slice(this.refs.provinsi.value.indexOf('T')+1,this.refs.provinsi.length):this.refs.kota.value
-        var pic_name = this.refs.pic_name.value ? this.refs.pic_name.value:this.refs.pic_name.placeholder
+        var pic = this.refs.pic.value ? this.refs.pic.value:this.refs.pic.placeholder
         var phone = this.refs.telp.value ? this.refs.telp.value:this.refs.telp.placeholder
 
 
@@ -171,10 +171,10 @@ class BankEdit extends React.Component{
             }
     
             var newData = {
-                name,type,address,province,city,services,products,pic_name,phone
+                name,type,address,province,city,services,products,pic,phone
             }
             var config = {
-                headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
+                headers: {'Authorization': "Bearer " + cookie.get('token')}
               };
            
             axios.patch(serverUrl+`admin/banks/${id}`,newData,config)
@@ -193,7 +193,7 @@ class BankEdit extends React.Component{
             return <Redirect to='/listbank'/>            
 
         }
-        if(cookie.get('token') && cookie.get('tokenClient')){
+        if(cookie.get('token')){
             return(
                 <div className="container">
                    <h2>Bank - Edit</h2>
@@ -290,7 +290,7 @@ class BankEdit extends React.Component{
                         <div className="form-group row">
                             <label className="col-sm-2 col-form-label">Nama PIC</label>
                             <div className="col-sm-10">
-                            <input type="text" className="form-control" ref="pic_name" placeholder={this.state.dataBank.pic_name} />                            
+                            <input type="text" className="form-control" ref="pic" placeholder={this.state.dataBank.pic} />                            
                             </div>
                         </div>
                         <div className="form-group row">
@@ -307,7 +307,7 @@ class BankEdit extends React.Component{
                 </div>
             )
         }
-        if(cookie.get('token')){
+        if(!cookie.get('token')){
             return (
                 <Redirect to='/login' />
             )    
