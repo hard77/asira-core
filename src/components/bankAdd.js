@@ -87,7 +87,7 @@ class Main extends React.Component{
       }
       getBankProduct = ()=>{
         var config = {
-            headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
+            headers: {'Authorization': "Bearer " + cookie.get('token')}
           };
         axios.get(serverUrl+'admin/service_products',config)
         .then((res)=>{
@@ -99,7 +99,7 @@ class Main extends React.Component{
 
       getBankService = ()=>{
         var config = {
-            headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
+            headers: {'Authorization': "Bearer " + cookie.get('token')}
           };
         axios.get(serverUrl+'admin/bank_services',config)
         .then((res)=>{
@@ -142,7 +142,7 @@ class Main extends React.Component{
 
       getBankType = () => {
         var config = {
-            headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
+            headers: {'Authorization': "Bearer " + cookie.get('token')}
           };
         axios.get(serverUrl+'admin/bank_types',config)
         .then((res)=>{
@@ -190,7 +190,7 @@ class Main extends React.Component{
                     name,type,address,province,city,pic_name,phone,services,products
                 }
                 var config = {
-                    headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
+                    headers: {'Authorization': "Bearer " + cookie.get('token')}
                 };
                 axios.post(serverUrl+'admin/banks',newData,config)
                 .then((res)=>{
@@ -209,7 +209,7 @@ class Main extends React.Component{
             return <Redirect to='/listbank'/>            
 
         }
-        if(cookie.get('token') && cookie.get('tokenClient')){
+        if(cookie.get('token')){
             return(
                 <div className="container mt-2">
                      <h3>Bank - Tambah</h3>
@@ -317,7 +317,7 @@ class Main extends React.Component{
                 </div>
             )
         }
-        if(cookie.get('token')){
+        if(!cookie.get('token')){
             return (
                 <Redirect to='/login' />
             )    
