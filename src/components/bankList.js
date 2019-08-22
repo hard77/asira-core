@@ -20,7 +20,7 @@ class BankList extends React.Component{
     }
     getAllBankData = ()=>{
         var config = {
-            headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
+            headers: {'Authorization': "Bearer " + cookie.get('token')}
           };
         axios.get(serverUrl+'admin/banks',config)
         .then((res)=>{
@@ -47,7 +47,7 @@ class BankList extends React.Component{
       if(searching){
         //search function
         var config = {
-          headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
+          headers: {'Authorization': "Bearer " + cookie.get('token')}
         };
         var newLink
         
@@ -93,7 +93,7 @@ class BankList extends React.Component{
                 <td align="center">{val.id}</td>
                 <td align="center">{val.name}</td>
                 <td align="center">{val.type}</td>
-                <td align="center">{val.pic_name}</td>
+                <td align="center">{val.pic}</td>
                 <td align="center">
                     <Link to={`/bankedit/${val.id}`} className="mr-2">
                          <i className="fas fa-edit" style={{color:"black",fontSize:"18px"}}/>
@@ -156,7 +156,7 @@ class BankList extends React.Component{
           this.setState({loading:true})
           var newLink
           var config = {
-            headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
+            headers: {'Authorization': "Bearer " + cookie.get('token')}
           };
           if(this.state.searchRows){
               if(!isNaN(this.state.searchRows)){
@@ -190,7 +190,7 @@ class BankList extends React.Component{
           var newLink
           this.setState({loading:true})
           var config = {
-            headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
+            headers: {'Authorization': "Bearer " + cookie.get('token')}
           };
           if(this.state.searchRows){
             if (!isNaN(this.state.searchRows)){
@@ -229,7 +229,7 @@ class BankList extends React.Component{
           }
           else{
             var config = {
-              headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
+              headers: {'Authorization': "Bearer " + cookie.get('token')}
             };
             if(this.state.searchRows){
               if(!isNaN(this.state.searchRows)){
@@ -259,7 +259,7 @@ class BankList extends React.Component{
         this.setState({loading:true})
         var newLink
         var config = {
-          headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
+          headers: {'Authorization': "Bearer " + cookie.get('token')}
         };
         if(this.state.searchRows){
           if(!isNaN(this.state.searchRows)){
@@ -283,7 +283,7 @@ class BankList extends React.Component{
       }
 
     render(){
-        if(cookie.get('token') && cookie.get('tokenClient')){
+        if(cookie.get('token')){
             return(
                 <div className="container">
                     <div className="row">
