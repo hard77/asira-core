@@ -3,8 +3,7 @@ import './App.css';
 import {Route,withRouter,Switch} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {keepLogin} from './1.actions'
-import {serverUrl} from './components/url'
-import {serverUrlBorrower} from './components/url'
+
 
 import Testing from './components/testing'
 
@@ -36,83 +35,21 @@ import ProductAdd from './components/productAdd'
 import ProductList from './components/productList'
 
 import Cookies from 'universal-cookie';
-import axios from 'axios'
+
 
 const kukie =new Cookies()
-var tokenClient = kukie.get("tokenClient")
+
 
 class App extends React.Component {
   state ={loading : true , tokenClient : null , Token : null}
- componentDidMount(){
-  this.getAuth()
-  this.getAuthBorrower()
-
-  if (tokenClient){
-   this.props.keepLogin()
-   }
-
-  }
-
-
-  getAuthBorrower =()=>{
-    var urlBorrow = serverUrlBorrower+"clientauth"
-    axios.get(urlBorrow ,{
-      auth : {
-          username : 'androkey',
-          password : 'androsecret'
-      }
-  })
-      .then((res)=>{
-          var date = new Date();
-          date.setTime(date.getTime() + (res.data.expires*1000));
-          kukie.set('tokenBorrower',res.data.token,{expires: date})
-          
-         
-      })
-      .catch((err)=>{
-        console.log(err)
-      }
-         
-      )
-  }
- getAuth = ()=>{
-  var url =serverUrl+"clientauth"
-  axios.get(url ,{
-      auth : {
-          username : 'reactkey',
-          password : 'reactpass'
-      }
-  })
-      .then((res)=>{
-          var date = new Date();
-          date.setTime(date.getTime() + (res.data.expires*1000));
-          kukie.set('token',res.data.token,{expires: date})
-          this.setState({loading : false})
-         
-      })
-      .catch((err)=>{
-        console.log(err)
-        setTimeout(function(){ alert("Coba reload halaman/ cek koneksi internet"); }, 2000);
-      }
-         
-      )
-}
-
-
-  render() {
-    if(this.state.loading){
-      return(
-        <p> loading ....</p>
-      )
-    }
-    
+  render() {  
       return (
       
         <div>
           <ScrollTop>
             <div className="row">
             {
-                kukie.get('tokenClient') ? 
+                kukie.get('token') ? 
               <div className="col-2 col-md-3">
               <Header/>
               </div>
@@ -146,7 +83,7 @@ class App extends React.Component {
                     
 
 
-                    {kukie.get('tokenClient') ?  <Route path="/login" component={Home}></Route>:  <Route path="/login" component={Login}></Route>} 
+                    {kukie.get('token') ?  <Route path="/login" component={Home}></Route>:  <Route path="/login" component={Login}></Route>} 
 
                     <Route path='*' component={PageNotFound} />
               </Switch>

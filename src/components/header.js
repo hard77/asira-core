@@ -11,7 +11,7 @@ import {
   DropdownItem } from 'reactstrap';
 
 import Logo from './../support/img/logo.jpeg'
-import {Link} from 'react-router-dom'
+import {Link,Redirect} from 'react-router-dom'
 import './../support/css/header.css'
 import {connect} from 'react-redux'
 import {resetUser} from './../1.actions/index'
@@ -21,7 +21,7 @@ const kukie =new Cookies()
 
 
  class Example extends React.Component {
-
+  state={isLogin:false}
   constructor(props) {
     super(props);
 
@@ -37,17 +37,23 @@ const kukie =new Cookies()
   }
   //Button log out function  
   logOutBtn =()=>{ 
-    this.props.resetUser()  
-    kukie.remove("tokenClient")
+
+    kukie.remove("token")
+    this.setState({isLogin:true})
   }
   
   render() {
+    if(this.state.isLogin){
+      return(
+          <Redirect to='/' />
+      )
+  }
     return (
       <div className="sideBar">
         <Navbar>
-          <NavbarBrand href="/">
+          
               <img src={Logo} alt="Logo" width="100%" className="mb-4" />
-          </NavbarBrand>
+         
           <NavbarToggler onClick={this.toggle} style={{display:"none"}}/>
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav navbar>
