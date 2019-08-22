@@ -35,6 +35,7 @@ import PinjamanRejected from './components/pinjamanRejected'
 import ProductAdd from './components/productAdd'
 import ProductList from './components/productList'
 
+import ProductEdit from './components/productEdit'
 import Cookies from 'universal-cookie';
 import axios from 'axios'
 
@@ -138,7 +139,7 @@ class App extends React.Component {
                     <Route path='/tambahproduct' component={ProductAdd}></Route>
                     <Route path='/listproduct' component={ProductList}></Route>
                   
-
+                    <Route path='/productedit/:id' component={ProductEdit}></Route>
                     <Route path='/tambahlayanan' component={LayananAdd}></Route>
                     <Route path='/listlayanan' component={LayananList}></Route>
 
