@@ -23,10 +23,10 @@ class LayananEdit extends React.Component{
         this.getLayananEdit()
     }
     getLayananEdit = ()=>{
-        //var id = this.props.match.params.id
-        var config = {headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}};
-        axios.get(serverUrl+`admin/bank_services/[bank_service_id]`,config)        
-        //axios.get(serverUrl+`admin/bank_services/${id}`,config)
+        var id = this.props.match.params.id
+        var config = {headers: {'Authorization': "Bearer " + cookie.get('token')}};
+        // axios.get(serverUrl+`admin/bank_services/[bank_service_id]`,config)        
+        axios.get(serverUrl+`admin/bank_services/${id}`,config)
         .then((res)=>{
             console.log(res.data)
             this.setState({rows:res.data})
@@ -69,7 +69,7 @@ class LayananEdit extends React.Component{
                 status ? status= "active": status= "inactive"
                
                 var newData = {name,status,image}
-                var config = {headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}};
+                var config = {headers: {'Authorization': "Bearer " + cookie.get('token')}};
                 axios.patch(serverUrl+`admin/bank_services/${id}`,newData,config)
                 .then((res)=>{
                     swal("Success","Layanan berhasil di Edit","success")
@@ -83,7 +83,7 @@ class LayananEdit extends React.Component{
         }else{
            
             var newData = {name,status,image}
-            var config = {headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}};
+            var config = {headers: {'Authorization': "Bearer " + cookie.get('token')}};
             axios.patch(serverUrl+`admin/bank_services/${id}`,newData,config)
             .then((res)=>{
                 swal("Success","Layanan berhasil di Edit","success")
@@ -105,7 +105,7 @@ class LayananEdit extends React.Component{
             return <Redirect to='/listlayanan'/>            
 
         }
-        if(cookie.get('token') && cookie.get('tokenClient')){
+        if(cookie.get('token')){
             return(
                 <div className="container">
                    <h2 className="mt-3">Layanan - Ubah</h2>
@@ -148,7 +148,7 @@ class LayananEdit extends React.Component{
                 </div>
             )
         }
-        if(cookie.get('token')){
+        if(!cookie.get('token')){
             return (
                 <Redirect to='/login' />
             )    
