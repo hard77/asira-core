@@ -8,7 +8,7 @@ import {connect } from 'react-redux'
 import Cookie from 'universal-cookie'
 import { Redirect } from 'react-router-dom'
 import QueryString from 'query-string'
-import {serverUrl} from './url'
+import {serverUrlBorrower} from './url'
 import {Link} from 'react-router-dom'
 
 const kukie = new Cookie()
@@ -60,9 +60,9 @@ getLink = ()=>{
   
   //Ambil data pertama kali
   getAllData = ()=>{
-   var newLink='lender/borrower_list'
+   var newLink='admin/borrower'
     var config = {
-      headers: {'Authorization': "Bearer " + kukie.get('tokenClient')}
+      headers: {'Authorization': "Bearer " + kukie.get('token')}
     };
     if (this.props.location.search){
       var hasil = this.getLink()
@@ -72,7 +72,7 @@ getLink = ()=>{
         newLink += `?fullname=${hasil}`
       }
     }
-    axios.get(serverUrl+newLink,config)
+    axios.get(serverUrlBorrower+newLink,config)
     .then((res)=>{
       console.log(res.data)
         this.setState({loading:false,rows:res.data.data,rowsPerPage:res.data.rows,jumlahBaris:null,totalData:res.data.total_data,last_page:res.data.last_page,page:res.data.current_page})
@@ -90,7 +90,7 @@ getLink = ()=>{
       this.setState({loading:true})
       var newLink
       var config = {
-        headers: {'Authorization': "Bearer " + kukie.get('tokenClient')}
+        headers: {'Authorization': "Bearer " + kukie.get('token')}
       };
       if(this.state.searchRows){
           if(!isNaN(this.state.searchRows)){
@@ -102,7 +102,7 @@ getLink = ()=>{
         newLink =`page=${this.state.page+1}`
       }
   
-        axios.get(serverUrl+`lender/borrower_list?`+newLink,config)
+        axios.get(serverUrlBorrower+`admin/borrower?`+newLink,config)
         .then((res)=>{
           
             this.setState({loading:false,rows:res.data.data,rowsPerPage:res.data.rows,page:this.state.page+1})
@@ -124,7 +124,7 @@ getLink = ()=>{
       var newLink
       this.setState({loading:true})
       var config = {
-        headers: {'Authorization': "Bearer " + kukie.get('tokenClient')}
+        headers: {'Authorization': "Bearer " + kukie.get('token')}
       };
       if(this.state.searchRows){
         if (!isNaN(this.state.searchRows)){
@@ -135,7 +135,7 @@ getLink = ()=>{
       }else{
         newLink+=`page=${this.state.page-1}`
       }
-      axios.get(serverUrl+`lender/borrower_list?`+newLink,config)
+      axios.get(serverUrlBorrower+`admin/borrower?`+newLink,config)
       .then((res)=>{
           console.log(res.data)
           this.setState({loading:false,rows:res.data.data,rowsPerPage:res.data.rows,page:this.state.page-1})
@@ -203,7 +203,7 @@ getLink = ()=>{
       }
       else{
         var config = {
-          headers: {'Authorization': "Bearer " + kukie.get('tokenClient')}
+          headers: {'Authorization': "Bearer " + kukie.get('token')}
         };
         if(this.state.searchRows){
           if(!isNaN(this.state.searchRows)){
@@ -215,7 +215,7 @@ getLink = ()=>{
         }else{
           newLink+=`page=${num}`
         }
-        axios.get(serverUrl+`lender/borrower_list?`+newLink,config)
+        axios.get(serverUrlBorrower+`admin/borrower?`+newLink,config)
         .then((res)=>{
             console.log(res.data)
             this.setState({loading:false,rows:res.data.data,rowsPerPage:res.data.rows,totalData:res.data.total_data,page:num})
@@ -233,7 +233,7 @@ getLink = ()=>{
     this.setState({loading:true})
     var newLink
     var config = {
-      headers: {'Authorization': "Bearer " + kukie.get('tokenClient')}
+      headers: {'Authorization': "Bearer " + kukie.get('token')}
     };
     if(this.state.searchRows){
       if(!isNaN(this.state.searchRows)){
@@ -246,7 +246,7 @@ getLink = ()=>{
       newLink+=`page=${num}`
     }
 
-    axios.get(serverUrl+`lender/borrower_list?`+newLink,config)
+    axios.get(serverUrlBorrower+`admin/borrower?`+newLink,config)
     .then((res)=>{
         console.log(res.data)
         this.setState({loading:false,rows:res.data.data,rowsPerPage:res.data.rows,totalData:res.data.total_data,page:num})
@@ -267,9 +267,9 @@ getLink = ()=>{
     
       if(!isNaN(searching)){
         var config = {
-          headers: {'Authorization': "Bearer " + kukie.get('tokenClient')}
+          headers: {'Authorization': "Bearer " + kukie.get('token')}
         };
-        axios.get(serverUrl+`lender/borrower_list?id=${searching}`,config)
+        axios.get(serverUrlBorrower+`admin/borrower?id=${searching}`,config)
         .then((res)=>{
             console.log(res.data)
             this.setState({loading:false,rows:res.data.data})
@@ -280,9 +280,9 @@ getLink = ()=>{
       }else{
        
        config = {
-         headers: {'Authorization': "Bearer " + kukie.get('tokenClient')}
+         headers: {'Authorization': "Bearer " + kukie.get('token')}
        };
-       axios.get(serverUrl+`lender/borrower_list?fullname=${searching}`,config)
+       axios.get(serverUrlBorrower+`admin/borrower?fullname=${searching}`,config)
        .then((res)=>{
            console.log(res.data)
            this.setState({loading:false,rows:res.data.data,searchRows:null})
@@ -295,9 +295,9 @@ getLink = ()=>{
      
     }else{
       config = {
-        headers: {'Authorization': "Bearer " + kukie.get('tokenClient')}
+        headers: {'Authorization': "Bearer " + kukie.get('token')}
       };
-      axios.get(serverUrl+`lender/borrower_list`,config)
+      axios.get(serverUrlBorrower+`admin/borrower`,config)
       .then((res)=>{
           this.setState({loading:false,rows:res.data.data,searchRows:null})
       })
@@ -365,7 +365,7 @@ getLink = ()=>{
   render() {
    
 
-if(kukie.get("tokenClient")&&kukie.get("token")){
+if(kukie.get("token")){
     return (
         <div className="container">
          <div className="row">
@@ -410,7 +410,7 @@ if(kukie.get("tokenClient")&&kukie.get("token")){
         </div>
     );
 
-}else if (kukie.get("token")){
+}else if (!kukie.get("token")){
   return  <Redirect to='/login' />
 }
     
