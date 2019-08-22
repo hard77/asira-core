@@ -1,9 +1,65 @@
 import React from 'react'
 import Cookies from 'universal-cookie';
 import { Redirect } from 'react-router-dom'
+import axios from 'axios'
+import {serverUrl} from './url'
+import NumberFormat from 'react-number-format';
 const cookie = new Cookies()
 
 class ProductDetail extends React.Component{
+    state = {rows:[],fees:[ {
+        "description": "Admin Fee",
+        "amount": "2500"
+      }, {
+        "description": "Admin Fee",
+        "amount": "2500"
+      }],collaterals:["c","d","s"],financing_sector:["a","b","c"],layanan:[]}
+    componentDidMount(){
+        this.getDetailProduct()
+        this.getLayananbyId()
+    }
+    getDetailProduct = ()=>{
+        //var id = this.props.match.params.id
+        var config = {
+            headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
+          };
+          axios.get(serverUrl+`admin/service_products/[bank_id]`,config)
+      //  axios.get(serverUrl+`admin/service_products/${id}`,config)
+        .then((res)=>{
+            console.log(res.data)
+            this.setState({rows:res.data,fees:res.data.fees,collaterals:res.data.collaterals,financing_sector:res.data.financing_sector})
+        })
+        .catch((err)=>console.log(err)) 
+    
+    }
+    getLayananbyId = ()=>{
+       // var layananid = this.state.rows.service
+        var config = {
+            headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
+          };
+          axios.get(serverUrl+`admin/bank_services/[bank_service_id]`,config)
+          //axios.get(serverUrl+`admin/bank_services/${layananid}`,config)
+        .then((res)=>{
+            console.log(res.data)
+            this.setState({layanan:res.data})
+        })
+        .catch((err)=>console.log(err)) 
+
+    }
+    renderAdminFee = ()=>{
+      
+        var jsx = this.state.fees.map((val)=>{
+            return(
+                <div className="form-group row">
+                            <label className="col-sm-4 col-form-label">{val.description} </label>
+                            <div className="col-sm-8">
+                            : {val.amount}
+                            </div>
+                        </div>
+            )
+        })
+        return jsx
+    }
     render(){
         if(cookie.get('token') && cookie.get('tokenClient')){
             return(
@@ -14,7 +70,8 @@ class ProductDetail extends React.Component{
                         <div className="form-group row">
                             <label className="col-sm-4 col-form-label">Nama Produk</label>
                             <div className="col-sm-8">
-                            :
+                            : {this.state.rows.name}
+
                             </div>
                         </div>
                     </form>
@@ -22,7 +79,7 @@ class ProductDetail extends React.Component{
                         <div className="form-group row">
                             <label className="col-sm-4 col-form-label">Jangka Waktu (Bulan)</label>
                             <div className="col-sm-8">
-                            : 
+                            : {this.state.rows.min_timespan} s/d {this.state.rows.max_timespan}
                             </div>
                         </div>
                     </form>
@@ -30,7 +87,7 @@ class ProductDetail extends React.Component{
                         <div className="form-group row">
                             <label className="col-sm-4 col-form-label">Imbal Hasil</label>
                             <div className="col-sm-8">
-                            : 
+                            : {this.state.rows.interest} %
                             </div>
                         </div>
                     </form>
@@ -38,23 +95,30 @@ class ProductDetail extends React.Component{
                         <div className="form-group row">
                             <label className="col-sm-4 col-form-label">Rentang Pengajuan</label>
                             <div className="col-sm-8">
-                            : 
+                            : <NumberFormat thousandSeparator={true} thousandsGroupStyle="Rupiah" prefix={'Rp.'} displayType={'text'} value={this.state.rows.min_loan}/> s/d  <NumberFormat thousandSeparator={true} displayType={'text'} thousandsGroupStyle="Rupiah" prefix={'Rp.'} value={this.state.rows.max_loan}/>
                             </div>
                         </div>
                     </form>
                     <form>
+                        {this.state.fees === undefined ? 
+                            
+                            <form>
                         <div className="form-group row">
                             <label className="col-sm-4 col-form-label">Admin Fee</label>
                             <div className="col-sm-8">
-                            : 
+                            : -
                             </div>
                         </div>
+                    </form>
+                            
+                            
+                            :this.renderAdminFee()}
                     </form>
                     <form>
                         <div className="form-group row">
                             <label className="col-sm-4 col-form-label">Convinence Fee</label>
                             <div className="col-sm-8">
-                            : 
+                            : {this.state.rows.asn_fee}
                             </div>
                         </div>
                     </form>
@@ -62,15 +126,7 @@ class ProductDetail extends React.Component{
                         <div className="form-group row">
                             <label className="col-sm-4 col-form-label">Layanan</label>
                             <div className="col-sm-8">
-                            : 
-                            </div>
-                        </div>
-                    </form>
-                    <form>
-                        <div className="form-group row">
-                            <label className="col-sm-4 col-form-label">Bank Pengguna</label>
-                            <div className="col-sm-8">
-                            : 
+                            : {this.state.layanan.name}
                             </div>
                         </div>
                     </form>
@@ -78,7 +134,7 @@ class ProductDetail extends React.Component{
                         <div className="form-group row">
                             <label className="col-sm-4 col-form-label">Agunan</label>
                             <div className="col-sm-8">
-                            : 
+                            : {this.state.collaterals === undefined ?  "-" :this.state.collaterals.toString()}
                             </div>
                         </div>
                     </form>
@@ -86,15 +142,7 @@ class ProductDetail extends React.Component{
                         <div className="form-group row">
                             <label className="col-sm-4 col-form-label">Sektor Pembiayaan</label>
                             <div className="col-sm-8">
-                            : 
-                            </div>
-                        </div>
-                    </form>
-                    <form>
-                        <div className="form-group row">
-                            <label className="col-sm-4 col-form-label">Jenis Bank Pengguna</label>
-                            <div className="col-sm-8">
-                            : 
+                            : {this.state.financing_sector === undefined?"-":this.state.financing_sector.toString()}
                             </div>
                         </div>
                     </form>
@@ -102,7 +150,7 @@ class ProductDetail extends React.Component{
                         <div className="form-group row">
                             <label className="col-sm-4 col-form-label">Asuransi</label>
                             <div className="col-sm-8">
-                            : 
+                            : {this.state.rows.assurance}
                             </div>
                         </div>
                     </form>
@@ -110,7 +158,7 @@ class ProductDetail extends React.Component{
                         <div className="form-group row">
                             <label className="col-sm-4 col-form-label">Status</label>
                             <div className="col-sm-8">
-                            : 
+                            : {this.state.rows.status}
                             </div>
                         </div>
                     </form>
