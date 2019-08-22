@@ -1,7 +1,7 @@
 import React from 'react'
 import Cookies from 'universal-cookie';
 import { Redirect } from 'react-router-dom'
-import {serverUrl} from './url'
+import {serverUrlBorrower} from './url'
 import Moment from 'react-moment';
 
 import Axios from 'axios';
@@ -22,11 +22,11 @@ class Main extends React.Component{
     
     getDataDetail =()=>{
        var idLoan = this.props.match.params.idLoan
-        if(cookie.get('tokenClient')){
+        if(cookie.get('token')){
             var config = {
-                headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
+                headers: {'Authorization': "Bearer " + cookie.get('token')}
               };
-            Axios.get(serverUrl+`lender/loanrequest_list/${idLoan}/detail`,config)
+            Axios.get(serverUrlBorrower+`admin/loan/${idLoan}`,config)
             .then((res)=>{
                 console.log(res.data)
                 this.setState({rows:res.data,items:res.data.fees,status:res.data.status})
@@ -40,11 +40,11 @@ class Main extends React.Component{
    
     getDataBorrower =()=>{
         var idBorrower = this.props.match.params.idBorrower
-        if (cookie.get('tokenClient')){
+        if (cookie.get('token')){
             var config = {
-                headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
+                headers: {'Authorization': "Bearer " + cookie.get('token')}
               };
-              Axios.get(serverUrl+`lender/borrower_list/${idBorrower}/detail`,config)
+              Axios.get(serverUrlBorrower+`admin/borrower/${idBorrower}`,config)
               .then((res)=>{
                   console.log(res.data)
                   this.setState({borrowerDetail:res.data})
@@ -55,35 +55,7 @@ class Main extends React.Component{
         }
         
     }
-    
-    btnTerimaPinjaman = ()=>{
-        var idLoan = this.props.match.params.idLoan
-        
-        var config = {
-            headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
-          };
-        Axios.get(serverUrl+`/lender/loanrequest_list/${idLoan}/detail/approve`,config)
-        .then((res)=>{
-            swal("Permintaan","Diterima","success")
-            this.setState({status:"approved"})
 
-        })
-        .catch((err)=>console.log(err))
-    }
-
-    btnTolakPinjaman = ()=>{
-        var idLoan = this.props.match.params.idLoan
-
-        var config = {
-            headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
-          };
-        Axios.get(serverUrl+`/lender/loanrequest_list/${idLoan}/detail/reject`,config)
-        .then((res)=>{
-            swal("Permintaan","Ditolak","error")
-            this.setState({status:"rejected"})
-        })
-        .catch((err)=>console.log(err))
-    }
 
     btnBack = ()=>{
         window.history.back()
@@ -103,7 +75,7 @@ class Main extends React.Component{
     }
 
     render(){
-        if(cookie.get('token') && cookie.get('tokenClient')){
+        if(cookie.get('token')){
             return(
                 <div>
 
@@ -261,25 +233,12 @@ class Main extends React.Component{
                         <div className="col-12 col-md-6">
                             <table>
                                 <tbody>
-                                    {
-                                         this.state.status === "approved" || this.state.status === "rejected"? 
-                                         <tr>
+                                    <tr>
                                  
                                          <td>
                                              <input type="button" onClick={this.btnBack}  className="btn btn-info" value="Back"></input>
                                          </td>
                                      </tr>
-                                         
-                                         :
-                                         <tr>
-                                         <td>
-                                             <input type="button" onClick={this.btnTerimaPinjaman} className="btn btn-success" value="Terima"></input>
-                                         </td>
-                                         <td>
-                                             <input type="button" onClick={this.btnTolakPinjaman}  className="btn btn-danger ml-2" value="Tolak"></input>
-                                         </td>
-                                     </tr>
-                                    }
                                
                                 </tbody>
                                 
@@ -290,7 +249,7 @@ class Main extends React.Component{
                 </div>
             )
         }
-        if(cookie.get('token')){
+        if(!cookie.get('token')){
             return (
                 <Redirect to='/login' />
             )    
