@@ -1,6 +1,6 @@
 import React from 'react'
 import Axios from 'axios';
-import {serverUrl, serverUrlBorrower} from './url'
+import {serverUrlBorrower} from './url'
 // import {serverUrlBorrower} from './url'
 import Cookies from 'universal-cookie';
 import './../support/css/profilenasabahdetail.css'
@@ -22,11 +22,11 @@ class profileNasabahDetail extends React.Component{
 
     getDataDetail =()=>{
          var id = this.props.match.params.id
-        if (kukie.get('tokenClient')){
+        if (kukie.get('token')){
             var config = {
-                headers: {'Authorization': "Bearer " + kukie.get('tokenClient')}
+                headers: {'Authorization': "Bearer " + kukie.get('token')}
               };
-              Axios.get(serverUrl+`lender/borrower_list/${id}/detail`,config)
+              Axios.get(serverUrlBorrower+`admin/borrower/${id}`,config)
               .then((res)=>{
                   console.log(res.data)
                   this.setState({rows:res.data,ktp:res.data.idcard_imageid,npwp:res.data.taxid_imageid})
@@ -83,7 +83,7 @@ class profileNasabahDetail extends React.Component{
     }
   
     render(){
-        if(kukie.get('token') && kukie.get('tokenClient')){
+        if(kukie.get('token')){
             return(
                 <div className="container">
    {/* ------------------------------------------------------FOTO KTP------------------------------------------------------ */}
@@ -419,7 +419,7 @@ class profileNasabahDetail extends React.Component{
             )
         
         }
-        if(kukie.get('token')){
+        if(!kukie.get('token')){
             return (
                 <Redirect to='/login' />
             )    
