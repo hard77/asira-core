@@ -5,7 +5,7 @@ const cookie = new Cookies()
 
 class Main extends React.Component{
     render(){
-        if(cookie.get('token') && cookie.get('tokenClient')){
+        if(cookie.get('token')){
             return(
                 <div className="container">
                    <p>CORE</p>
@@ -13,7 +13,7 @@ class Main extends React.Component{
                 </div>
             )
         }
-        if(cookie.get('token')){
+        if(!cookie.get('token')){
             return (
                 <Redirect to='/login' />
             )    
