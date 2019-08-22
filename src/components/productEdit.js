@@ -48,7 +48,7 @@ class ProductEdit extends React.Component{
       getProductDetailId=()=>{
         //var id = this.props.match.params.id
         var config = {
-            headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
+            headers: {'Authorization': "Bearer " + cookie.get('token')}
           };
          axios.get(serverUrl+`admin/service_products/[bank_id]`,config)
        // axios.get(serverUrl+`admin/service_products/${id}`,config)
@@ -138,7 +138,7 @@ class ProductEdit extends React.Component{
                 name,min_timespan,max_timespan,interest,min_loan,max_loan,fees,asn_fee,service,collaterals,financing_sector,assurance,status
             }
             var config = {
-                headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
+                headers: {'Authorization': "Bearer " + cookie.get('token')}
             };
             axios.post(serverUrl+'admin/service_products',newData,config)
             .then((res)=>{
@@ -152,7 +152,7 @@ class ProductEdit extends React.Component{
       
       getBankService = ()=>{
         var config = {
-            headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
+            headers: {'Authorization': "Bearer " + cookie.get('token')}
           };
         axios.get(serverUrl+'admin/bank_services',config)
         .then((res)=>{
@@ -178,7 +178,7 @@ class ProductEdit extends React.Component{
             return <Redirect to='/listproduct'/>            
 
         }
-        if(cookie.get('token') && cookie.get('tokenClient')){
+        if(cookie.get('token')){
             return(
                 <div className="container">
                     <h2 className="mb-5">Produk - Ubah</h2>
@@ -443,7 +443,7 @@ class ProductEdit extends React.Component{
                 </div>
             )
         }
-        if(cookie.get('token')){
+        if(!cookie.get('token')){
             return (
                 <Redirect to='/login' />
             )    
