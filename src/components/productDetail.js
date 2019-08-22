@@ -21,7 +21,7 @@ class ProductDetail extends React.Component{
     getDetailProduct = ()=>{
         var id = this.props.match.params.id
         var config = {
-            headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
+            headers: {'Authorization': "Bearer " + cookie.get('token')}
           };
          // axios.get(serverUrl+`admin/service_products/[bank_id]`,config)
       axios.get(serverUrl+`admin/service_products/${id}`,config)
@@ -35,7 +35,7 @@ class ProductDetail extends React.Component{
     getLayananbyId = ()=>{
        var layananid = this.state.rows.service
         var config = {
-            headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
+            headers: {'Authorization': "Bearer " + cookie.get('token')}
           };
          // axios.get(serverUrl+`admin/bank_services/[bank_service_id]`,config)
           axios.get(serverUrl+`admin/bank_services/${layananid}`,config)
@@ -61,7 +61,7 @@ class ProductDetail extends React.Component{
         return jsx
     }
     render(){
-        if(cookie.get('token') && cookie.get('tokenClient')){
+        if(cookie.get('token')){
             return(
                 <div className="container">
                    <h2>Produk - Detail</h2>
@@ -174,7 +174,7 @@ class ProductDetail extends React.Component{
                 </div>
             )
         }
-        if(cookie.get('token')){
+        if(!cookie.get('token')){
             return (
                 <Redirect to='/login' />
             )    
