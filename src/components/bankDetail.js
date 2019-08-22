@@ -16,9 +16,9 @@ class BankDetail extends React.Component{
 
     getBankDetail = ()=>{
         var id = this.props.match.params.id
-        if(cookie.get('tokenClient')){
+        if(cookie.get('token')){
             var config = {
-                headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
+                headers: {'Authorization': "Bearer " + cookie.get('token')}
               };
           
             axios.get(serverUrl+`admin/banks/${id}`,config)
@@ -30,7 +30,7 @@ class BankDetail extends React.Component{
         }
     }
     render(){
-        if(cookie.get('token') && cookie.get('tokenClient')){
+        if(cookie.get('token')){
             return(
                 <div className="container">
                    <h2>Bank Detail</h2>
@@ -94,7 +94,7 @@ class BankDetail extends React.Component{
                         <div className="form-group row">
                             <label className="col-sm-4 col-form-label">Nama PIC</label>
                             <div className="col-sm-8">
-                            : {this.state.rows.pic_name}
+                            : {this.state.rows.pic}
 
                             </div>
                         </div>
@@ -127,7 +127,7 @@ class BankDetail extends React.Component{
                 </div>
             )
         }
-        if(cookie.get('token')){
+        if(!cookie.get('token')){
             return (
                 <Redirect to='/login' />
             )    
