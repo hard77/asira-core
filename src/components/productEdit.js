@@ -46,7 +46,17 @@ class ProductEdit extends React.Component{
           this.getProductDetailId()
         }
       getProductDetailId=()=>{
-        
+        //var id = this.props.match.params.id
+        var config = {
+            headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
+          };
+         axios.get(serverUrl+`admin/service_products/[bank_id]`,config)
+       // axios.get(serverUrl+`admin/service_products/${id}`,config)
+        .then((res)=>{
+            console.log(res.data)
+            this.setState({rows:res.data,fees:res.data.fees,collaterals:res.data.collaterals,financing_sector:res.data.financing_sector})
+        })
+        .catch((err)=>console.log(err)) 
       }
       
       handleChange = (selectedOption) => {
