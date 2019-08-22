@@ -326,7 +326,7 @@ class BankList extends React.Component{
                 </div>
             )
         }
-        if(cookie.get('token')){
+        if(!cookie.get('token')){
             return (
                 <Redirect to='/login' />
             )    
