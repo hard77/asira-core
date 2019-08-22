@@ -123,7 +123,7 @@ class ProductAdd extends React.Component{
                 name,min_timespan,max_timespan,interest,min_loan,max_loan,fees,asn_fee,service,collaterals,financing_sector,assurance,status
             }
             var config = {
-                headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
+                headers: {'Authorization': "Bearer " + cookie.get('token')}
             };
             axios.post(serverUrl+'admin/service_products',newData,config)
             .then((res)=>{
@@ -137,7 +137,7 @@ class ProductAdd extends React.Component{
       
       getBankService = ()=>{
         var config = {
-            headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
+            headers: {'Authorization': "Bearer " + cookie.get('token')}
           };
         axios.get(serverUrl+'admin/bank_services',config)
         .then((res)=>{
@@ -163,7 +163,7 @@ class ProductAdd extends React.Component{
             return <Redirect to='/listproduct'/>            
 
         }
-        if(cookie.get('token') && cookie.get('tokenClient')){
+        if(cookie.get('token')){
             return(
                 <div className="container">
                     <h2 className="mb-5">Produk - Tambah</h2>
@@ -428,7 +428,7 @@ class ProductAdd extends React.Component{
                 </div>
             )
         }
-        if(cookie.get('token')){
+        if(!cookie.get('token')){
             return (
                 <Redirect to='/login' />
             )    
