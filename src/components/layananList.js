@@ -17,7 +17,7 @@ class LayananList extends React.Component{
     }
     getAllList = ()=>{
         var config = {
-            headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
+            headers: {'Authorization': "Bearer " + cookie.get('token')}
           };
 
         axios.get(serverUrl+`admin/bank_services`,config)
@@ -79,7 +79,7 @@ class LayananList extends React.Component{
         
     }
     render(){
-        if(cookie.get('token') && cookie.get('tokenClient')){
+        if(cookie.get('token')){
             return(
                 <div className="container">
                    <h2 className="mt-3">Layanan List</h2>
@@ -103,7 +103,7 @@ class LayananList extends React.Component{
                 </div>
             )
         }
-        if(cookie.get('token')){
+        if(!cookie.get('token')){
             return (
                 <Redirect to='/login' />
             )    
