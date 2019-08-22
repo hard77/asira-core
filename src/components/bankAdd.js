@@ -87,7 +87,7 @@ class Main extends React.Component{
       }
       getBankProduct = ()=>{
         var config = {
-            headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
+            headers: {'Authorization': "Bearer " + cookie.get('token')}
           };
         axios.get(serverUrl+'admin/service_products',config)
         .then((res)=>{
@@ -99,7 +99,7 @@ class Main extends React.Component{
 
       getBankService = ()=>{
         var config = {
-            headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
+            headers: {'Authorization': "Bearer " + cookie.get('token')}
           };
         axios.get(serverUrl+'admin/bank_services',config)
         .then((res)=>{
@@ -142,7 +142,7 @@ class Main extends React.Component{
 
       getBankType = () => {
         var config = {
-            headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
+            headers: {'Authorization': "Bearer " + cookie.get('token')}
           };
         axios.get(serverUrl+'admin/bank_types',config)
         .then((res)=>{
@@ -169,13 +169,13 @@ class Main extends React.Component{
         var address = this.refs.alamat.value
         var province =  this.refs.provinsi.value.slice(this.refs.provinsi.value.indexOf('T')+1,this.refs.provinsi.value.length)
         var city = this.refs.kota.value
-        var pic_name = this.refs.pic_name.value
+        var pic = this.refs.pic.value
         var phone = this.refs.telp.value
 
         if(this.state.jenisLayanan===null || this.state.jenisProduct===null || 
         this.refs.namaBank.value === "" || this.refs.tipeBank.value ==="0" || 
         this.refs.alamat.value ==="" || this.refs.provinsi.value==="0" || 
-        this.refs.kota.value==="0" || this.refs.pic_name.value ==="" || this.refs.telp.value===""){
+        this.refs.kota.value==="0" || this.refs.pic.value ==="" || this.refs.telp.value===""){
             this.setState({errorMessage:"Harap cek ulang masih ada data yang belum terisi"})
         }else{
             
@@ -187,10 +187,10 @@ class Main extends React.Component{
                     products.push (this.state.jenisProduct[i].value)
                 }
                 var newData = {
-                    name,type,address,province,city,pic_name,phone,services,products
+                    name,type,address,province,city,pic,phone,services,products
                 }
                 var config = {
-                    headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
+                    headers: {'Authorization': "Bearer " + cookie.get('token')}
                 };
                 axios.post(serverUrl+'admin/banks',newData,config)
                 .then((res)=>{
@@ -209,7 +209,7 @@ class Main extends React.Component{
             return <Redirect to='/listbank'/>            
 
         }
-        if(cookie.get('token') && cookie.get('tokenClient')){
+        if(cookie.get('token')){
             return(
                 <div className="container mt-2">
                      <h3>Bank - Tambah</h3>
@@ -298,7 +298,7 @@ class Main extends React.Component{
                         <div className="form-group row">
                             <label className="col-sm-2 col-form-label">Nama PIC</label>
                             <div className="col-sm-10">
-                            <input type="text" className="form-control" ref="pic_name" placeholder="Input Nama PIC.." />                            
+                            <input type="text" className="form-control" ref="pic" placeholder="Input Nama PIC.." />                            
                             </div>
                         </div>
                         <div className="form-group row">
@@ -317,7 +317,7 @@ class Main extends React.Component{
                 </div>
             )
         }
-        if(cookie.get('token')){
+        if(!cookie.get('token')){
             return (
                 <Redirect to='/login' />
             )    
