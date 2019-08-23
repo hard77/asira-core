@@ -38,20 +38,25 @@ const customStyles = {
 class ProductEdit extends React.Component{
     state = {
         selectedOption: null, errorMessage:null,rentangDari:0,rentangAkhir:0,
-        bankService:[],diKlik:false
+        bankService:[],diKlik:false,rows:[],fees:[],bankServicebyID:{}
       };
 
       componentDidMount(){
           this.getBankService()
           this.getProductDetailId()
+          setTimeout(()=>{
+            this.getBankServiceID()
+          },2500) 
         }
+       
+    
       getProductDetailId=()=>{
-        //var id = this.props.match.params.id
+        var id = this.props.match.params.id
         var config = {
             headers: {'Authorization': "Bearer " + cookie.get('token')}
           };
-         axios.get(serverUrl+`admin/service_products/[bank_id]`,config)
-       // axios.get(serverUrl+`admin/service_products/${id}`,config)
+         //axios.get(serverUrl+`admin/service_products/[bank_id]`,config)
+       axios.get(serverUrl+`admin/service_products/${id}`,config)
         .then((res)=>{
             console.log(res.data)
             this.setState({rows:res.data,fees:res.data.fees,collaterals:res.data.collaterals,financing_sector:res.data.financing_sector})
@@ -112,7 +117,7 @@ class ProductEdit extends React.Component{
                 "description": "Admin Fee",
                 "amount":`${adminfee}%`
             })
-
+           
                //===========CODING BAGIAN SEKTOR PEMBIAYAAN
 
                     var financing_sector = []
@@ -162,6 +167,18 @@ class ProductEdit extends React.Component{
         .catch((err)=> console.log(err))
       }
 
+      getBankServiceID = ()=>{
+        var config = {
+            headers: {'Authorization': "Bearer " + cookie.get('token')}
+          };
+        axios.get(serverUrl+`admin/bank_services/${this.state.rows.service}`,config)
+        .then((res)=>{
+            console.log(res.data)
+            this.setState({bankServicebyID:res.data})
+        })
+        .catch((err)=> console.log(err))
+      }
+
       renderBankService = ()=>{
           var jsx = this.state.bankService.map((val,index)=>{
                  return   (<option key={index} value={val.id}>{val.name}</option>)
@@ -172,6 +189,23 @@ class ProductEdit extends React.Component{
       componentWillReceiveProps(newProps){
         this.setState({errorMessage:newProps.error})
       }
+      renderAdminJsx =()=>{
+          var jsx = this.state.fees.map((val,index)=>{
+            return(
+                <tr key={index}>
+                <td>
+                    <label>{val.description}</label>
+                </td>
+                <td>
+                <div className="form-inline">
+                    <input type="text" className="form-control" ref="adminFee" style={{width:"80px"}} defaultValue={val.amount} placeholder={val.amount} />   
+                </div>
+                </td>
+            </tr>
+            )
+          })
+          return jsx
+      }
   
     render(){
         if(this.state.diKlik){
@@ -181,7 +215,7 @@ class ProductEdit extends React.Component{
         if(cookie.get('token')){
             return(
                 <div className="container">
-                    <h2 className="mb-5">Produk - Ubah</h2>
+                    <h2 className="mb-5">Produk - Ubah</h2> 
                     <form>
                         <table className="table">
                             <tbody>
@@ -190,7 +224,7 @@ class ProductEdit extends React.Component{
                                    <label>Nama Produk</label>
                                 </td>
                                 <td>
-                                   <input disabled type="text" ref="namaProduct" className="form-control textfield" placeholder="Input Nama Produk" />
+                                   <input disabled type="text" ref="namaProduct" className="form-control textfield" placeholder={this.state.rows.name} />
                                 </td>
                             </tr>
                             <tr>
@@ -199,7 +233,7 @@ class ProductEdit extends React.Component{
                                 </td>
                                 <td>
                                 <select ref="jangkaWaktuDari" className="form-control option" style={{width:"150px"}}>
-                                        <option value={0}> DARI </option>
+                                        <option value={this.state.rows.min_timespan}> {this.state.rows.min_timespan} </option>
                                         <option value={6}>6 </option>
                                         <option value={7}>7 </option>
                                         <option value={8}>8 </option>
@@ -228,7 +262,7 @@ class ProductEdit extends React.Component{
                                 </select>
                               
                                 <select  ref="jangkaWaktuSampai" className="form-control option" style={{width:"150px"}}>
-                                        <option value={0}>HINGGA</option>
+                                <option value={this.state.rows.max_timespan}> {this.state.rows.max_timespan} </option>                                        
                                         <option value={12}>12 </option> 
                                         <option value={13}>13 </option>
                                         <option value={14}>14 </option>
@@ -263,7 +297,7 @@ class ProductEdit extends React.Component{
                                     </td>
                                     <td>
                                     <div className="form-inline">
-                                        <input type="number" className="form-control" ref="imbalHasil" style={{width:"80px"}} placeholder="0" /><label>%</label>
+                                        <input type="number" defaultValue={this.state.rows.interest} className="form-control" ref="imbalHasil" style={{width:"80px"}} placeholder="0" /><label>%</label>
                                     </div>  
                                     </td>
                             </tr>
@@ -273,30 +307,21 @@ class ProductEdit extends React.Component{
                                     </td>
                                     <td>
                                     <div className="form-inline">
-                                        <NumberFormat placeholder="Rp. 0" onValueChange={(values) => {this.setState({rentangDari:values.value})}} className="form-control textfield" ref="rentangDari" thousandSeparator={true} prefix={'Rp. '} />
+                                        <NumberFormat placeholder={this.state.rows.min_loan}  onValueChange={(values) => {this.setState({rentangDari:values.value})}} className="form-control textfield" ref="rentangDari" thousandSeparator={true} prefix={'Rp. '} />
                                         <label style={{marginLeft:"20px",marginRight:"-95px"}}> s/d </label>
-                                        <NumberFormat placeholder="Rp. 0" onValueChange={(values) => {this.setState({rentangAkhir:values.value})}} className="form-control textfield" ref="rentangHingga" thousandSeparator={true} prefix={'Rp. '} />
+                                        <NumberFormat placeholder={this.state.rows.max_loan} onValueChange={(values) => {this.setState({rentangAkhir:values.value})}} className="form-control textfield" ref="rentangHingga" thousandSeparator={true} prefix={'Rp. '} />
                                     </div>
                                     </td>
 
                             </tr>
-                            <tr>
-                                <td>
-                                    <label>Admin fee</label>
-                                </td>
-                                <td>
-                                <div className="form-inline">
-                                    <input type="text" className="form-control" ref="adminFee" style={{width:"80px"}} placeholder="0" />   <label>%</label>
-                                </div>
-                                </td>
-                            </tr>
+                          {this.renderAdminJsx()}
                             <tr>
                                 <td>
                                     <label>Convinience Fee</label>
                                 </td>
                                 <td>
                                 <div className="form-inline">
-                                    <input type="text" className="form-control" ref="convinienceFee" style={{width:"80px"}} placeholder="0" />   <label>%</label>
+                                    <input type="text" className="form-control" ref="convinienceFee" style={{width:"80px"}} placeholder={this.state.rows.asn_fee}/> 
                                 </div>
                                 </td>
                             </tr>
@@ -306,7 +331,7 @@ class ProductEdit extends React.Component{
                                 </td>
                                 <td>
                                     <select ref="layanan" className="form-control">
-                                            <option value={0}>Pilih Layanan...</option>
+                                            <option value={this.state.bankServicebyID.id}>{this.state.bankServicebyID.name} [DEFAULT]</option>
                                            {this.renderBankService()}
                                     </select>
                                 </td>
@@ -393,12 +418,18 @@ class ProductEdit extends React.Component{
                                     <label >Asuransi</label>
                                 </td>
                                 <td>
-                                   
-                                <div className="form-check-inline" style={{marginLeft:"125px"}}>
-                                            <input className="form-check-input asuransi" type="checkbox"/>
+                                {this.state.rows.assurance ?<div className="form-check-inline" style={{marginLeft:"125px"}}>
+                                            <input className="form-check-input asuransi" type="checkbox" defaultChecked/>
                                             <label className="form-check-label">Tersedia</label>
-                                            <input type="text" className="ml-2" ref="asuransi" placeholder="Jika ada.."></input>
-                                </div> 
+                                            <input type="text" className="ml-2" ref="asuransi" defaultValue={this.state.rows.assurance}></input>
+                                </div>  :
+                                <div className="form-check-inline" style={{marginLeft:"125px"}}>
+                                <input className="form-check-input asuransi" type="checkbox"/>
+                                <label className="form-check-label">Tersedia</label>
+                                <input type="text" className="ml-2" ref="asuransi" placeholder="Jika ada.."></input>
+                    </div> 
+                                }
+                                
 
 
                                 </td>
@@ -409,7 +440,10 @@ class ProductEdit extends React.Component{
                                 </td>
                                 <td>
                                 <div className="form-check-inline" style={{marginLeft:"125px"}}>
-                                            <input className="form-check-input messageCheckbox" type="checkbox" id="BPKB" value="koperasi"/>
+
+                                {this.state.rows.status ==="active"?<input className="form-check-input messageCheckbox" value="active" type="checkbox" defaultChecked/>   :
+                        <input className="form-check-input messageCheckbox " value="active" type="checkbox"/> 
+                        }
                                             <label className="form-check-label">Aktif</label>
                                 </div> 
                                 </td>
