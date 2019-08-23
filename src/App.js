@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import {Route,withRouter,Switch} from 'react-router-dom'
+import {Route, Router, withRouter,Switch} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {keepLogin} from './1.actions'
 
@@ -58,6 +58,40 @@ class App extends React.Component {
             }
               <div className="col-10 col-md-9">
               <Switch> 
+                <Router basename={'/api-core'}>
+
+                
+                    <Route path='/test' component={Testing}></Route>
+                    <Route path={`${process.env.PUBLIC_URL}/`} component={Home} />
+                    <Route path={`${process.env.PUBLIC_URL}/profileNasabah`} component={Nasabah} />
+                    <Route path={`${process.env.PUBLIC_URL}/profileNasabahDetail/:id`} component={profileNasabahDetail} />
+                    <Route path={`${process.env.PUBLIC_URL}/permintaanpinjaman`} component={PermintaanPinjaman} />
+                    <Route path={`${process.env.PUBLIC_URL}/permintaanpinjamanDetail/:idLoan/:idBorrower`} component={PermintaanPinjamanDetail} />
+                    <Route path={`${process.env.PUBLIC_URL}/pinjamansetuju`} component={PinjamanSetuju} />
+                    <Route path={`${process.env.PUBLIC_URL}/pinjamanrejected`} component={PinjamanRejected} />
+
+                    <Route path={`${process.env.PUBLIC_URL}/tambahbank`} component={TambahBank} />
+                    <Route path={`${process.env.PUBLIC_URL}/listbank`} component={ListBank} />
+                    <Route path={`${process.env.PUBLIC_URL}/bankedit/:id`} component={EditBank} />
+                    <Route path={`${process.env.PUBLIC_URL}/bankdetail/:id`} component={DetailBank} />
+
+                    <Route path={`${process.env.PUBLIC_URL}/tambahproduct`} component={ProductAdd} />
+                    <Route path={`${process.env.PUBLIC_URL}/listproduct`} component={ProductList} />
+    
+                    <Route path={`${process.env.PUBLIC_URL}/tambahlayanan`} component={LayananAdd} />
+                    <Route path={`${process.env.PUBLIC_URL}/listlayanan`} component={LayananList} />
+
+
+                    {kukie.get('token') ?      <Route path={`${process.env.PUBLIC_URL}/login`} component={Home} />:       <Route path={`${process.env.PUBLIC_URL}/login`} component={Login} />} 
+
+                    <Route path={`${process.env.PUBLIC_URL}/*`} component={PageNotFound} />
+                  
+                    </Router>
+              </Switch>
+              {/* <Switch> 
+                
+
+                
                     <Route path='/test' component={Testing}></Route>
                     <Route path='/' component={Home} exact></Route>
                     <Route path='/profileNasabah' component={Nasabah}></Route>
@@ -86,7 +120,8 @@ class App extends React.Component {
                     {kukie.get('token') ?  <Route path="/login" component={Home}></Route>:  <Route path="/login" component={Login}></Route>} 
 
                     <Route path='*' component={PageNotFound} />
-              </Switch>
+                  
+              </Switch> */}
               </div>
             </div>
           </ScrollTop>
