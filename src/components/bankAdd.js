@@ -155,7 +155,7 @@ class Main extends React.Component{
       renderTypeBankJsx = ()=>{
           var jsx = this.state.typeBank.map((val,index)=>{
               return(
-                <option key={index} value={val.name}>{val.name}</option>
+                <option key={index} value={val.id}>{val.name}</option>
               )
           })
           return jsx
@@ -165,18 +165,24 @@ class Main extends React.Component{
         var services =[]
         var products =[]
         var name = this.refs.namaBank.value
-        var type = this.refs.tipeBank.value
+        var type = parseInt(this.refs.tipeBank.value)
         var address = this.refs.alamat.value
         var province =  this.refs.provinsi.value.slice(this.refs.provinsi.value.indexOf('T')+1,this.refs.provinsi.value.length)
         var city = this.refs.kota.value
         var pic = this.refs.pic.value
-        var phone = this.refs.telp.value
+        var phone = String(this.refs.telp.value)
+        var username=this.refs.username.value
+        var password=this.refs.password1.value
+        var password2=this.refs.password2.value
+
 
         if(this.state.jenisLayanan===null || this.state.jenisProduct===null || 
         this.refs.namaBank.value === "" || this.refs.tipeBank.value ==="0" || 
         this.refs.alamat.value ==="" || this.refs.provinsi.value==="0" || 
         this.refs.kota.value==="0" || this.refs.pic.value ==="" || this.refs.telp.value===""){
             this.setState({errorMessage:"Harap cek ulang masih ada data yang belum terisi"})
+        }else if(password !== password2){
+            this.setState({errorMessage:"Password did not match"})
         }else{
             
             
@@ -187,7 +193,7 @@ class Main extends React.Component{
                     products.push (this.state.jenisProduct[i].value)
                 }
                 var newData = {
-                    name,type,address,province,city,pic,phone,services,products
+                    name,type,address,province,city,pic,phone,services,products,username,password
                 }
                 var config = {
                     headers: {'Authorization': "Bearer " + cookie.get('token')}
@@ -198,7 +204,13 @@ class Main extends React.Component{
                     swal("Berhasil","Bank berhasil bertambah","success")
                     this.setState({errorMessage:null,diKlik:true})
                 })
-                .catch((err)=>console.log(err))
+                .catch((err)=>{
+                    if(err.response.status === 422){
+                        alert("Username sudah di pakai")
+                    }else{
+                        console.log(err)
+                    }
+                })
         }
 
 
@@ -305,6 +317,24 @@ class Main extends React.Component{
                             <label className="col-sm-2 col-form-label">No Telp</label>
                             <div className="col-sm-10">
                             <input type="number" className="form-control" ref="telp" placeholder="Nomor telp" />                                                        
+                            </div>
+                        </div>
+                        <div className="form-group row">
+                            <label className="col-sm-2 col-form-label">Username</label>
+                            <div className="col-sm-10">
+                            <input type="text" className="form-control" ref="username" placeholder="Input Username.." />                            
+                            </div>
+                        </div>
+                        <div className="form-group row">
+                            <label className="col-sm-2 col-form-label">Password</label>
+                            <div className="col-sm-10">
+                            <input type="password" className="form-control" ref="password1" placeholder="Input Password.." />                            
+                            </div>
+                        </div>
+                        <div className="form-group row">
+                            <label className="col-sm-2 col-form-label">Confirm Password</label>
+                            <div className="col-sm-10">
+                            <input type="password" className="form-control" ref="password2" placeholder="Confirm Password.." />                            
                             </div>
                         </div>
                             <input type="button" className="btn btn-primary" value="Simpan" onClick={this.btnSaveBank}/>
