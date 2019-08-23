@@ -160,6 +160,9 @@ class Main extends React.Component{
           })
           return jsx
       }
+      btnCancel = ()=>{
+        window.history.back()
+      }
 
     btnSaveBank =()=>{
         var services =[]
@@ -315,7 +318,7 @@ class Main extends React.Component{
                         </div>
                             <input type="button" className="btn btn-primary" value="Simpan" onClick={this.btnSaveBank}/>
                             <Link to='/listbank'>
-                            <input type="button" className="btn btn-secondary ml-2" value="Batal"/>
+                            <input type="button" className="btn btn-secondary ml-2" value="Batal" onClick={this.btnCancel}/>
                             </Link>  
                     </form>
                     
