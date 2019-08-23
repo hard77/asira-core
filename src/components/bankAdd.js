@@ -171,9 +171,6 @@ class Main extends React.Component{
         var city = this.refs.kota.value
         var pic = this.refs.pic.value
         var phone = String(this.refs.telp.value)
-        var username=this.refs.username.value
-        var password=this.refs.password1.value
-        var password2=this.refs.password2.value
 
 
         if(this.state.jenisLayanan===null || this.state.jenisProduct===null || 
@@ -181,11 +178,7 @@ class Main extends React.Component{
         this.refs.alamat.value ==="" || this.refs.provinsi.value==="0" || 
         this.refs.kota.value==="0" || this.refs.pic.value ==="" || this.refs.telp.value===""){
             this.setState({errorMessage:"Harap cek ulang masih ada data yang belum terisi"})
-        }else if(password !== password2){
-            this.setState({errorMessage:"Password did not match"})
         }else{
-            
-            
                 for (var i=0; i<this.state.jenisLayanan.length;i++){
                     services.push (this.state.jenisLayanan[i].value)
                 }
@@ -193,7 +186,7 @@ class Main extends React.Component{
                     products.push (this.state.jenisProduct[i].value)
                 }
                 var newData = {
-                    name,type,address,province,city,pic,phone,services,products,username,password
+                    name,type,address,province,city,pic,phone,services,products
                 }
                 var config = {
                     headers: {'Authorization': "Bearer " + cookie.get('token')}
@@ -317,24 +310,6 @@ class Main extends React.Component{
                             <label className="col-sm-2 col-form-label">No Telp</label>
                             <div className="col-sm-10">
                             <input type="number" className="form-control" ref="telp" placeholder="Nomor telp" />                                                        
-                            </div>
-                        </div>
-                        <div className="form-group row">
-                            <label className="col-sm-2 col-form-label">Username</label>
-                            <div className="col-sm-10">
-                            <input type="text" className="form-control" ref="username" placeholder="Input Username.." />                            
-                            </div>
-                        </div>
-                        <div className="form-group row">
-                            <label className="col-sm-2 col-form-label">Password</label>
-                            <div className="col-sm-10">
-                            <input type="password" className="form-control" ref="password1" placeholder="Input Password.." />                            
-                            </div>
-                        </div>
-                        <div className="form-group row">
-                            <label className="col-sm-2 col-form-label">Confirm Password</label>
-                            <div className="col-sm-10">
-                            <input type="password" className="form-control" ref="password2" placeholder="Confirm Password.." />                            
                             </div>
                         </div>
                             <input type="button" className="btn btn-primary" value="Simpan" onClick={this.btnSaveBank}/>
