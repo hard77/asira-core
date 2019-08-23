@@ -154,6 +154,10 @@ class ProductAdd extends React.Component{
           return jsx;
       }
 
+      btnCancel = ()=>{
+        window.history.back()
+      }
+
       componentWillReceiveProps(newProps){
         this.setState({errorMessage:newProps.error})
        }
@@ -402,7 +406,7 @@ class ProductAdd extends React.Component{
                             <tr>
                                 <td>
                                     <input type="button" className="btn btn-success" value="Simpan" onClick={this.btnSaveProduct}/>
-                                    <input type="button" className="btn btn-warning ml-2" value="Batal" onClick={this.btnSaveProduct}/>
+                                    <input type="button" className="btn btn-warning ml-2" value="Batal" onClick={this.btnCancel}/>
                                
                                 </td>
                                 <td>
