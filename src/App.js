@@ -33,6 +33,10 @@ import PinjamanRejected from './components/pinjamanRejected'
 
 import ProductAdd from './components/productAdd'
 import ProductList from './components/productList'
+import TypeBankAdd from './components/typebankAdd'
+import TypeBankList from './components/typebankList'
+import TujuanAdd from './components/tujuanAdd'
+import TujuanList from './components/tujuanList'
 
 import Cookies from 'universal-cookie';
 
@@ -79,9 +83,11 @@ class App extends React.Component {
                     <Route path='/tambahlayanan' component={LayananAdd}></Route>
                     <Route path='/listlayanan' component={LayananList}></Route>
 
+                    <Route path='/tambahtipe' component={TypeBankAdd}></Route>
+                    <Route path='/listtipe' component={TypeBankList}></Route>
 
-                    
-
+                    <Route path='/tambahtujuan' component={TujuanAdd}></Route>
+                    <Route path='/listtujuan' component={TujuanList}></Route>
 
                     {kukie.get('token') ?  <Route path="/login" component={Home}></Route>:  <Route path="/login" component={Login}></Route>} 
 
