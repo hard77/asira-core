@@ -13,44 +13,46 @@ class ProductDetail extends React.Component{
       }, {
         "description": "Admin Fee",
         "amount": "2500"
-      }],collaterals:["c","d","s"],financing_sector:["a","b","c"],layanan:[]}
+      }],collaterals:["c","d","s"],financing_sector:["a","b","c"],layanan:""}
     componentDidMount(){
         this.getDetailProduct()
-        this.getLayananbyId()
+     
     }
     getDetailProduct = ()=>{
         var id = this.props.match.params.id
         var config = {
             headers: {'Authorization': "Bearer " + cookie.get('token')}
           };
-         // axios.get(serverUrl+`admin/service_products/[bank_id]`,config)
+     
       axios.get(serverUrl+`admin/service_products/${id}`,config)
         .then((res)=>{
             console.log(res.data)
             this.setState({rows:res.data,fees:res.data.fees,collaterals:res.data.collaterals,financing_sector:res.data.financing_sector})
+
+            if (this.state.rows.service !== undefined || this.state.rows.service !== null){
+                var layananid = this.state.rows.service
+                var config = {
+                    headers: {'Authorization': "Bearer " + cookie.get('token')}
+                  };
+                
+                  axios.get(serverUrl+`admin/bank_services/${layananid}`,config)
+                .then((res)=>{
+                    console.log(res.data)
+                    this.setState({layanan:res.data.name})
+                })
+                .catch((err)=>console.log(err)) 
+            }
+
         })
         .catch((err)=>console.log(err)) 
     
     }
-    getLayananbyId = ()=>{
-       var layananid = this.state.rows.service
-        var config = {
-            headers: {'Authorization': "Bearer " + cookie.get('token')}
-          };
-         // axios.get(serverUrl+`admin/bank_services/[bank_service_id]`,config)
-          axios.get(serverUrl+`admin/bank_services/${layananid}`,config)
-        .then((res)=>{
-            console.log(res.data)
-            this.setState({layanan:res.data})
-        })
-        .catch((err)=>console.log(err)) 
-
-    }
+  
     renderAdminFee = ()=>{
       
-        var jsx = this.state.fees.map((val)=>{
+        var jsx = this.state.fees.map((val,index)=>{
             return(
-                <div className="form-group row">
+                <div className="form-group row" key={index}>
                             <label className="col-sm-4 col-form-label">{val.description} </label>
                             <div className="col-sm-8">
                             : {val.amount}
@@ -126,7 +128,7 @@ class ProductDetail extends React.Component{
                         <div className="form-group row">
                             <label className="col-sm-4 col-form-label">Layanan</label>
                             <div className="col-sm-8">
-                            : {this.state.layanan.name}
+                            : {this.state.layanan}
                             </div>
                         </div>
                     </form>
