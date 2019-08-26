@@ -38,15 +38,14 @@ const customStyles = {
 class ProductEdit extends React.Component{
     state = {
         selectedOption: null, errorMessage:null,rentangDari:0,rentangAkhir:0,
-        bankService:[],diKlik:false,rows:[],fees:[],bankServicebyID:{}
+        collaterals:[],
+        bankService:[],diKlik:false,rows:[],fees:[],bankServicebyID:{},financing_sector:[],
+        agunan:["Sertifikat Tanah","Sertifikat Rumah","Kios/Lapak","Deposito","BPKB Kendaraan"]
       };
 
       componentDidMount(){
           this.getBankService()
           this.getProductDetailId()
-          setTimeout(()=>{
-            this.getBankServiceID()
-          },2500) 
         }
        
     
@@ -59,9 +58,26 @@ class ProductEdit extends React.Component{
        axios.get(serverUrl+`admin/service_products/${id}`,config)
         .then((res)=>{
             console.log(res.data)
-            this.setState({rows:res.data,fees:res.data.fees,collaterals:res.data.collaterals,financing_sector:res.data.financing_sector})
+            this.setState({rows:res.data,fees:res.data.fees,
+                collaterals:res.data.collaterals,
+                financing_sector:res.data.financing_sector})
+            if (this.state.rows.service !== undefined || this.state.rows.service !== null){
+                var config = {
+                    headers: {'Authorization': "Bearer " + cookie.get('token')}
+                  };
+                axios.get(serverUrl+`admin/bank_services/${this.state.rows.service}`,config)
+                .then((res)=>{
+                    console.log(res.data)
+                    this.setState({bankServicebyID:res.data})
+                })
+                .catch((err)=> console.log(err))
+            }
         })
         .catch((err)=>console.log(err)) 
+
+    
+
+
       }
       
       handleChange = (selectedOption) => {
@@ -69,18 +85,27 @@ class ProductEdit extends React.Component{
         console.log(`Option selected:`, selectedOption);
       };
 
-      btnSaveProduct = ()=>{
-        var i
-        var name = this.refs.namaProduct.value
-        var min_timespan = this.refs.jangkaWaktuDari.value
-        var max_timespan = this.refs.jangkaWaktuSampai.value
-        var interest = this.refs.imbalHasil.value ? this.refs.imbalHasil.value : this.refs.imbalHasil.placeholder
-        var min_loan = this.state.rentangDari
-        var max_loan = this.state.rentangAkhir 
-        var adminfee = this.refs.adminFee.value ? this.refs.adminFee.value : this.refs.adminFee.placeholder
+      renderSektorPembiayaan = ()=>{
+          var jsx = this.state.financing_sector.map((val)=>{
+              return(
+                { value: val, label: val }
+              )
+          })
+          return jsx
+      }
 
-        var asn_fee = this.refs.convinienceFee.value ? this.refs.convinienceFee.value : this.refs.convinienceFee.placeholder
-        var service = this.refs.layanan.value
+      btnEditProduct = ()=>{
+        var id = this.props.match.params.id
+        var i
+        var name = this.refs.namaProduct.value? this.refs.namaProduct.value:this.refs.namaProduct.placeholder
+        var min_timespan = parseInt(this.refs.jangkaWaktuDari.value)
+        var max_timespan = parseInt(this.refs.jangkaWaktuSampai.value)
+        var interest = this.refs.imbalHasil.value ? parseInt(this.refs.imbalHasil.value) : parseInt(this.refs.imbalHasil.placeholder)
+        var min_loan = this.state.rentangDari ? parseInt(this.state.rentangDari) : this.state.rows.min_loan
+        var max_loan = this.state.rentangAkhir ? parseInt(this.state.rentangAkhir) : this.state.rows.max_loan
+        var adminfee = this.refs.adminFee.value ? this.refs.adminFee.value : this.refs.adminFee.placeholder
+        var asn_fee = this.refs.convinienceFee.value ? parseInt(this.refs.convinienceFee.value) : this.refs.convinienceFee.placeholder
+        var service = parseInt(this.refs.layanan.value)
         
         var fees= []
         var status =  document.querySelector('.messageCheckbox').checked;
@@ -91,9 +116,7 @@ class ProductEdit extends React.Component{
         assurance = assurance ? assurance = this.refs.asuransi.value : assurance=""
         otheragunan = otheragunan ? otheragunan = this.refs.lainnya.value : otheragunan =""
     
-        if(name===""){
-            this.setState({errorMessage:"Data Kosong"})
-        }else if(min_timespan==="0" || max_timespan==="0"){
+        if(min_timespan==="0" || max_timespan==="0"){
             this.setState({errorMessage:"Jangka Waktu Kosong"})
         }else if(parseInt(min_timespan) > parseInt(max_timespan)){
             this.setState({errorMessage:"Jangka Waktu dari lebih besar - Harap cek ulang"})
@@ -105,25 +128,25 @@ class ProductEdit extends React.Component{
             this.setState({errorMessage:"Admin Fee tidak benar - Harap cek ulang"})
         }else if(parseFloat(asn_fee) <0){
             this.setState({errorMessage:"Convinience Fee tidak benar - Harap cek ulang"})
-        }else if(parseInt(service)===0){
-            this.setState({errorMessage:"Layanan belum terpilih - Harap cek ulang"})
-        }else if(this.state.selectedOption===null){
-            this.setState({errorMessage:"Sektor Pembiayaan belum terpilih - Harap cek ulang"})
-        }else if(isNaN(adminfee) || isNaN(asn_fee)){
-            this.setState({errorMessage:"Admin atau Convience Fee mesti angka  - Harap cek ulang"})
         }
         else{
+       
             fees.push({
                 "description": "Admin Fee",
-                "amount":`${adminfee}%`
+                "amount":`${adminfee}`
             })
-           
+            console.log(fees + " "+ typeof(fees))
                //===========CODING BAGIAN SEKTOR PEMBIAYAAN
 
                     var financing_sector = []
-                    for ( i=0 ; i < this.state.selectedOption.length; i++){
-                        financing_sector.push(this.state.selectedOption[i].value)
+                    if (this.state.selectedOption){
+                        for ( i=0 ; i < this.state.selectedOption.length; i++){
+                            financing_sector.push(this.state.selectedOption[i].value)
+                        }
+                    }else{
+                        financing_sector = this.state.financing_sector
                     }
+                    
 
 
                 //======= CODING BAGIAN AGUNAN
@@ -137,18 +160,18 @@ class ProductEdit extends React.Component{
                     if (otheragunan){
                         collaterals.push(otheragunan)
                     }
-           
-            asn_fee = asn_fee +"%"
+                    
+                    
             var newData = {
                 name,min_timespan,max_timespan,interest,min_loan,max_loan,fees,asn_fee,service,collaterals,financing_sector,assurance,status
             }
             var config = {
                 headers: {'Authorization': "Bearer " + cookie.get('token')}
             };
-            axios.post(serverUrl+'admin/service_products',newData,config)
+            axios.patch(serverUrl+`admin/service_products/${id}`,newData,config)
             .then((res)=>{
                 console.log(res.data)
-                swal("Berhasil","Produk berhasil bertambah","success")
+                swal("Berhasil","Produk berhasil diEdit","success")
                 this.setState({errorMessage:null,diKlik:true})
             })
             .catch((err)=>console.log(err))
@@ -206,6 +229,66 @@ class ProductEdit extends React.Component{
           })
           return jsx
       }
+
+      renderAngunanJsx = ()=>{
+        
+        var jsx = this.state.agunan.map((val,index)=>{
+            var dataSame= false
+            for (var i=0;i < this.state.collaterals.length;i++){
+                if (val === this.state.collaterals[i]){
+                  dataSame= true
+                }
+            }
+            if (dataSame) {
+               return (
+                    <div key={index} className="form-check form-check-inline">
+                    <input defaultChecked className="form-check-input agunan" type="checkbox" value={val}/>
+                    <label className="form-check-label">{val}</label>
+                    </div> 
+    
+                ) 
+            }else {
+                return (
+                    <div key={index} className="form-check form-check-inline">
+                    <input className="form-check-input agunan" type="checkbox" value={val}/>
+                    <label className="form-check-label">{val}</label>
+                    </div> 
+    
+                ) 
+            }
+              
+      })
+      return jsx
+          
+      }
+
+      renderAgunanLainJsx =()=>{
+          for (var i=0; i<this.state.collaterals.length;i++){
+             
+                if (!this.state.agunan.includes(this.state.collaterals[i]))
+                {
+                    return (
+                        <div className="form-check form-check-inline">
+                        <input defaultChecked className="form-check-input otheragunan" type="checkbox" value="lainnya"/>
+                        <label className="form-check-label">Lainnya</label>
+                        <input type="text" ref="lainnya" style={{width:"200px"}} placeholder={this.state.collaterals[i]} className="form-control ml-2"/>
+                        </div> 
+                    )
+                }else{
+                    return (
+                        <div className="form-check form-check-inline">
+                        <input className="form-check-input otheragunan" type="checkbox" value="lainnya"/>
+                        <label className="form-check-label">Lainnya</label>
+                        <input type="text" ref="lainnya" style={{width:"200px"}} placeholder="Jika ada.." className="form-control ml-2"/>
+                        </div> 
+                    )
+                }
+              }  
+      }
+
+      btnCancel=()=>{
+          this.setState({diKlik:true})
+      }
   
     render(){
         if(this.state.diKlik){
@@ -216,7 +299,7 @@ class ProductEdit extends React.Component{
             return(
                 <div className="container">
                     <h2 className="mb-5">Produk - Ubah</h2> 
-                    <form>
+                  <form>
                         <table className="table">
                             <tbody>
                             <tr>
@@ -233,7 +316,8 @@ class ProductEdit extends React.Component{
                                 </td>
                                 <td>
                                 <select ref="jangkaWaktuDari" className="form-control option" style={{width:"150px"}}>
-                                        <option value={this.state.rows.min_timespan}> {this.state.rows.min_timespan} </option>
+                                        <option value={this.state.rows.min_timespan}>{this.state.rows.min_timespan} </option>
+                                        <optgroup label="----------">                                       
                                         <option value={6}>6 </option>
                                         <option value={7}>7 </option>
                                         <option value={8}>8 </option>
@@ -258,11 +342,13 @@ class ProductEdit extends React.Component{
                                         <option value={27}>27 </option>
                                         <option value={28}>28 </option>
                                         <option value={29}>29 </option> 
-                                        <option value={30}>30 </option>    
+                                        <option value={30}>30 </option>  
+                                        </optgroup>
                                 </select>
-                              
+                                <label style={{marginLeft:"80px",marginRight:"-90px"}}> s/d </label>
                                 <select  ref="jangkaWaktuSampai" className="form-control option" style={{width:"150px"}}>
-                                <option value={this.state.rows.max_timespan}> {this.state.rows.max_timespan} </option>                                        
+                                <option value={this.state.rows.max_timespan}> {this.state.rows.max_timespan}</option>     
+                                <optgroup label="----------">    
                                         <option value={12}>12 </option> 
                                         <option value={13}>13 </option>
                                         <option value={14}>14 </option>
@@ -288,6 +374,7 @@ class ProductEdit extends React.Component{
                                         <option value={34}>34 </option>
                                         <option value={35}>35 </option>
                                         <option value={36}>36 </option>
+                                    </optgroup>  
                                 </select>
                                 </td>
                             </tr>
@@ -332,7 +419,9 @@ class ProductEdit extends React.Component{
                                 <td>
                                     <select ref="layanan" className="form-control">
                                             <option value={this.state.bankServicebyID.id}>{this.state.bankServicebyID.name} [DEFAULT]</option>
+                                            <optgroup label="--------------------------------">    
                                            {this.renderBankService()}
+                                           </optgroup>
                                     </select>
                                 </td>
 
@@ -344,53 +433,12 @@ class ProductEdit extends React.Component{
                                 </td>
                                 <td>
                              
-                                <div className="col-sm-10">
-                            <div className="row">
-                                <div className="col ">
-                              
-
-                                    <div className="form-check form-check-inline">
-                                    <input className="form-check-input agunan" type="checkbox" value="setifikat tanah" style={{marginLeft:"110px"}}/>
-                                    <label className="form-check-label">Sertifikat Tanah</label>
-                                    </div>
-
-                                    <div className="form-check form-check-inline">
-                                    <input className="form-check-input agunan" type="checkbox" value="sertifikat rumah"/>
-                                    <label className="form-check-label" >Sertifikat Rumah</label>
-                                    </div>
-
-                                    <div className="form-check form-check-inline">
-                                    <input className="form-check-input agunan" type="checkbox" value="bpkb kendaraan"/>
-                                    <label className="form-check-label">BPKB Kendaraan</label>
-                                    </div> 
-                                
-                                   
-                                </div>
-                            </div>
-
-                            <div className="row">
-                                <div className="col">
-                                    <div className="form-check form-check-inline">
-                                    <input className="form-check-input agunan" type="checkbox" name="agunan" value="kios/lapak" style={{marginLeft:"110px"}}/>
-                                    <label className="form-check-label">Kios/ Lapak</label>
-                                    </div>
-
-                                    <div className="form-check form-check-inline">
-                                    <input className="form-check-input agunan" type="checkbox" name="agunan" value="deposito"/>
-                                    <label className="form-check-label" >Deposito</label>
-                                    </div>
-
-                                    <div className="form-check form-check-inline">
-                                    <input className="form-check-input otheragunan" type="checkbox" value="other" />
-                                    <label className="form-check-label ">Lainnya</label> 
-                                    <input type="text" ref="lainnya" style={{width:"100px"}} placeholder="Lainnya.." className="form-control ml-2"/>
-                                    </div> 
-                                  
-                                </div>
-                                
-                            </div>
-                      
-                        </div>
+                                <div className="col-sm-10" style={{marginLeft:"105px"}}>
+                        
+                                {this.renderAngunanJsx()}
+                                {this.renderAgunanLainJsx()}
+                            </div> 
+                        
                        
                                     
                                 </td>
@@ -407,7 +455,7 @@ class ProductEdit extends React.Component{
                                         isMulti={true}
                                         options={options}
                                         styles={customStyles}
-                                        placeholder="Jenis Layanan"
+                                        placeholder={this.state.financing_sector.toString()}
                                         
                                     />
                                 </td>
@@ -449,18 +497,17 @@ class ProductEdit extends React.Component{
                                 </td>
                             </tr>
                             <tr>
-                                <td>
-                                    <input type="button" className="btn btn-success" value="Simpan" onClick={this.btnSaveProduct}/>
-                                    <input type="button" className="btn btn-warning ml-2" value="Batal" onClick={this.btnSaveProduct}/>
+                                <td colSpan={2}>
+                                        
+                                    <div className="form-group row">
+                                            <div style={{color:"red",fontSize:"15px",textAlign:'center'}}>
+                                                    {this.state.errorMessage}
+                                            </div>
+                                    </div>
+                                    <input type="button" className="inline-block btn btn-success" value="Simpan" onClick={this.btnEditProduct}/>
+                                    <input type="button" className="inline-block btn btn-warning ml-2" value="Batal" onClick={this.btnCancel}/>
                                
-                                </td>
-                                <td>
-                                <div className="form-group row">
-                                        <div style={{color:"red",fontSize:"15px",textAlign:'center'}}>
-                                                {this.state.errorMessage}
-                                        </div>
-                                            
-                                </div>
+                                
                                 </td>
                             </tr>
                             </tbody>
