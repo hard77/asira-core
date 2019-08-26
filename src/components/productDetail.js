@@ -16,14 +16,14 @@ class ProductDetail extends React.Component{
       }],collaterals:["c","d","s"],financing_sector:["a","b","c"],layanan:""}
     componentDidMount(){
         this.getDetailProduct()
-       // this.getLayananbyId()
+     
     }
     getDetailProduct = ()=>{
         var id = this.props.match.params.id
         var config = {
             headers: {'Authorization': "Bearer " + cookie.get('token')}
           };
-         // axios.get(serverUrl+`admin/service_products/[bank_id]`,config)
+     
       axios.get(serverUrl+`admin/service_products/${id}`,config)
         .then((res)=>{
             console.log(res.data)
@@ -34,7 +34,7 @@ class ProductDetail extends React.Component{
                 var config = {
                     headers: {'Authorization': "Bearer " + cookie.get('token')}
                   };
-                 // axios.get(serverUrl+`admin/bank_services/[bank_service_id]`,config)
+                
                   axios.get(serverUrl+`admin/bank_services/${layananid}`,config)
                 .then((res)=>{
                     console.log(res.data)
@@ -47,20 +47,7 @@ class ProductDetail extends React.Component{
         .catch((err)=>console.log(err)) 
     
     }
-    // getLayananbyId = ()=>{
-    //    var layananid = this.state.rows.service
-    //     var config = {
-    //         headers: {'Authorization': "Bearer " + cookie.get('token')}
-    //       };
-    //      // axios.get(serverUrl+`admin/bank_services/[bank_service_id]`,config)
-    //       axios.get(serverUrl+`admin/bank_services/${layananid}`,config)
-    //     .then((res)=>{
-    //         console.log(res.data)
-    //         this.setState({layanan:res.data})
-    //     })
-    //     .catch((err)=>console.log(err)) 
-
-    // }
+  
     renderAdminFee = ()=>{
       
         var jsx = this.state.fees.map((val,index)=>{
