@@ -53,7 +53,7 @@ class LayananAdd extends React.Component{
                 var image = reader.result.replace("data:image/jpeg;base64,","")
                 var status =  document.querySelector('.messageCheckbox').checked;
 
-                status ? status= 1: status= 0
+                status ? status= "active": status= "inactive"
 
                 var newData = {name,status,image}
                 var config = {headers: {'Authorization': "Bearer " + cookie.get('token')}};
@@ -63,7 +63,6 @@ class LayananAdd extends React.Component{
                     this.setState({errorMessage:null,diKlik:true})
                 })
                 .catch((err)=>{console.log(err)})
-                //masukin axios di sini buat add layanan.. jangan lupa
 
 
             };
