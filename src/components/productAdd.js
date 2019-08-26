@@ -52,15 +52,15 @@ class ProductAdd extends React.Component{
       btnSaveProduct = ()=>{
         var i
         var name = this.refs.namaProduct.value
-        var min_timespan = this.refs.jangkaWaktuDari.value
-        var max_timespan = this.refs.jangkaWaktuSampai.value
-        var interest = this.refs.imbalHasil.value ? this.refs.imbalHasil.value : this.refs.imbalHasil.placeholder
-        var min_loan = this.state.rentangDari
-        var max_loan = this.state.rentangAkhir 
+        var min_timespan = parseInt(this.refs.jangkaWaktuDari.value)
+        var max_timespan = parseInt(this.refs.jangkaWaktuSampai.value)
+        var interest = this.refs.imbalHasil.value ? parseInt(this.refs.imbalHasil.value) : parseInt(this.refs.imbalHasil.placeholder)
+        var min_loan = parseInt(this.state.rentangDari)
+        var max_loan = parseInt(this.state.rentangAkhir) 
         var adminfee = this.refs.adminFee.value ? this.refs.adminFee.value : this.refs.adminFee.placeholder
 
         var asn_fee = this.refs.convinienceFee.value ? this.refs.convinienceFee.value : this.refs.convinienceFee.placeholder
-        var service = this.refs.layanan.value
+        var service = parseInt(this.refs.layanan.value)
         
         var fees= []
         var status =  document.querySelector('.messageCheckbox').checked;
@@ -95,7 +95,7 @@ class ProductAdd extends React.Component{
         else{
             fees.push({
                 "description": "Admin Fee",
-                "amount":`${adminfee}%`
+                "amount":`${adminfee}`
             })
 
                //===========CODING BAGIAN SEKTOR PEMBIAYAAN
@@ -118,7 +118,6 @@ class ProductAdd extends React.Component{
                         collaterals.push(otheragunan)
                     }
            
-            asn_fee = asn_fee +"%"
             var newData = {
                 name,min_timespan,max_timespan,interest,min_loan,max_loan,fees,asn_fee,service,collaterals,financing_sector,assurance,status
             }
@@ -152,6 +151,10 @@ class ProductAdd extends React.Component{
                  return   (<option key={index} value={val.id}>{val.name}</option>)
           })
           return jsx;
+      }
+
+      btnCancel = ()=>{
+        window.history.back()
       }
 
       componentWillReceiveProps(newProps){
@@ -271,7 +274,7 @@ class ProductAdd extends React.Component{
                                 </td>
                                 <td>
                                 <div className="form-inline">
-                                    <input type="text" className="form-control" ref="adminFee" style={{width:"80px"}} placeholder="0" />   <label>%</label>
+                                    <input type="text" className="form-control" ref="adminFee" style={{width:"80px"}} placeholder="0" />  
                                 </div>
                                 </td>
                             </tr>
@@ -281,7 +284,7 @@ class ProductAdd extends React.Component{
                                 </td>
                                 <td>
                                 <div className="form-inline">
-                                    <input type="text" className="form-control" ref="convinienceFee" style={{width:"80px"}} placeholder="0" />   <label>%</label>
+                                    <input type="text" className="form-control" ref="convinienceFee" style={{width:"80px"}} placeholder="0" /> 
                                 </div>
                                 </td>
                             </tr>
@@ -402,7 +405,7 @@ class ProductAdd extends React.Component{
                             <tr>
                                 <td>
                                     <input type="button" className="btn btn-success" value="Simpan" onClick={this.btnSaveProduct}/>
-                                    <input type="button" className="btn btn-warning ml-2" value="Batal" onClick={this.btnSaveProduct}/>
+                                    <input type="button" className="btn btn-warning ml-2" value="Batal" onClick={this.btnCancel}/>
                                
                                 </td>
                                 <td>
