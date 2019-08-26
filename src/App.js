@@ -38,7 +38,6 @@ import ProductDetail from './components/productDetail'
 
 import ProductEdit from './components/productEdit'
 import Cookies from 'universal-cookie';
-import ProductList from './components/productList'
 import TypeBankAdd from './components/typebankAdd'
 import TypeBankList from './components/typebankList'
 import TujuanAdd from './components/tujuanAdd'
