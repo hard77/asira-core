@@ -32,14 +32,13 @@ import PinjamanSetuju from './components/pinjamanSetuju'
 import PinjamanRejected from './components/pinjamanRejected'
 
 import ProductAdd from './components/productAdd'
+
+import Cookies from 'universal-cookie';
 import ProductList from './components/productList'
 import TypeBankAdd from './components/typebankAdd'
 import TypeBankList from './components/typebankList'
 import TujuanAdd from './components/tujuanAdd'
 import TujuanList from './components/tujuanList'
-
-import Cookies from 'universal-cookie';
-
 
 const kukie =new Cookies()
 
