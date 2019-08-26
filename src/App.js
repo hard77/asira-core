@@ -36,6 +36,7 @@ import ProductAdd from './components/productAdd'
 import ProductList from './components/productList'
 import ProductDetail from './components/productDetail'
 
+import ProductEdit from './components/productEdit'
 import Cookies from 'universal-cookie';
 
 
@@ -113,6 +114,7 @@ class App extends React.Component {
                     <Route path='/productdetail/:id' component={ProductDetail}></Route>
                   
                     <Route path='/layananedit/:id' component={LayananEdit}></Route>
+                    <Route path='/productedit/:id' component={ProductEdit}></Route>
                     <Route path='/tambahlayanan' component={LayananAdd}></Route>
                     <Route path='/listlayanan' component={LayananList}></Route>
                     <Route path='/layanandetail/:id' component={LayananDetail}></Route>
