@@ -38,7 +38,10 @@ import ProductDetail from './components/productDetail'
 
 import ProductEdit from './components/productEdit'
 import Cookies from 'universal-cookie';
-
+import TypeBankAdd from './components/typebankAdd'
+import TypeBankList from './components/typebankList'
+import TujuanAdd from './components/tujuanAdd'
+import TujuanList from './components/tujuanList'
 
 const kukie =new Cookies()
 
@@ -86,9 +89,11 @@ class App extends React.Component {
                     <Route path='/layanandetail/:id' component={LayananDetail}></Route>
 
 
+                    <Route path='/tambahtipe' component={TypeBankAdd}></Route>
+                    <Route path='/listtipe' component={TypeBankList}></Route>
 
-                    
-
+                    <Route path='/tambahtujuan' component={TujuanAdd}></Route>
+                    <Route path='/listtujuan' component={TujuanList}></Route>
 
                     {kukie.get('token') ?  <Route path="/login" component={Home}></Route>:  <Route path="/login" component={Login}></Route>} 
 
@@ -115,5 +120,3 @@ const mapStateToProps = (state)=>{
 }
 
 export default withRouter(connect(mapStateToProps,{keepLogin}) (App));
-
-
