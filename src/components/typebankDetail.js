@@ -8,7 +8,7 @@ import axios from 'axios'
 const cookie = new Cookies()
 
 class TypeBankDetail extends React.Component{
-    state = {rows:[]}
+    state = {rows:{}}
     componentDidMount(){
         this.getTypeBankDetail()
     }
@@ -20,7 +20,7 @@ class TypeBankDetail extends React.Component{
                 headers: {'Authorization': "Bearer " + cookie.get('token')}
               };
           
-            axios.get(serverUrl+`admin/banks_types/${id}`,config)
+            axios.get(serverUrl+`admin/bank_types/${id}`,config)
             .then((res)=>{
                 console.log(res.data)
                 this.setState({rows:res.data})
