@@ -40,6 +40,7 @@ import TypeBankList from './components/typebankList'
 import TujuanAdd from './components/tujuanAdd'
 import TujuanList from './components/tujuanList'
 
+import TypeBankEdit from './components/typebankEdit'
 const kukie =new Cookies()
 
 
@@ -85,6 +86,7 @@ class App extends React.Component {
                     <Route path='/tambahtipe' component={TypeBankAdd}></Route>
                     <Route path='/listtipe' component={TypeBankList}></Route>
 
+                    <Route path='/banktypeedit/:id' component={TypeBankEdit}></Route>
                     <Route path='/tambahtujuan' component={TujuanAdd}></Route>
                     <Route path='/listtujuan' component={TujuanList}></Route>
 
