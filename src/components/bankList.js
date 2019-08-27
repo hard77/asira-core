@@ -49,10 +49,10 @@ class BankList extends React.Component{
         var config = {
           headers: {'Authorization': "Bearer " + cookie.get('token')}
         };
-        var newLink
+        var newLink=""
         
       if(!isNaN(searching)){
-          newLink += `id=${searching}` 
+          newLink += `id=${parseInt(searching)}` 
         }else{
           newLink += `name=${searching}`
         }     
