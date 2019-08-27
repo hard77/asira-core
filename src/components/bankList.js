@@ -43,16 +43,16 @@ class BankList extends React.Component{
     
       var searching = this.refs.search.value
       this.setState({loading:true,searchRows:searching})
-     
+      var config = {
+        headers: {'Authorization': "Bearer " + cookie.get('token')}
+      };
       if(searching){
         //search function
-        var config = {
-          headers: {'Authorization': "Bearer " + cookie.get('token')}
-        };
+       
         var newLink=""
         
       if(!isNaN(searching)){
-          newLink += `id=${parseInt(searching)}` 
+          newLink += `id=${searching}` 
         }else{
           newLink += `name=${searching}`
         }     
