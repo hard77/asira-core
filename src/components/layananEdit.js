@@ -13,7 +13,7 @@ class LayananEdit extends React.Component{
         base64img:null,
         errorMessage:'',
         diKlik:false,
-        rows:[]
+        rows:[],imageVal:''
     
     }
     componentWillReceiveProps(newProps){
@@ -25,11 +25,17 @@ class LayananEdit extends React.Component{
     getLayananEdit = ()=>{
         var id = this.props.match.params.id
         var config = {headers: {'Authorization': "Bearer " + cookie.get('token')}};
-        // axios.get(serverUrl+`admin/bank_services/[bank_service_id]`,config)        
+                
         axios.get(serverUrl+`admin/bank_services/${id}`,config)
         .then((res)=>{
             console.log(res.data)
             this.setState({rows:res.data})
+            if(this.state.rows.image_id !== undefined || this.state.rows.image_id !== null){
+                axios.get(serverUrl+`admin/image/${this.state.rows.image_id}`,config)
+                .then((res)=>{
+                    this.setState({imageVal:res.data.image_string})
+                })
+            }
         })
         .catch((err)=>{console.log(err)})
     }
@@ -127,7 +133,7 @@ class LayananEdit extends React.Component{
                             <div className="col-sm-9">
                             <input className="AddStyleButton btn btn-primary" type="button" onClick={()=>this.refs.input.click()} value={this.valueHandler()}></input>
                             <input ref="input" style={{display:"none"}} type="file" accept="image/*" onChange={this.onChangeHandler}></input> 
-                            <img alt={this.state.rows.name} style={{marginLeft:"20px"}} src={`data:image/jpeg;base64,${this.state.rows.image}`}></img>
+                            <img alt={this.state.rows.name} style={{marginLeft:"20px"}} src={`data:image/jpeg;base64,${this.state.imageVal}`}></img>
                             </div>
                     </div>
                     <div className="form-group row">
