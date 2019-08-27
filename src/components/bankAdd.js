@@ -183,10 +183,10 @@ class Main extends React.Component{
             this.setState({errorMessage:"Harap cek ulang masih ada data yang belum terisi"})
         }else{
                 for (var i=0; i<this.state.jenisLayanan.length;i++){
-                    services.push (this.state.jenisLayanan[i].id)
+                    services.push (this.state.jenisLayanan[i].value)
                 }
                 for ( i=0; i<this.state.jenisProduct.length;i++){
-                    products.push (this.state.jenisProduct[i].id)
+                    products.push (this.state.jenisProduct[i].value)
                 }
              
                 var newData = {
