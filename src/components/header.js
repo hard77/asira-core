@@ -3,7 +3,6 @@ import {
   Collapse,
   Navbar,
   NavbarToggler,
-  NavbarBrand,
   Nav,
   UncontrolledDropdown,
   DropdownToggle,
@@ -87,6 +86,26 @@ const kukie =new Cookies()
                  <Link to="/tambahproduct" style={{color:"inherit",textDecoration:"none"}}><DropdownItem>Tambah </DropdownItem></Link>                   
                  <Link to="/listproduct" style={{color:"inherit",textDecoration:"none"}}><DropdownItem>List </DropdownItem>  </Link>                                  
                 </DropdownMenu>
+              </UncontrolledDropdown>
+
+              <UncontrolledDropdown  nav inNavbar>
+                <DropdownToggle nav caret style={{ color:"inherit",textDecoration:"none"}}>
+                <label><i className="fas fa-sliders-h"></i> Tipe Bank</label>
+                </DropdownToggle>
+              <DropdownMenu className="menuDropDown" style={{border:"1px solid black",marginBottom:"20px"}}>
+                 <Link to="/tambahtipe" style={{color:"inherit",textDecoration:"none"}}><DropdownItem>Tambah</DropdownItem></Link>                   
+                 <Link to="/listtipe" style={{color:"inherit",textDecoration:"none"}}>  <DropdownItem>List </DropdownItem>   </Link>                
+              </DropdownMenu>
+              </UncontrolledDropdown>
+              
+              <UncontrolledDropdown  nav inNavbar>
+                <DropdownToggle nav caret style={{ color:"inherit",textDecoration:"none"}}>
+                <label><i className="fas fa-bullseye"></i> Tujuan</label>
+                </DropdownToggle>
+              <DropdownMenu className="menuDropDown" style={{border:"1px solid black",marginBottom:"20px"}}>
+                 <Link to="/tambahtujuan" style={{color:"inherit",textDecoration:"none"}}><DropdownItem>Tambah</DropdownItem></Link>                   
+                 <Link to="/listtujuan" style={{color:"inherit",textDecoration:"none"}}>  <DropdownItem>List </DropdownItem>   </Link>                
+              </DropdownMenu>
               </UncontrolledDropdown>
            
         
