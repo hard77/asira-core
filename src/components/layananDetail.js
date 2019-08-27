@@ -7,7 +7,7 @@ import {serverUrl} from './url'
 const cookie = new Cookies()
 
 class LayananDetail extends React.Component{
-    state={rows:[]}
+    state={rows:[],imageData:''}
 
     componentDidMount =()=>{
         this.getDetailLayanan()
@@ -19,10 +19,16 @@ class LayananDetail extends React.Component{
             headers: {'Authorization': "Bearer " + cookie.get('token')}
           };
         axios.get(serverUrl+`admin/bank_services/${id}`,config)
-       // axios.get(serverUrl+`admin/bank_services/[bank_service_id]`,config)
         .then((res)=>{
-            console.log(res.data)
+      
             this.setState({loading:false,rows:res.data})
+            if (this.state.rows.image_id !== undefined || this.state.rows.image_id !== null){
+               axios.get(serverUrl+`admin/image/${this.state.rows.image_id}`,config)
+                .then((res)=>{
+                    this.setState({imageData:res.data.image_string})
+                })
+                .catch((err)=>console.log(err))
+            }
         })
         .catch((err)=>console.log(err))
     }
@@ -44,7 +50,7 @@ class LayananDetail extends React.Component{
                         <div className="form-group row">
                             <label className="col-sm-4 col-form-label">Gambar</label>
                             <div className="col-sm-8">
-                            : <img src={`data:image/jpeg;base64,${this.state.rows.image}`} alt={this.state.rows.name} />
+                            : <img src={`data:image/jpeg;base64,${this.state.imageData}`} alt={this.state.rows.name} />
                             </div>
                         </div>
                     </form>

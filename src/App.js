@@ -36,6 +36,7 @@ import ProductAdd from './components/productAdd'
 import ProductList from './components/productList'
 import ProductDetail from './components/productDetail'
 
+import ProductEdit from './components/productEdit'
 import Cookies from 'universal-cookie';
 import TypeBankAdd from './components/typebankAdd'
 import TypeBankList from './components/typebankList'
@@ -43,6 +44,7 @@ import TujuanAdd from './components/tujuanAdd'
 import TujuanList from './components/tujuanList'
 
 import TypeBankEdit from './components/typebankEdit'
+import TypeBankDetail from './components/typebankDetail'
 const kukie =new Cookies()
 
 
@@ -83,6 +85,7 @@ class App extends React.Component {
                     <Route path='/productdetail/:id' component={ProductDetail}></Route>
                   
                     <Route path='/layananedit/:id' component={LayananEdit}></Route>
+                    <Route path='/productedit/:id' component={ProductEdit}></Route>
                     <Route path='/tambahlayanan' component={LayananAdd}></Route>
                     <Route path='/listlayanan' component={LayananList}></Route>
                     <Route path='/layanandetail/:id' component={LayananDetail}></Route>
@@ -90,6 +93,7 @@ class App extends React.Component {
 
                     <Route path='/tambahtipe' component={TypeBankAdd}></Route>
                     <Route path='/listtipe' component={TypeBankList}></Route>
+                    <Route path='/banktypedetail/:id' component={TypeBankDetail}></Route>
 
                     <Route path='/banktypeedit/:id' component={TypeBankEdit}></Route>
                     <Route path='/tambahtujuan' component={TujuanAdd}></Route>
@@ -120,5 +124,3 @@ const mapStateToProps = (state)=>{
 }
 
 export default withRouter(connect(mapStateToProps,{keepLogin}) (App));
-
-

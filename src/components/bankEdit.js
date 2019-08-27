@@ -36,7 +36,7 @@ const customStyles = {
 
 class BankEdit extends React.Component{
     state = {
-        jenisProduct:null, jenisLayanan: null, 
+        jenisProduct:null, jenisLayanan: null, productID:[],serviceID:[],
         errorMessage: null, diKlik:false,
         typeBank:[],bankService:[],bankProduct:[],
         provinsi:[],kabupaten:[],idProvinsi:null,dataBank:[]
@@ -69,7 +69,7 @@ class BankEdit extends React.Component{
         axios.get(serverUrl+`admin/banks/${id}`,config)
         .then((res)=>{
             console.log(res.data)
-            this.setState({dataBank:res.data})
+            this.setState({dataBank:res.data,productID:res.data.products,serviceID:res.data.services})
         })
         .catch((err)=> console.log(err))
 
@@ -151,25 +151,32 @@ class BankEdit extends React.Component{
         var products =[]
         var id=this.refs.idBank.value
         var name = this.refs.namaBank.value
-        var type = this.refs.tipeBank.value
+        var type = parseInt(this.refs.tipeBank.value)
         var address = this.refs.alamat.value ? this.refs.alamat.value:this.refs.alamat.placeholder
         var province = this.refs.provinsi.value.includes("T") ? this.refs.provinsi.value.slice(this.refs.provinsi.value.indexOf('T')+1,this.refs.provinsi.length):this.refs.provinsi.value
         var city = this.refs.kota.value.includes("T") ? this.refs.kota.value.slice(this.refs.provinsi.value.indexOf('T')+1,this.refs.provinsi.length):this.refs.kota.value
         var pic = this.refs.pic.value ? this.refs.pic.value:this.refs.pic.placeholder
-        var phone = this.refs.telp.value ? this.refs.telp.value:this.refs.telp.placeholder
+        var phone = this.refs.telp.value ? String(this.refs.telp.value):String(this.refs.telp.placeholder)
 
 
-        if(this.state.jenisLayanan===null || this.state.jenisProduct===null){
-                this.setState({errorMessage:"Harap cek ulang masih ada data yang belum terisi"})
-        }else{
-
-            for (var i=0; i<this.state.jenisLayanan.length;i++){
-                services.push (this.state.jenisLayanan[i].value)
+       
+            if(this.state.jenisLayanan){
+                for (var i=0; i<this.state.jenisLayanan.length;i++){
+                    services.push (this.state.jenisLayanan[i].value)
+                }
+            }else{
+                services = this.state.serviceID
             }
-            for ( i=0; i<this.state.jenisProduct.length;i++){
-                products.push (this.state.jenisProduct[i].value)
+            
+            if(this.state.jenisProduct){
+                for ( i=0; i<this.state.jenisProduct.length;i++){
+                    products.push (this.state.jenisProduct[i].value)
+                }
+            }else{
+                products = this.state.productID
             }
-    
+            console.log(products)
+            console.log(services)
             var newData = {
                 name,type,address,province,city,services,products,pic,phone
             }
@@ -184,7 +191,7 @@ class BankEdit extends React.Component{
             })
             .catch((err)=> console.log(err))
 
-        }
+        
        
     }
     
@@ -265,7 +272,7 @@ class BankEdit extends React.Component{
                                 isMulti={true}
                                 options={this.renderJenisLayananJsx()}
                                 styles={customStyles}
-                                placeholder="Jenis Layanan"
+                                placeholder={this.state.serviceID.toString()}
                                 
                             />
                             </div>
@@ -281,7 +288,8 @@ class BankEdit extends React.Component{
                                 isMulti={true}
                                 options={this.renderJenisProductJsx()}
                                 styles={customStyles}
-                                placeholder="Jenis Produk"
+                                placeholder={this.state.productID.toString()}
+                                
                             />
 
                                 </div>
