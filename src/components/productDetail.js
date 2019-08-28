@@ -102,7 +102,7 @@ class ProductDetail extends React.Component{
                         </div>
                     </form>
                     <form>
-                        {this.state.fees === undefined ? 
+                        {this.state.fees.length === 0 ? 
                             
                             <form>
                         <div className="form-group row">
