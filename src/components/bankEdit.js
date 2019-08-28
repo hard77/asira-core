@@ -5,6 +5,8 @@ import Select from 'react-select';
 import {serverUrl} from './url'
 import axios from 'axios'
 import swal from 'sweetalert'
+import PhoneInput from 'react-phone-number-input'
+import 'react-phone-number-input/style.css'
 
 const cookie = new Cookies()
 
@@ -39,7 +41,7 @@ class BankEdit extends React.Component{
         jenisProduct:null, jenisLayanan: null, productID:[],serviceID:[],
         errorMessage: null, diKlik:false,
         typeBank:[],bankService:[],bankProduct:[],
-        provinsi:[],kabupaten:[],idProvinsi:null,dataBank:[]
+        provinsi:[],kabupaten:[],idProvinsi:null,dataBank:[],phone:'',provinsiEdit:null
     };
     componentWillReceiveProps(newProps){
         this.setState({errorMessage:newProps.error})
@@ -87,7 +89,7 @@ class BankEdit extends React.Component{
       axios.get(`https://cors-anywhere.herokuapp.com/http://dev.farizdotid.com/api/daerahindonesia/provinsi/${id}/kabupaten`)
       .then((res)=>{
           console.log(res.data.kabupatens)
-          this.setState({kabupaten:res.data.kabupatens})
+          this.setState({kabupaten:res.data.kabupatens,provinsiEdit:"terpilih"})
          
       })
       .catch((err)=> console.log(err))
@@ -117,9 +119,11 @@ class BankEdit extends React.Component{
     }
 
     renderProvinsiJsx = ()=>{
+    
         var jsx = this.state.provinsi.map((val,index)=>{
             return (
                 <option key={index} value={val.id+"T"+val.nama} > {val.nama} </option>
+                
             )
         })
         return jsx
@@ -156,10 +160,10 @@ class BankEdit extends React.Component{
         var province = this.refs.provinsi.value.includes("T") ? this.refs.provinsi.value.slice(this.refs.provinsi.value.indexOf('T')+1,this.refs.provinsi.length):this.refs.provinsi.value
         var city = this.refs.kota.value.includes("T") ? this.refs.kota.value.slice(this.refs.provinsi.value.indexOf('T')+1,this.refs.provinsi.length):this.refs.kota.value
         var pic = this.refs.pic.value ? this.refs.pic.value:this.refs.pic.placeholder
-        var phone = this.refs.telp.value ? String(this.refs.telp.value):String(this.refs.telp.placeholder)
+        var phone = this.state.phone ? String(this.state.phone):String(this.state.dataBank.phone)
 
+        
 
-       
             if(this.state.jenisLayanan){
                 for (var i=0; i<this.state.jenisLayanan.length;i++){
                     services.push (this.state.jenisLayanan[i].value)
@@ -175,8 +179,7 @@ class BankEdit extends React.Component{
             }else{
                 products = this.state.productID
             }
-            console.log(products)
-            console.log(services)
+           
             var newData = {
                 name,type,address,province,city,services,products,pic,phone
             }
@@ -244,9 +247,12 @@ class BankEdit extends React.Component{
                         <div className="form-group row">
                             <label className="col-sm-2 col-form-label">Provinsi</label>
                             <div className="col-sm-10">
-                            <select onChange={()=>this.getAllKabupaten(this.refs.provinsi.value.slice(0,this.refs.provinsi.value.indexOf('T')))} ref="provinsi" className="form-control">
-                                <option value={this.state.dataBank.province}>{this.state.dataBank.province}</option>
+                            <select id="provinsi" onChange={()=>this.getAllKabupaten(this.refs.provinsi.value.slice(0,this.refs.provinsi.value.indexOf('T')))} ref="provinsi" className="form-control">
+                           
+                               {this.state.provinsiEdit===null?     <option value={this.state.dataBank.province}>{this.state.dataBank.province}</option>:null} 
+                               <optgroup label="_________________________">
                                {this.renderProvinsiJsx()}
+                               </optgroup>
                             </select>
                             </div>
                         </div>
@@ -255,8 +261,10 @@ class BankEdit extends React.Component{
                             <label className="col-sm-2 col-form-label">Kota</label>
                             <div className="col-sm-10">
                             <select ref="kota" className="form-control">
-                                <option value={this.state.dataBank.city}>{this.state.dataBank.city}</option>
+                              {this.state.provinsiEdit===null? <option value={this.state.dataBank.city}>{this.state.dataBank.city}</option>:null} 
+                                <optgroup label="_________________________">
                                 {this.renderKabupatenJsx()}
+                                </optgroup>
                             </select>
                             </div>
                         </div>
@@ -304,7 +312,13 @@ class BankEdit extends React.Component{
                         <div className="form-group row">
                             <label className="col-sm-2 col-form-label">No Telp</label>
                             <div className="col-sm-10">
-                            <input type="number" className="form-control" ref="telp"  placeholder={this.state.dataBank.phone} />                                                        
+                          
+                            <PhoneInput
+                            country="ID"
+                            ref="telp"
+                            placeholder={this.state.dataBank.phone} 
+                            value={ this.state.phone }
+                            onChange={ phone => this.setState({ phone }) } className="form-control" />                                                       
                             </div>
                         </div>
                         <input type="button" className="btn btn-success" value="Update" onClick={this.btnEdit}/>
