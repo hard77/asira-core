@@ -179,7 +179,7 @@ class Main extends React.Component{
         if(this.state.jenisLayanan===null || this.state.jenisProduct===null || 
         this.refs.namaBank.value === "" || this.refs.tipeBank.value ==="0" || 
         this.refs.alamat.value ==="" || this.refs.provinsi.value==="0" || 
-        this.refs.kota.value==="0" || this.refs.pic.value ==="" || this.refs.telp.value===""){
+        this.refs.kota.value==="0" || this.refs.pic.value ===""){
             this.setState({errorMessage:"Harap cek ulang masih ada data yang belum terisi"})
         }
         else if (name.trim() ===""){
