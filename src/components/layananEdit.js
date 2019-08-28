@@ -63,17 +63,14 @@ class LayananEdit extends React.Component{
     btnEditLayanan = ()=>{
         var id = this.props.match.params.id
         var name = this.refs.namaLayanan.value ? this.refs.namaLayanan.value : this.refs.namaLayanan.placeholder
-        var image = this.state.selectedFile === null ? this.state.rows.image : this.state.selectedFile
         var status =  document.querySelector('.messageCheckbox').checked;
-      
+        status ? status= "active": status= "inactive"
         if (this.state.selectedFile){
             var pic = this.state.selectedFile
             var reader = new FileReader();
             reader.readAsDataURL(pic);
             reader.onload =  () => {                
                 var image = reader.result.replace("data:image/jpeg;base64,","")
-                status ? status= "active": status= "inactive"
-               
                 var newData = {name,status,image}
                 var config = {headers: {'Authorization': "Bearer " + cookie.get('token')}};
                 axios.patch(serverUrl+`admin/bank_services/${id}`,newData,config)
@@ -87,8 +84,7 @@ class LayananEdit extends React.Component{
               console.log('Error: ', error);
             };
         }else{
-           
-            var newData = {name,status,image}
+            var newData = {name,status}
             var config = {headers: {'Authorization': "Bearer " + cookie.get('token')}};
             axios.patch(serverUrl+`admin/bank_services/${id}`,newData,config)
             .then((res)=>{
