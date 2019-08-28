@@ -29,7 +29,7 @@ class profileNasabahDetail extends React.Component{
               Axios.get(serverUrlBorrower+`admin/borrower/${id}`,config)
               .then((res)=>{
                   console.log(res.data)
-                  this.setState({rows:res.data,ktp:res.data.idcard_imageid,npwp:res.data.taxid_imageid})
+                  this.setState({rows:res.data,ktp:res.data.idcard_image.Int64,npwp:res.data.taxid_image.Int64})
               })
               .catch((err)=>{
                   console.log(err)
@@ -40,11 +40,11 @@ class profileNasabahDetail extends React.Component{
 
     btnModalKTP =()=>{
         this.setState({modalKTP:true})
-        if(this.state.ktp){
+        console.log(this.state.ktp)
             var config = {
-                headers: {'Authorization': "Bearer " + kukie.get('tokenBorrower')}
+                headers: {'Authorization': "Bearer " + kukie.get('token')}
               };
-              Axios.get(serverUrlBorrower+`client/imagefile/${this.state.ktp}`,config)
+              Axios.get(serverUrlBorrower+`admin/image/${this.state.ktp}`,config)
               .then((res)=>{
                   console.log(res.data)
                   this.setState({gambarKTP:res.data.image_string})
@@ -52,21 +52,20 @@ class profileNasabahDetail extends React.Component{
               .catch((err)=>{
                   console.log(err)
               })
-        }else{
-            this.setState({gambarKTP:'Gambar KTP kosong'})
-        }
+        
         
     }
     btnModalNPWP =()=>{
         this.setState({modalNPWP:true})
         if(this.state.npwp){
             var config = {
-                headers: {'Authorization': "Bearer " + kukie.get('tokenBorrower')}
+                headers: {'Authorization': "Bearer " + kukie.get('token')}
               };
-              Axios.get(serverUrlBorrower+`client/imagefile/${this.state.ktp}`,config)
+              Axios.get(serverUrlBorrower+`admin/image/${this.state.ktp}`,config)
               .then((res)=>{
                   console.log(res.data)
                   this.setState({gambarNPWP:res.data.image_string})
+                  console.log(res.data.image_string)
               })
               .catch((err)=>{
                   console.log(err)
@@ -109,7 +108,7 @@ class profileNasabahDetail extends React.Component{
              {this.state.npwp?<div>
                 <img width="100%" alt="NPWP" src={`data:image/jpeg;base64,${this.state.gambarNPWP}`}></img>
              </div>:<div>{this.state.gambarNPWP}</div>}
-            
+
              {/* <img width="100%" alt="NPWP" src="https://blue.kumparan.com/image/upload/fl_progressive,fl_lossy,c_fill,q_auto:best,w_640/v1516958492/npwp_ayvbmi.jpg"></img> */}
           </ModalBody>
           <ModalFooter>
