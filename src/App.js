@@ -39,6 +39,9 @@ import TypeBankAdd from './components/typebankAdd'
 import TypeBankList from './components/typebankList'
 import TujuanAdd from './components/tujuanAdd'
 import TujuanList from './components/tujuanList'
+import TujuanEdit from './components/tujuanEdit'
+import TujuanDetail from './components/tujuanDetail'
+
 
 const kukie =new Cookies()
 
@@ -87,6 +90,9 @@ class App extends React.Component {
 
                     <Route path='/tambahtujuan' component={TujuanAdd}></Route>
                     <Route path='/listtujuan' component={TujuanList}></Route>
+                    <Route path='/tujuanedit/:id' component={TujuanEdit}></Route>
+                    <Route path='/tujuandetail/:id' component={TujuanDetail}></Route>
+
 
                     {kukie.get('token') ?  <Route path="/login" component={Home}></Route>:  <Route path="/login" component={Login}></Route>} 
 
