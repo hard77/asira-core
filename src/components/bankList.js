@@ -13,7 +13,8 @@ class BankList extends React.Component{
     state={
         loading:true,
         rows:[],total_data:10,page:1,from:1,to:3,last_page:1,rowsPerPage:10,dataPerhalaman:5,
-        searchRows:null
+        searchRows:null,
+        halamanConfig:`orderby=id&sort=ASC&rows=10`
     }
     componentDidMount(){
         this.getAllBankData()
@@ -22,7 +23,7 @@ class BankList extends React.Component{
         var config = {
             headers: {'Authorization': "Bearer " + cookie.get('token')}
           };
-        axios.get(serverUrl+`admin/banks?orderby=id&sort=ASC&rows=10`,config)
+        axios.get(serverUrl+`admin/banks?${this.state.halamanConfig}`,config)
         .then((res)=>{
             console.log(res.data)
             this.setState({
@@ -52,9 +53,9 @@ class BankList extends React.Component{
         var newLink=""
         
       if(!isNaN(searching)){
-          newLink += `id=${searching}&orderby=id&sort=ASC&rows=10` 
+          newLink += `id=${searching}&${this.state.halamanConfig}` 
         }else{
-          newLink += `name=${searching}&orderby=id&sort=ASC&rows=10`
+          newLink += `name=${searching}&${this.state.halamanConfig}`
         }     
       }else{
         newLink +=""
@@ -160,12 +161,12 @@ class BankList extends React.Component{
           };
           if(this.state.searchRows){
               if(!isNaN(this.state.searchRows)){
-                newLink+=`id=${this.state.searchRows}&page=${this.state.page+1}&orderby=id&sort=ASC&rows=10`
+                newLink+=`id=${this.state.searchRows}&page=${this.state.page+1}&${this.state.halamanConfig}`
               }else{
-                newLink+=`name=${this.state.searchRows}&page=${this.state.page+1}&orderby=id&sort=ASC&rows=10`
+                newLink+=`name=${this.state.searchRows}&page=${this.state.page+1}&${this.state.halamanConfig}`
               }
           }else{
-            newLink =`page=${this.state.page+1}&orderby=id&sort=ASC&rows=10`
+            newLink =`page=${this.state.page+1}&${this.state.halamanConfig}`
           }
       
             axios.get(serverUrl+`admin/banks?`+newLink,config)
@@ -194,12 +195,12 @@ class BankList extends React.Component{
           };
           if(this.state.searchRows){
             if (!isNaN(this.state.searchRows)){
-              newLink += `id=${this.state.searchRows}&page=${this.state.page-1}&orderby=id&sort=ASC&rows=10`
+              newLink += `id=${this.state.searchRows}&page=${this.state.page-1}&${this.state.halamanConfig}`
             }else{
-              newLink += `name=${this.state.searchRows}&page=${this.state.page-1}&orderby=id&sort=ASC&rows=10`
+              newLink += `name=${this.state.searchRows}&page=${this.state.page-1}&${this.state.halamanConfig}`
             }
           }else{
-            newLink+=`page=${this.state.page-1}&orderby=id&sort=ASC&rows=10`
+            newLink+=`page=${this.state.page-1}&${this.state.halamanConfig}`
           }
           axios.get(serverUrl+`admin/banks?`+newLink,config)
           .then((res)=>{
@@ -233,13 +234,13 @@ class BankList extends React.Component{
             };
             if(this.state.searchRows){
               if(!isNaN(this.state.searchRows)){
-                newLink+=`page=${num}&id=${this.state.searchRows}&orderby=id&sort=ASC&rows=10`
+                newLink+=`page=${num}&id=${this.state.searchRows}&${this.state.halamanConfig}`
     
               }else{
-                newLink+=`page=${num}&name=${this.state.searchRows}&orderby=id&sort=ASC&rows=10`
+                newLink+=`page=${num}&name=${this.state.searchRows}&${this.state.halamanConfig}`
               }
             }else{
-              newLink+=`page=${num}&orderby=id&sort=ASC&rows=10`
+              newLink+=`page=${num}&${this.state.halamanConfig}`
             }
             axios.get(serverUrl+`admin/banks?`+newLink,config)
             .then((res)=>{
@@ -263,13 +264,13 @@ class BankList extends React.Component{
         };
         if(this.state.searchRows){
           if(!isNaN(this.state.searchRows)){
-            newLink+=`page=${num}&id=${this.state.searchRows}&orderby=id&sort=ASC&rows=10`
+            newLink+=`page=${num}&id=${this.state.searchRows}&${this.state.halamanConfig}`
     
           }else{
-            newLink+=`page=${num}&name=${this.state.searchRows}&orderby=id&sort=ASC&rows=10`
+            newLink+=`page=${num}&name=${this.state.searchRows}&${this.state.halamanConfig}`
           }
         }else{
-          newLink+=`page=${num}&orderby=id&sort=ASC&rows=10`
+          newLink+=`page=${num}&${this.state.halamanConfig}`
         }
     
         axios.get(serverUrl+`admin/banks?`+newLink,config)
