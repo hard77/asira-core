@@ -52,7 +52,7 @@ class TujuanAdd extends React.Component{
         if(cookie.get('token')){
             return(
                 <div className="container">
-                   <h2 className="mt-3">Layanan Tambah</h2>
+                   <h2 className="mt-3">Tujuan Pembiayaan - Tambah</h2>
                   
                    <hr/>
                    <div className="form-group row">
