@@ -163,8 +163,10 @@ class BankEdit extends React.Component{
         var phone = this.state.phone ? String(this.state.phone):String(this.state.dataBank.phone)
 
         
-
-            if(this.state.jenisLayanan){
+        if(city === "0" || city === null){
+            this.setState({errorMessage:"Pilih Kota"})
+        }else{
+             if(this.state.jenisLayanan){
                 for (var i=0; i<this.state.jenisLayanan.length;i++){
                     services.push (this.state.jenisLayanan[i].value)
                 }
@@ -179,7 +181,7 @@ class BankEdit extends React.Component{
             }else{
                 products = this.state.productID
             }
-           
+    
             var newData = {
                 name,type,address,province,city,services,products,pic,phone
             }
@@ -193,6 +195,9 @@ class BankEdit extends React.Component{
                 this.setState({diKlik:true,errorMessage:null})
             })
             .catch((err)=> console.log(err))
+           
+        }
+           
 
         
        
@@ -247,7 +252,9 @@ class BankEdit extends React.Component{
                         <div className="form-group row">
                             <label className="col-sm-2 col-form-label">Provinsi</label>
                             <div className="col-sm-10">
-                            <select id="provinsi" onChange={()=>this.getAllKabupaten(this.refs.provinsi.value.slice(0,this.refs.provinsi.value.indexOf('T')))} ref="provinsi" className="form-control">
+                            <select id="provinsi" onChange={()=>{this.getAllKabupaten(this.refs.provinsi.value.slice(0,this.refs.provinsi.value.indexOf('T')))
+                            document.getElementById("kota").value ="0"
+                        }} ref="provinsi" className="form-control">
                            
                                {this.state.provinsiEdit===null?     <option value={this.state.dataBank.province}>{this.state.dataBank.province}</option>:null} 
                                <optgroup label="_________________________">
@@ -260,8 +267,10 @@ class BankEdit extends React.Component{
                         <div className="form-group row">
                             <label className="col-sm-2 col-form-label">Kota</label>
                             <div className="col-sm-10">
-                            <select ref="kota" className="form-control">
-                              {this.state.provinsiEdit===null? <option value={this.state.dataBank.city}>{this.state.dataBank.city}</option>:null} 
+                            <select ref="kota" id="kota" className="form-control">
+                              {this.state.provinsiEdit===null? <option value={this.state.dataBank.city}>{this.state.dataBank.city}</option>:
+                            <option value={0}>========= PILIH KOTA =========</option>
+                            } 
                                 <optgroup label="_________________________">
                                 {this.renderKabupatenJsx()}
                                 </optgroup>
