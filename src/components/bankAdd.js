@@ -266,7 +266,10 @@ class Main extends React.Component{
                         <div className="form-group row">
                             <label className="col-sm-2 col-form-label">Provinsi</label>
                             <div className="col-sm-10">
-                            <select onChange={()=>this.getAllKabupaten(this.refs.provinsi.value.slice(0,this.refs.provinsi.value.indexOf('T')))} ref="provinsi" className="form-control">
+                            <select onChange={()=>{this.getAllKabupaten(this.refs.provinsi.value.slice(0,this.refs.provinsi.value.indexOf('T')))
+                             document.getElementById("kota").value = "0";
+                             }
+                        } ref="provinsi" className="form-control">
                                 <option value={0}>===== Pilih Provinsi =====</option>
                                {this.renderProvinsiJsx()}
                             </select>
@@ -275,7 +278,7 @@ class Main extends React.Component{
                         <div className="form-group row">
                             <label className="col-sm-2 col-form-label">Kota</label>
                             <div className="col-sm-10">
-                            <select ref="kota" className="form-control">
+                            <select ref="kota" id="kota" className="form-control">
                                 <option value={0}>===== Pilih Kota =====</option>
                                 {this.renderKabupatenJsx()}
                             </select>
