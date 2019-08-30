@@ -42,12 +42,12 @@ class PermintaanPinjaman extends React.Component {
       if (this.props.location.search){
         var hasil = this.getLink()
         if(!isNaN(hasil)){
-          newLink += `?id=${hasil}&status=processing`
+          newLink += `?id=${hasil}`
         }else{
-          newLink += `?owner_name=${hasil}&status=processing`
+          newLink += `?owner_name=${hasil}`
         }
       }else{
-        newLink += `?status=processing`
+        newLink += `?`
       }
       axios.get(serverUrlBorrower+newLink,config)
       .then((res)=>{
@@ -98,9 +98,9 @@ class PermintaanPinjaman extends React.Component {
     if(searching){
       //search function
       if(!isNaN(searching)){
-        newLink +=`?id=${searching}&status=processing`
+        newLink +=`?id=${searching}`
       }else{
-        newLink +=`?owner_name=${searching}&status=processing`
+        newLink +=`?owner_name=${searching}`
       }
       axios.get(serverUrlBorrower+newLink,config)
         .then((res)=>{
@@ -111,7 +111,7 @@ class PermintaanPinjaman extends React.Component {
             console.log(err)
         })
     }else{
-      axios.get(serverUrlBorrower+newLink+`?status=processing`,config)
+      axios.get(serverUrlBorrower+newLink,config)
       .then((res)=>{
           this.setState({loading:false,rows:res.data.data,searchRows:null})
       })
@@ -135,13 +135,13 @@ class PermintaanPinjaman extends React.Component {
 
         if(this.state.searchRows){
           if(!isNaN(this.state.searchRows)){
-            newLink +=`?id=${this.state.searchRows}&page=${this.state.page+1}&status=processing`
+            newLink +=`?id=${this.state.searchRows}&page=${this.state.page+1}`
           }else{
-            newLink +=`?owner_name=${this.state.searchRows}&page=${this.state.page+1}&status=processing`
+            newLink +=`?owner_name=${this.state.searchRows}&page=${this.state.page+1}`
           }
 
         }else{
-          newLink+=`?page=${this.state.page+1}&status=processing`
+          newLink+=`?page=${this.state.page+1}`
         }
 
         axios.get(serverUrlBorrower+`admin/loan?`+newLink,config)
@@ -169,13 +169,13 @@ getDataPreviousPage=()=>{
 
     if(this.state.searchRows){
       if(!isNaN(this.state.searchRows)){
-        newLink +=`?id=${this.state.searchRows}&page=${this.state.page-1}&status=processing`
+        newLink +=`?id=${this.state.searchRows}&page=${this.state.page-1}`
       }else{
-        newLink +=`?owner_name=${this.state.searchRows}&page=${this.state.page-1}&status=processing`
+        newLink +=`?owner_name=${this.state.searchRows}&page=${this.state.page-1}`
       }
 
     }else{
-      newLink+=`?page=${this.state.page-1}&status=processing`
+      newLink+=`?page=${this.state.page-1}`
     }
 
     axios.get(serverUrlBorrower+`admin/loan?`+newLink,config)
@@ -254,13 +254,13 @@ getDataPreviousPage=()=>{
         var newLink
         if(this.state.searchRows){
           if(!isNaN(this.state.searchRows)){
-            newLink+=`page=${num}&id=${this.state.searchRows}&status=processing`
+            newLink+=`page=${num}&id=${this.state.searchRows}`
 
           }else{
-            newLink+=`page=${num}&owner_name=${this.state.searchRows}&status=processing`
+            newLink+=`page=${num}&owner_name=${this.state.searchRows}`
           }
         }else{
-          newLink+=`page=${num}&status=processing`
+          newLink+=`page=${num}`
         }
         axios.get(serverUrlBorrower+`admin/loan?`+newLink,config)
         .then((res)=>{
@@ -285,13 +285,13 @@ getDataPreviousPage=()=>{
     var newLink
     if(this.state.searchRows){
       if(!isNaN(this.state.searchRows)){
-        newLink+=`page=${num}&id=${this.state.searchRows}&status=processing`
+        newLink+=`page=${num}&id=${this.state.searchRows}`
 
       }else{
-        newLink+=`page=${num}&owner_name=${this.state.searchRows}&status=processing`
+        newLink+=`page=${num}&owner_name=${this.state.searchRows}`
       }
     }else{
-      newLink+=`page=${num}&status=processing`
+      newLink+=`page=${num}`
     }
     axios.get(serverUrlBorrower+`admin/loan?`+newLink,config)
     .then((res)=>{
