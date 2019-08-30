@@ -160,7 +160,7 @@ class ProductEdit extends React.Component{
                     if (otheragunan){
                         collaterals.push(otheragunan)
                     }
-                    
+                    collaterals.reverse()
                     
             var newData = {
                 name,min_timespan,max_timespan,interest,min_loan,max_loan,fees,asn_fee,service,collaterals,financing_sector,assurance,status
