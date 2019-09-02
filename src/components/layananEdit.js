@@ -135,8 +135,8 @@ class LayananEdit extends React.Component{
                             <label className="col-sm-3 col-form-label">Gambar</label>
                             <div className="col-sm-9">
                             <input className="AddStyleButton btn btn-primary" type="button" onClick={()=>this.refs.input.click()} value={this.valueHandler()}></input>
-                            <input ref="input" style={{display:"none"}} type="file" accept="image/*" onChange={this.onChangeHandler}></input> 
-                            <img style={{width:"100px"}} alt={this.state.rows.name} style={{marginLeft:"20px"}} src={`data:image/jpeg;png;base64,${this.state.imageVal}`}></img>
+                            <input ref="input" style={{display:"none"}} type="file" accept="image/*" onChange={this.onChangeHandler}></input>
+                            <img alt={this.state.rows.name} style={{marginLeft:"20px",width:"100px"}} src={`data:image/jpeg;png;base64,${this.state.imageVal}`}></img>
                             </div>
                     </div>
                     <div className="form-group row">
