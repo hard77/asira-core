@@ -77,7 +77,10 @@ class ProductAdd extends React.Component{
             this.setState({errorMessage:"Jangka Waktu Kosong"})
         }else if(parseInt(min_timespan) > parseInt(max_timespan)){
             this.setState({errorMessage:"Jangka Waktu dari lebih besar - Harap cek ulang"})
-        }else if(parseFloat(interest)<0 || parseInt(interest)===0){
+        }else if(parseInt(max_timespan) - parseInt(min_timespan) < 6){
+            this.setState({errorMessage:"Jangka Waktu minimal 6 bulan - Harap cek ulang"})
+        }
+        else if(parseFloat(interest)<0 || parseInt(interest)===0){
             this.setState({errorMessage:"Imbal Hasil tidak bole minus/ kosong - Harap cek ulang"})
         }else if(parseInt(min_loan) > parseInt(max_loan) || parseInt(min_loan) === parseInt(max_loan) ){
             this.setState({errorMessage:"Rentang Pengajuan tidak benar - Harap cek ulang"})
@@ -155,7 +158,7 @@ class ProductAdd extends React.Component{
       }
 
       btnCancel = ()=>{
-        window.history.back()
+        this.setState({diKlik:true})
       }
 
       componentWillReceiveProps(newProps){
