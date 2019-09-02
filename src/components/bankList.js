@@ -155,7 +155,7 @@ class BankList extends React.Component{
           swal("Access Denied","Halaman Terkahir","info")
         }else{
           this.setState({loading:true})
-          var newLink
+          var newLink=""
           var config = {
             headers: {'Authorization': "Bearer " + cookie.get('token')}
           };
@@ -188,7 +188,7 @@ class BankList extends React.Component{
           swal("Access Denied","Halaman Terkahir","info")
           this.setState({page:1,loading:false})
         }else{
-          var newLink
+          var newLink=""
           this.setState({loading:true})
           var config = {
             headers: {'Authorization': "Bearer " + cookie.get('token')}
@@ -215,7 +215,7 @@ class BankList extends React.Component{
       }
 
       getDataCustomePage =()=>{
-        var newLink
+        var newLink=""
         this.setState({loading:true})
         swal("Halaman Berapa:", {
           content: "input",
@@ -258,7 +258,7 @@ class BankList extends React.Component{
       //pagination 
       getDataBaseOnPages=(num)=>{
         this.setState({loading:true})
-        var newLink
+        var newLink=""
         var config = {
           headers: {'Authorization': "Bearer " + cookie.get('token')}
         };
@@ -272,7 +272,6 @@ class BankList extends React.Component{
         }else{
           newLink+=`page=${num}&${this.state.halamanConfig}`
         }
-    
         axios.get(serverUrl+`admin/banks?`+newLink,config)
         .then((res)=>{
             console.log(res.data)
