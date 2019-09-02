@@ -128,7 +128,7 @@ class PermintaanPinjaman extends React.Component {
       }
       else{
         this.setState({loading:true})
-        var newLink
+        var newLink=""
         var config = {
           headers: {'Authorization': "Bearer " + kukie.get('token')}
         };
@@ -162,7 +162,7 @@ getDataPreviousPage=()=>{
   }
   else{
     this.setState({loading:true})
-    var newLink
+    var newLink=""
     var config = {
       headers: {'Authorization': "Bearer " + kukie.get('token')}
     };
@@ -251,7 +251,7 @@ getDataPreviousPage=()=>{
         var config = {
           headers: {'Authorization': "Bearer " + kukie.get('token')}
         };
-        var newLink
+        var newLink=""
         if(this.state.searchRows){
           if(!isNaN(this.state.searchRows)){
             newLink+=`page=${num}&id=${this.state.searchRows}`
@@ -282,7 +282,7 @@ getDataPreviousPage=()=>{
     var config = {
       headers: {'Authorization': "Bearer " + kukie.get('token')}
     };
-    var newLink
+    var newLink=""
     if(this.state.searchRows){
       if(!isNaN(this.state.searchRows)){
         newLink+=`page=${num}&id=${this.state.searchRows}`
