@@ -88,7 +88,7 @@ getLink = ()=>{
       swal("Access Denied","Halaman Terkahir","info")
     }else{
       this.setState({loading:true})
-      var newLink
+      var newLink=""
       var config = {
         headers: {'Authorization': "Bearer " + kukie.get('token')}
       };
@@ -121,7 +121,7 @@ getLink = ()=>{
       swal("Access Denied","Halaman Terkahir","info")
       this.setState({page:1,loading:false})
     }else{
-      var newLink
+      var newLink=""
       this.setState({loading:true})
       var config = {
         headers: {'Authorization': "Bearer " + kukie.get('token')}
@@ -188,7 +188,7 @@ getLink = ()=>{
 //Function buat direct langsung ke halaman berapa
 
   getDataCustomePage =()=>{
-    var newLink
+    var newLink=""
     this.setState({loading:true})
     swal("Halaman Berapa:", {
       content: "input",
@@ -231,7 +231,7 @@ getLink = ()=>{
   //pagination 
   getDataBaseOnPages=(num)=>{
     this.setState({loading:true})
-    var newLink
+    var newLink=""
     var config = {
       headers: {'Authorization': "Bearer " + kukie.get('token')}
     };
