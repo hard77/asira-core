@@ -65,24 +65,31 @@ class LayananEdit extends React.Component{
         var name = this.refs.namaLayanan.value ? this.refs.namaLayanan.value : this.refs.namaLayanan.placeholder
         var status =  document.querySelector('.messageCheckbox').checked;
         status ? status= "active": status= "inactive"
+       
         if (this.state.selectedFile){
-            var pic = this.state.selectedFile
-            var reader = new FileReader();
-            reader.readAsDataURL(pic);
-            reader.onload =  () => {                
-                var image = reader.result.replace("data:image/jpeg;base64,","")
-                var newData = {name,status,image}
-                var config = {headers: {'Authorization': "Bearer " + cookie.get('token')}};
-                axios.patch(serverUrl+`admin/bank_services/${id}`,newData,config)
-                .then((res)=>{
-                    swal("Success","Layanan berhasil di Edit","success")
-                    this.setState({errorMessage:null,diKlik:true})
-                })
-                .catch((err)=>{console.log(err)})
-            };
-            reader.onerror = function (error) {
-              console.log('Error: ', error);
-            };
+            if (this.state.selectedFile.size >1000000){
+                this.setState({errorMessage:"Gambar tidak bole lebih dari 1 MB - Harap cek ulang"})
+            }else{
+                var pic = this.state.selectedFile
+                var reader = new FileReader();
+                reader.readAsDataURL(pic);
+                reader.onload =  () => {           
+                    var arr = reader.result.split(",")   
+                    var image = arr[1].toString()
+                    var newData = {name,status,image}
+                    var config = {headers: {'Authorization': "Bearer " + cookie.get('token')}};
+                    axios.patch(serverUrl+`admin/bank_services/${id}`,newData,config)
+                    .then((res)=>{
+                        swal("Success","Layanan berhasil di Edit","success")
+                        this.setState({errorMessage:null,diKlik:true})
+                    })
+                    .catch((err)=>{console.log(err)})
+                };
+                reader.onerror = function (error) {
+                  console.log('Error: ', error);
+                };
+            }
+         
         }else{
             var newData = {name,status}
             var config = {headers: {'Authorization': "Bearer " + cookie.get('token')}};
@@ -129,7 +136,7 @@ class LayananEdit extends React.Component{
                             <div className="col-sm-9">
                             <input className="AddStyleButton btn btn-primary" type="button" onClick={()=>this.refs.input.click()} value={this.valueHandler()}></input>
                             <input ref="input" style={{display:"none"}} type="file" accept="image/*" onChange={this.onChangeHandler}></input> 
-                            <img alt={this.state.rows.name} style={{marginLeft:"20px"}} src={`data:image/jpeg;base64,${this.state.imageVal}`}></img>
+                            <img style={{width:"100px"}} alt={this.state.rows.name} style={{marginLeft:"20px"}} src={`data:image/jpeg;png;base64,${this.state.imageVal}`}></img>
                             </div>
                     </div>
                     <div className="form-group row">
