@@ -28,17 +28,6 @@ class LayananAdd extends React.Component{
         return  this.state.selectedFile ? this.state.selectedFile.name :"Browse Image"
         
     }
-    getBase64(file,callback) {
-        var reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = function () {
-            callback(reader.result.replace("data:image/jpeg;base64,",""))
-        };
-        reader.onerror = function (error) {
-          console.log('Error: ', error);
-        };
-        // return reader.result.replace("data:image/jpeg;base64,","");
-     }
 
     btnSimpanLayanan = ()=>{
         var name =this.refs.namaLayanan.value
@@ -47,13 +36,17 @@ class LayananAdd extends React.Component{
             this.setState({errorMessage:"Nama Layanan atau Gambar kosong"})
         }else if(name.trim() === ""){
             this.setState({errorMessage:"Nama Layanan kosong - Harap Cek ulang"})
+        }else if(this.state.selectedFile.size > 1000000){
+            this.setState({errorMessage:"Gambar tidak boleh lebih dari 1 MB - Harap Cek ulang"})
         }
         else{
             var pic = this.state.selectedFile
             var reader = new FileReader();
             reader.readAsDataURL(pic);
-            reader.onload =  () => {                
-                var image = reader.result.replace("data:image/jpeg;base64,","")
+            reader.onload =  () => {   
+                console.log(reader)
+                var arr = reader.result.split(",")   
+                var image = arr[1].toString()
                 var status =  document.querySelector('.messageCheckbox').checked;
 
                 status ? status= "active": status= "inactive"
