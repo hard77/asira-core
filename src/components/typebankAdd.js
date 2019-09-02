@@ -17,7 +17,7 @@ class TypeBank extends React.Component{
         var name= this.refs.typebank.value
         var description = this.refs.deskripsi.value
   
-        if (name ===""){
+        if (name ===""||name.trim()===""){
             this.setState({errorMessage:"Nama Tipe Bank Kosong - Harap cek ulang"})
         }else{
             var config = {
