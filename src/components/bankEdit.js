@@ -165,7 +165,7 @@ class BankEdit extends React.Component{
         
         if(city === "0" || city === null){
             this.setState({errorMessage:"Kota Kosong - Harap cek ulang"})
-        }else if (city.trim()===""){
+        }else if (pic.trim()===""){
             this.setState({errorMessage:"PIC Kosong - Harap cek ulang"})
         }else if(address.trim()===""){
             this.setState({errorMessage:"Alamat Kosong - Harap cek ulang"})
