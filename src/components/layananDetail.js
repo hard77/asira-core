@@ -50,7 +50,7 @@ class LayananDetail extends React.Component{
                         <div className="form-group row">
                             <label className="col-sm-4 col-form-label">Gambar</label>
                             <div className="col-sm-8">
-                            : <img src={`data:image/jpeg;base64,${this.state.imageData}`} alt={this.state.rows.name} />
+                            : <img style={{width:"100px"}}src={`data:image/jpeg;png;base64,${this.state.imageData}`} alt={this.state.rows.name} />
                             </div>
                         </div>
                     </form>
