@@ -33,7 +33,7 @@ class BankDetail extends React.Component{
         if(cookie.get('token')){
             return(
                 <div className="container">
-                   <h2>Bank Detail</h2>
+                   <h2>Bank - Detail</h2>
                    <hr/>
                    
                    <form>
