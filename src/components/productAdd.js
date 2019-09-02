@@ -58,7 +58,7 @@ class ProductAdd extends React.Component{
         var min_loan = parseInt(this.state.rentangDari)
         var max_loan = parseInt(this.state.rentangAkhir) 
         var adminfee = this.refs.adminFee.value ? this.refs.adminFee.value : this.refs.adminFee.placeholder
-
+      
         var asn_fee = this.refs.convinienceFee.value ? this.refs.convinienceFee.value : this.refs.convinienceFee.placeholder
         var service = parseInt(this.refs.layanan.value)
         
@@ -73,6 +73,8 @@ class ProductAdd extends React.Component{
     
         if(name===""){
             this.setState({errorMessage:"Data Kosong"})
+        }else if (interest>100){
+            this.setState({errorMessage:"Imbal Hasil tidak valid"})
         }else if(min_timespan==="0" || max_timespan==="0"){
             this.setState({errorMessage:"Jangka Waktu Kosong"})
         }else if(parseInt(min_timespan) > parseInt(max_timespan)){
