@@ -77,7 +77,7 @@ class ProductList extends React.Component{
         if(cookie.get('token')){
             return(
                 <div className="container">
-                    <h2>Product List</h2>
+                    <h2>Product - List</h2>
                     <hr></hr>
 
                     <table className="table table-hover">
