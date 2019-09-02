@@ -45,7 +45,10 @@ class LayananAdd extends React.Component{
 
         if(name==="" || this.state.selectedFile===null){
             this.setState({errorMessage:"Nama Layanan atau Gambar kosong"})
-        }else{
+        }else if(name.trim() === ""){
+            this.setState({errorMessage:"Nama Layanan kosong - Harap Cek ulang"})
+        }
+        else{
             var pic = this.state.selectedFile
             var reader = new FileReader();
             reader.readAsDataURL(pic);
