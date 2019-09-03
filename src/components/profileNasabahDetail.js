@@ -16,6 +16,7 @@ class profileNasabahDetail extends React.Component{
 
     componentDidMount(){
         this.getDataDetail()  
+        
     }
     formatMoney=(number)=>
     { return number.toLocaleString('in-RP', {style : 'currency', currency: 'IDR'})}
@@ -30,7 +31,31 @@ class profileNasabahDetail extends React.Component{
               .then((res)=>{
                   console.log(res.data)
                   this.setState({rows:res.data,ktp:res.data.idcard_image.Int64,npwp:res.data.taxid_image.Int64})
-              })
+                  //KTP WAJIB KALO NPWP OPTIONAL
+                  if (this.state.ktp !==0){
+                    var config = {
+                        headers: {'Authorization': "Bearer " + kukie.get('token')}
+                      };
+                      //KTP
+                      Axios.get(serverUrlBorrower+`admin/image/${this.state.ktp}`,config)
+                      .then((res)=>{
+                        
+                          this.setState({gambarKTP:res.data.image_string})
+                      })
+                      .catch((err)=>{
+                          console.log(err)
+                      })
+                          //NPWP
+                          Axios.get(serverUrlBorrower+`admin/image/${this.state.npwp}`,config)
+                          .then((res)=>{
+
+                              this.setState({gambarNPWP:res.data.image_string})
+                          })
+                          .catch((err)=>{
+                              console.log(err)
+                          })
+                }
+                })
               .catch((err)=>{
                   console.log(err)
               })
@@ -40,45 +65,11 @@ class profileNasabahDetail extends React.Component{
 
     btnModalKTP =()=>{
         this.setState({modalKTP:true})
-       
-        if(this.state.ktp){
-            var config = {
-                headers: {'Authorization': "Bearer " + kukie.get('token')}
-              };
-              Axios.get(serverUrlBorrower+`admin/image/${this.state.ktp}`,config)
-              .then((res)=>{
-                  console.log(res.data)
-                  this.setState({gambarKTP:res.data.image_string})
-              })
-              .catch((err)=>{
-                  console.log(err)
-              })
-        }else{
-            this.setState({gambarKTP:'Gambar KTP kosong'})
-        }
-          
-        
         
     }
     btnModalNPWP =()=>{
         this.setState({modalNPWP:true})
        
-        if(this.state.npwp){
-            var config = {
-                headers: {'Authorization': "Bearer " + kukie.get('token')}
-              };
-              Axios.get(serverUrlBorrower+`admin/image/${this.state.ktp}`,config)
-              .then((res)=>{
-                  console.log(res.data)
-                  this.setState({gambarNPWP:res.data.image_string})
-                  console.log(res.data.image_string)
-              })
-              .catch((err)=>{
-                  console.log(err)
-              })
-        }else{
-            this.setState({gambarNPWP:'Gambar NPWP kosong'})
-        }
     }
     btnModalCancelKTP=()=>{
         this.setState({modalKTP:false})
@@ -95,11 +86,9 @@ class profileNasabahDetail extends React.Component{
         <Modal isOpen={this.state.modalKTP} className={this.props.className}>
           <ModalHeader toggle={this.toggle}>KTP Detail</ModalHeader>
           <ModalBody>
-             {/* <img width="100%" alt="KTP" src={`data:image/jpeg;base64,${this.state.image}`}></img> */}
-             {this.state.ktp?<div>
-                <img width="100%" alt="KTP" src={`data:image/jpeg;png;base64,${this.state.gambarKTP}`}></img>
-             </div>:<div>{this.state.gambarKTP}</div>}
-            
+              {this.state.ktp ===0 ?"Gambar KTP Tidak ada":
+             <img width="100%" alt="KTP" src={`data:image/*;base64,${this.state.gambarKTP}`}></img>
+            }
           </ModalBody>
           <ModalFooter>
             <Button color="secondary" onClick={this.btnModalCancelKTP}>Close</Button>
@@ -110,12 +99,8 @@ class profileNasabahDetail extends React.Component{
          <Modal isOpen={this.state.modalNPWP} className={this.props.className}>
           <ModalHeader toggle={this.toggle}>NPWP Detail</ModalHeader>
           <ModalBody>
-             {/* <img width="100%" alt="NPWP" src={`data:image/jpeg;base64,${this.state.image}`}></img> */}
-             {this.state.npwp?<div>
-                <img width="100%" alt="NPWP" src={`data:image/jpeg;png;base64,${this.state.gambarNPWP}`}></img>
-             </div>:<div>{this.state.gambarNPWP}</div>}
-
-             {/* <img width="100%" alt="NPWP" src="https://blue.kumparan.com/image/upload/fl_progressive,fl_lossy,c_fill,q_auto:best,w_640/v1516958492/npwp_ayvbmi.jpg"></img> */}
+            {this.state.npwp ===0 ?"Gambar NPWP Tidak ada":
+                <img width="100%" alt="NPWP" src={`data:image/jpeg;png;base64,${this.state.gambarNPWP}`}></img>}
           </ModalBody>
           <ModalFooter>
             <Button color="secondary" onClick={this.btnModalCancelNPWP}>Close</Button>
