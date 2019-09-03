@@ -73,8 +73,8 @@ class ProductAdd extends React.Component{
     
         if(name==="" || name.trim()===""){
             this.setState({errorMessage:"Nama Product Kosong"})
-        }else if (interest>100){
-            this.setState({errorMessage:"Imbal Hasil tidak valid"})
+        }else if (interest>200){
+            this.setState({errorMessage:"Imbal Hasil tidak boleh lebih dari 200 - Harap cek ulang"})
         }else if(min_timespan==="0" || max_timespan==="0"){
             this.setState({errorMessage:"Jangka Waktu Kosong"})
         }else if(parseInt(min_timespan) > parseInt(max_timespan)){
