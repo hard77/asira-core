@@ -164,7 +164,7 @@ getLink = ()=>{
         return (
             <nav key={index}>
               <p className="mr-2" style={this.state.page === val ?
-                {border:"1px solid black",backgroundColor="#F1E8E7",width:"25px",textAlign:"center",cursor:"pointer"}:
+                {border:"1px solid black",backgroundColor:"#F1E8E7",width:"25px",textAlign:"center",cursor:"pointer"}:
                 {border:"1px solid black",width:"25px",textAlign:"center",cursor:"pointer"}
                 }onClick={()=>this.getDataBaseOnPages(val)}>{val}</p>
             </nav>
