@@ -197,6 +197,7 @@ class ProductAdd extends React.Component{
                                         <option value={18}>18 </option> 
                                         <option value={24}>24 </option>
                                         <option value={30}>30 </option>    
+                                        <option value={36}>36 </option>
                                 </select>
                               
                                 <select  ref="jangkaWaktuSampai" className="form-control option" style={{width:"150px"}}>
