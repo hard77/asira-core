@@ -40,7 +40,8 @@ class profileNasabahDetail extends React.Component{
 
     btnModalKTP =()=>{
         this.setState({modalKTP:true})
-        console.log(this.state.ktp)
+       
+        if(this.state.ktp){
             var config = {
                 headers: {'Authorization': "Bearer " + kukie.get('token')}
               };
@@ -52,11 +53,16 @@ class profileNasabahDetail extends React.Component{
               .catch((err)=>{
                   console.log(err)
               })
+        }else{
+            this.setState({gambarKTP:'Gambar KTP kosong'})
+        }
+          
         
         
     }
     btnModalNPWP =()=>{
         this.setState({modalNPWP:true})
+       
         if(this.state.npwp){
             var config = {
                 headers: {'Authorization': "Bearer " + kukie.get('token')}
@@ -91,7 +97,7 @@ class profileNasabahDetail extends React.Component{
           <ModalBody>
              {/* <img width="100%" alt="KTP" src={`data:image/jpeg;base64,${this.state.image}`}></img> */}
              {this.state.ktp?<div>
-                <img width="100%" alt="KTP" src={`data:image/jpeg;base64,${this.state.gambarKTP}`}></img>
+                <img width="100%" alt="KTP" src={`data:image/jpeg;png;base64,${this.state.gambarKTP}`}></img>
              </div>:<div>{this.state.gambarKTP}</div>}
             
           </ModalBody>
@@ -106,7 +112,7 @@ class profileNasabahDetail extends React.Component{
           <ModalBody>
              {/* <img width="100%" alt="NPWP" src={`data:image/jpeg;base64,${this.state.image}`}></img> */}
              {this.state.npwp?<div>
-                <img width="100%" alt="NPWP" src={`data:image/jpeg;base64,${this.state.gambarNPWP}`}></img>
+                <img width="100%" alt="NPWP" src={`data:image/jpeg;png;base64,${this.state.gambarNPWP}`}></img>
              </div>:<div>{this.state.gambarNPWP}</div>}
 
              {/* <img width="100%" alt="NPWP" src="https://blue.kumparan.com/image/upload/fl_progressive,fl_lossy,c_fill,q_auto:best,w_640/v1516958492/npwp_ayvbmi.jpg"></img> */}
