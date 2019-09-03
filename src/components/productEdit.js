@@ -121,7 +121,10 @@ class ProductEdit extends React.Component{
             this.setState({errorMessage:"Jangka Waktu dari lebih besar - Harap cek ulang"})
         }else if(parseFloat(interest)<0 || parseInt(interest)===0){
             this.setState({errorMessage:"Imbal Hasil tidak bole minus/ kosong - Harap cek ulang"})
-        }else if(parseInt(min_loan) > parseInt(max_loan)){
+        }else if(parseFloat(interest)>200){
+            this.setState({errorMessage:"Imbal Hasil tidak boleh lebih dari 200 - Harap cek ulang"})
+        }
+        else if(parseInt(min_loan) > parseInt(max_loan)){
             this.setState({errorMessage:"Rentang Pengajuan tidak benar - Harap cek ulang"})
         }else if(parseFloat(adminfee) <0){
             this.setState({errorMessage:"Admin Fee tidak benar - Harap cek ulang"})
