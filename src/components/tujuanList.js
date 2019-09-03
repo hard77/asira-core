@@ -20,7 +20,7 @@ class TujuanList extends React.Component{
             headers: {'Authorization': "Bearer " + cookie.get('token')}
           };
 
-        axios.get(serverUrl+`admin/bank_types`,config)
+        axios.get(serverUrl+`admin/loan_purposes`,config)
         .then((res)=>{
             this.setState({loading:false,rows:res.data.data})
         })
