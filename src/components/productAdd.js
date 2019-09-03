@@ -71,8 +71,8 @@ class ProductAdd extends React.Component{
         assurance = assurance ? assurance = this.refs.asuransi.value : assurance=""
         otheragunan = otheragunan ? otheragunan = this.refs.lainnya.value : otheragunan =""
     
-        if(name===""){
-            this.setState({errorMessage:"Data Kosong"})
+        if(name==="" || name.trim()===""){
+            this.setState({errorMessage:"Nama Product Kosong"})
         }else if (interest>100){
             this.setState({errorMessage:"Imbal Hasil tidak valid"})
         }else if(min_timespan==="0" || max_timespan==="0"){
