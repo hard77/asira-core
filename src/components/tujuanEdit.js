@@ -17,19 +17,19 @@ class TujuanEdit extends React.Component{
         this.setState({errorMessage:newProps.error})
     }
     
-    btnSimpanLayanan = ()=>{
+    btnUpdateLayanan = ()=>{
         var name =this.refs.tujuan.value
         var status =  document.querySelector('.messageCheckbox').checked;
-
+        var id = this.props.match.params.id
+      
         status ? status= "active": status= "inactive"
       
-
         if(name==="" || name.trim()===""){
             this.setState({errorMessage:"Tujuan field Kosong -  Harap cek ulang"})
         }else{
                 var newData={name,status}
                 var config = {headers: {'Authorization': "Bearer " + cookie.get('token')}};
-                axios.post(serverUrl+'admin/bank_services',newData,config)
+                axios.patch(serverUrl+`admin/loan_purposese/${id}`,newData,config)
                 .then((res)=>{
                     swal("Success","Tujuan berhasil di tambah","success")
                     this.setState({errorMessage:null,diKlik:true})
@@ -46,7 +46,7 @@ class TujuanEdit extends React.Component{
 
     render(){
         if(this.state.diKlik){
-            return <Redirect to='/listlayanan'/>            
+            return <Redirect to='/listtujuan'/>            
 
         }
         if(cookie.get('token')){
@@ -75,7 +75,7 @@ class TujuanEdit extends React.Component{
                             </div>
                     </div>
                     <div className="form-group row">
-                            <input type="button" className="btn btn-success ml-3 mr-3" value="Simpan" onClick={this.btnSimpanLayanan}/>
+                            <input type="button" className="btn btn-success ml-3 mr-3" value="Simpan" onClick={this.btnUpdateLayanan}/>
                             <input type="button" className="btn btn-warning" value="Batal" onClick={this.btnCancel}/>
 
                     </div>
