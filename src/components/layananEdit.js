@@ -66,7 +66,7 @@ class LayananEdit extends React.Component{
         var status =  document.querySelector('.messageCheckbox').checked;
         status ? status= "active": status= "inactive"
         
-        if(name.trim()===""){
+        if(name.trim()===""||name===""){
             this.setState({errorMessage:"Nama Layanan Kosong - Harap Cek Ulang"})
         }else{
             if (this.state.selectedFile){
