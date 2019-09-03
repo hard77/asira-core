@@ -45,7 +45,7 @@ class TujuanAdd extends React.Component{
 
     render(){
         if(this.state.diKlik){
-            return <Redirect to='/listlayanan'/>            
+            return <Redirect to='/listtujuan'/>            
 
         }
         if(cookie.get('token')){
