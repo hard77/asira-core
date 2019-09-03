@@ -152,13 +152,17 @@ class ProductEdit extends React.Component{
                     var collaterals =[]
                     var agunan = document.querySelectorAll('.agunan:checked')
 
-
-                    for ( i = 0; i < agunan.length; i++) {
-                        collaterals.push(agunan[i].value)   
+                    if (agunan.length===0){
+                        collaterals=[]
+                    }else{
+                        for ( i = 0; i < agunan.length; i++) {
+                            collaterals.push(agunan[i].value)   
+                        }
+                        if (otheragunan){
+                            collaterals.push(otheragunan)
+                        }
                     }
-                    if (otheragunan){
-                        collaterals.push(otheragunan)
-                    }
+                    
                     collaterals.reverse()
                     
             var newData = {
@@ -316,19 +320,20 @@ class ProductEdit extends React.Component{
                                 <td>
                                 <select ref="jangkaWaktuDari" className="form-control option" style={{width:"150px"}}>
                                         <option value={this.state.rows.min_timespan}>{this.state.rows.min_timespan} </option>
-                                        <optgroup label="----------">                                       
+                                        <optgroup label="___________">                                       
                                         <option value={6}>6 </option>
                                         <option value={12}>12 </option> 
                                         <option value={18}>18 </option> 
                                         <option value={24}>24 </option>
                                         <option value={30}>30 </option>  
+                                        <option value={36}>36 </option>
                                         </optgroup>
                                 </select>
                                 <label style={{marginLeft:"80px",marginRight:"-90px"}}> s/d </label>
                                 <select  ref="jangkaWaktuSampai" className="form-control option" style={{width:"150px"}}>
                                 <option value={this.state.rows.max_timespan}> {this.state.rows.max_timespan}</option>     
-                                <optgroup label="----------">    
-                                <option value={6}>6 </option>
+                                <optgroup label="___________">    
+                                        <option value={6}>6 </option>
                                         <option value={12}>12 </option> 
                                         <option value={18}>18 </option> 
                                         <option value={24}>24 </option>
@@ -396,7 +401,13 @@ class ProductEdit extends React.Component{
                                 <div className="col-sm-10" style={{marginLeft:"105px"}}>
                         
                                 {this.renderAngunanJsx()}
-                                {this.renderAgunanLainJsx()}
+                                {this.state.collaterals.length===0?
+                                <div className="form-check form-check-inline">
+                                <input className="form-check-input otheragunan" type="checkbox" value="lainnya"/>
+                                <label className="form-check-label">Lainnya</label>
+                                <input type="text" ref="lainnya" style={{width:"200px"}} placeholder="Jika ada.." className="form-control ml-2"/>
+                                </div> 
+                                :this.renderAgunanLainJsx()}
                             </div> 
                         
                        
