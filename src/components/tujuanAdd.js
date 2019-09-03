@@ -23,19 +23,18 @@ class TujuanAdd extends React.Component{
 
         status ? status= "active": status= "inactive"
       
-
         if(name==="" || name.trim()===""){
             this.setState({errorMessage:"Tujuan field Kosong -  Harap cek ulang"})
         }else{
                 var newData={name,status}
                 var config = {headers: {'Authorization': "Bearer " + cookie.get('token')}};
-                axios.post(serverUrl+'admin/bank_services',newData,config)
+                axios.post(serverUrl+'admin/loan_purposes',newData,config)
                 .then((res)=>{
                     swal("Success","Tujuan berhasil di tambah","success")
                     this.setState({errorMessage:null,diKlik:true})
                 })
                 .catch((err)=>{console.log(err)})
-            }
+        }
     }
         
     
