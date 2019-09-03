@@ -114,15 +114,14 @@ class ProductEdit extends React.Component{
        
         status = status ? status = "active" : status ="inactive"
         assurance = assurance ? assurance = this.refs.asuransi.value : assurance=""
-        otheragunan = otheragunan ? otheragunan = this.refs.lainnya.value : otheragunan =""
-    
+        otheragunan = otheragunan ? otheragunan = this.refs.lainnya.value : otheragunan = ""
         if(min_timespan==="0" || max_timespan==="0"){
             this.setState({errorMessage:"Jangka Waktu Kosong"})
         }else if(parseInt(min_timespan) > parseInt(max_timespan)){
             this.setState({errorMessage:"Jangka Waktu dari lebih besar - Harap cek ulang"})
         }else if(parseFloat(interest)<0 || parseInt(interest)===0){
             this.setState({errorMessage:"Imbal Hasil tidak bole minus/ kosong - Harap cek ulang"})
-        }else if(parseInt(min_loan) > parseInt(max_loan) || parseInt(min_loan) === parseInt(max_loan) ){
+        }else if(parseInt(min_loan) > parseInt(max_loan)){
             this.setState({errorMessage:"Rentang Pengajuan tidak benar - Harap cek ulang"})
         }else if(parseFloat(adminfee) <0){
             this.setState({errorMessage:"Admin Fee tidak benar - Harap cek ulang"})
@@ -271,7 +270,7 @@ class ProductEdit extends React.Component{
                         <div className="form-check form-check-inline">
                         <input defaultChecked className="form-check-input otheragunan" type="checkbox" value="lainnya"/>
                         <label className="form-check-label">Lainnya</label>
-                        <input type="text" ref="lainnya" style={{width:"200px"}} placeholder={this.state.collaterals[i]} className="form-control ml-2"/>
+                        <input type="text" ref="lainnya" style={{width:"200px"}} defaultValue={this.state.collaterals[i]} className="form-control ml-2"/>
                         </div> 
                     )
                 }else{
@@ -319,29 +318,9 @@ class ProductEdit extends React.Component{
                                         <option value={this.state.rows.min_timespan}>{this.state.rows.min_timespan} </option>
                                         <optgroup label="----------">                                       
                                         <option value={6}>6 </option>
-                                        <option value={7}>7 </option>
-                                        <option value={8}>8 </option>
-                                        <option value={9}>9 </option>
-                                        <option value={10}>10 </option>
-                                        <option value={11}>11 </option>
                                         <option value={12}>12 </option> 
-                                        <option value={13}>13 </option>
-                                        <option value={14}>14 </option>
-                                        <option value={15}>15 </option> 
-                                        <option value={16}>16 </option>
-                                        <option value={17}>17 </option>
                                         <option value={18}>18 </option> 
-                                        <option value={19}>19 </option>
-                                        <option value={20}>20 </option>
-                                        <option value={21}>21 </option>
-                                        <option value={22}>22 </option>
-                                        <option value={23}>23 </option> 
                                         <option value={24}>24 </option>
-                                        <option value={25}>25 </option>
-                                        <option value={26}>26 </option> 
-                                        <option value={27}>27 </option>
-                                        <option value={28}>28 </option>
-                                        <option value={29}>29 </option> 
                                         <option value={30}>30 </option>  
                                         </optgroup>
                                 </select>
@@ -349,30 +328,11 @@ class ProductEdit extends React.Component{
                                 <select  ref="jangkaWaktuSampai" className="form-control option" style={{width:"150px"}}>
                                 <option value={this.state.rows.max_timespan}> {this.state.rows.max_timespan}</option>     
                                 <optgroup label="----------">    
+                                <option value={6}>6 </option>
                                         <option value={12}>12 </option> 
-                                        <option value={13}>13 </option>
-                                        <option value={14}>14 </option>
-                                        <option value={15}>15 </option> 
-                                        <option value={16}>16 </option>
-                                        <option value={17}>17 </option>
                                         <option value={18}>18 </option> 
-                                        <option value={19}>19 </option>
-                                        <option value={20}>20 </option>
-                                        <option value={21}>21 </option>
-                                        <option value={22}>22 </option>
-                                        <option value={23}>23 </option> 
                                         <option value={24}>24 </option>
-                                        <option value={25}>25 </option>
-                                        <option value={26}>26 </option> 
-                                        <option value={27}>27 </option>
-                                        <option value={28}>28 </option>
-                                        <option value={29}>29 </option> 
                                         <option value={30}>30 </option>
-                                        <option value={31}>31 </option>
-                                        <option value={32}>32 </option>
-                                        <option value={33}>33 </option>
-                                        <option value={34}>34 </option>
-                                        <option value={35}>35 </option>
                                         <option value={36}>36 </option>
                                     </optgroup>  
                                 </select>
