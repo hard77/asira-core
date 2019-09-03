@@ -10,15 +10,29 @@ const cookie = new Cookies()
 class TujuanEdit extends React.Component{
     state={
         errorMessage:'',
-        diKlik:false
+        diKlik:false,
+        rows:[]
     }
 
+    componentDidMount(){
+        this.getTujuanDetailByID()
+    }
     componentWillReceiveProps(newProps){
         this.setState({errorMessage:newProps.error})
     }
-    
+
+    getTujuanDetailByID = ()=>{
+        var id = this.props.match.params.id
+        var config = {headers: {'Authorization': "Bearer " + cookie.get('token')}};
+        axios.get(serverUrl+`admin/loan_purposese/${id}`,config)
+        .then((res)=>{
+            console.log(res.data)
+            this.setState({rows:res.data})
+        })
+        .catch((err)=>{console.log(err)})
+    }
     btnUpdateLayanan = ()=>{
-        var name =this.refs.tujuan.value
+        var name =this.refs.tujuan.value ? this.refs.tujuan.value : this.refs.tujuan.placeholder
         var status =  document.querySelector('.messageCheckbox').checked;
         var id = this.props.match.params.id
       
@@ -63,7 +77,7 @@ class TujuanEdit extends React.Component{
                    <div className="form-group row">
                             <label className="col-sm-3 col-form-label">Tujuan Pembiayaan</label>
                             <div className="col-sm-9">
-                            <input type="text" placeholder="Masukan Nama Layanan" style={{width:"50%",marginLeft:"100px",height:"35px",borderRadius:"3px"}} ref="tujuan"></input>                            
+                            <input type="text" placeholder={this.state.rows.name} style={{width:"50%",marginLeft:"100px",height:"35px",borderRadius:"3px"}} ref="tujuan"></input>                            
                             </div>
                     </div>
                   
@@ -71,7 +85,9 @@ class TujuanEdit extends React.Component{
                             <label className="col-sm-3 col-form-label">Status</label>
                             <div className="col-sm-9">
                             <input className="form-check-input messageCheckbox AddStyleButtonCheckbox" value="active" type="checkbox" /> 
-                            <label style={{position:"relative",left:"130px",paddingTop:"3px"}} >Aktif</label>           
+                            {this.state.rows.status ==="active"?<input className="form-check-input messageCheckbox AddStyleButtonCheckbox" value="active" type="checkbox" defaultChecked/>   :
+                            <input className="form-check-input messageCheckbox AddStyleButtonCheckbox" value="active" type="checkbox"/> 
+                            }    
                             </div>
                     </div>
                     <div className="form-group row">
