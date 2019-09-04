@@ -1,7 +1,7 @@
 import React from 'react'
 import Cookies from 'universal-cookie';
 import { Redirect } from 'react-router-dom'
-import {serverUrl} from './url'
+import {serverUrlBorrower} from './url'
 
 import axios from 'axios'
 
@@ -20,7 +20,7 @@ class TujuanDetail extends React.Component{
                 headers: {'Authorization': "Bearer " + cookie.get('token')}
               };
           
-            axios.get(serverUrl+`admin/loan_purposes/${id}`,config)
+            axios.get(serverUrlBorrower+`admin/loan_purposes/${id}`,config)
             .then((res)=>{
                 console.log(res.data)
                 this.setState({rows:res.data})
