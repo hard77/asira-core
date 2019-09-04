@@ -2,7 +2,7 @@ import React from 'react'
 import Cookies from 'universal-cookie';
 import './../support/css/layananAdd.css'
 import { Redirect } from 'react-router-dom'
-import { serverUrl } from './url';
+import { serverUrlBorrower } from './url';
 import swal from 'sweetalert'
 import axios from 'axios'
 const cookie = new Cookies()
@@ -28,7 +28,7 @@ class TujuanAdd extends React.Component{
         }else{
                 var newData={name,status}
                 var config = {headers: {'Authorization': "Bearer " + cookie.get('token')}};
-                axios.post(serverUrl+'admin/loan_purposes',newData,config)
+                axios.post(serverUrlBorrower+'admin/loan_purposes',newData,config)
                 .then((res)=>{
                     swal("Success","Tujuan berhasil di tambah","success")
                     this.setState({errorMessage:null,diKlik:true})
