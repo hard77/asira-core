@@ -2,7 +2,7 @@ import React from 'react'
 import Cookies from 'universal-cookie';
 import { Redirect } from 'react-router-dom'
 import Loader from 'react-loader-spinner'
-import { serverUrl } from './url';
+import { serverUrlBorrower } from './url';
 import axios from 'axios'
 import {Link} from 'react-router-dom'
 
@@ -20,7 +20,7 @@ class TujuanList extends React.Component{
             headers: {'Authorization': "Bearer " + cookie.get('token')}
           };
 
-        axios.get(serverUrl+`admin/loan_purposes`,config)
+        axios.get(serverUrlBorrower+`admin/loan_purposes`,config)
         .then((res)=>{
             this.setState({loading:false,rows:res.data.data})
         })
