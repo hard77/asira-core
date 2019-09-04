@@ -2,7 +2,7 @@ import React from 'react'
 import Cookies from 'universal-cookie';
 import './../support/css/layananAdd.css'
 import { Redirect } from 'react-router-dom'
-import { serverUrl } from './url';
+import { serverUrlBorrower } from './url';
 import swal from 'sweetalert'
 import axios from 'axios'
 const cookie = new Cookies()
@@ -24,7 +24,7 @@ class TujuanEdit extends React.Component{
     getTujuanDetailByID = ()=>{
         var id = this.props.match.params.id
         var config = {headers: {'Authorization': "Bearer " + cookie.get('token')}};
-        axios.get(serverUrl+`admin/loan_purposese/${id}`,config)
+        axios.get(serverUrlBorrower+`admin/loan_purposese/${id}`,config)
         .then((res)=>{
             console.log(res.data)
             this.setState({rows:res.data})
@@ -43,7 +43,7 @@ class TujuanEdit extends React.Component{
         }else{
                 var newData={name,status}
                 var config = {headers: {'Authorization': "Bearer " + cookie.get('token')}};
-                axios.patch(serverUrl+`admin/loan_purposese/${id}`,newData,config)
+                axios.patch(serverUrlBorrower+`admin/loan_purposese/${id}`,newData,config)
                 .then((res)=>{
                     swal("Success","Tujuan berhasil di tambah","success")
                     this.setState({errorMessage:null,diKlik:true})
