@@ -24,7 +24,7 @@ class TujuanEdit extends React.Component{
     getTujuanDetailByID = ()=>{
         var id = this.props.match.params.id
         var config = {headers: {'Authorization': "Bearer " + cookie.get('token')}};
-        axios.get(serverUrlBorrower+`admin/loan_purposese/${id}`,config)
+        axios.get(serverUrlBorrower+`admin/loan_purposes/${id}`,config)
         .then((res)=>{
             console.log(res.data)
             this.setState({rows:res.data})
@@ -43,7 +43,7 @@ class TujuanEdit extends React.Component{
         }else{
                 var newData={name,status}
                 var config = {headers: {'Authorization': "Bearer " + cookie.get('token')}};
-                axios.patch(serverUrlBorrower+`admin/loan_purposese/${id}`,newData,config)
+                axios.patch(serverUrlBorrower+`admin/loan_purposes/${id}`,newData,config)
                 .then((res)=>{
                     swal("Success","Tujuan berhasil di tambah","success")
                     this.setState({errorMessage:null,diKlik:true})
@@ -83,12 +83,18 @@ class TujuanEdit extends React.Component{
                   
                     <div className="form-group row">
                             <label className="col-sm-3 col-form-label">Status</label>
+                           
+                            {this.state.rows.status ==="active"? 
+                            <div className="col-sm-9">
+                            <input className="form-check-input messageCheckbox AddStyleButtonCheckbox" value="active" type="checkbox" defaultChecked/> 
+                            <label style={{position:"relative",left:"130px",paddingTop:"3px"}} >Aktif</label>           
+                            </div> :
                             <div className="col-sm-9">
                             <input className="form-check-input messageCheckbox AddStyleButtonCheckbox" value="active" type="checkbox" /> 
-                            {this.state.rows.status ==="active"?<input className="form-check-input messageCheckbox AddStyleButtonCheckbox" value="active" type="checkbox" defaultChecked/>   :
-                            <input className="form-check-input messageCheckbox AddStyleButtonCheckbox" value="active" type="checkbox"/> 
-                            }    
+                            <label style={{position:"relative",left:"130px",paddingTop:"3px"}} >Aktif</label>           
                             </div>
+                            }    
+                           
                     </div>
                     <div className="form-group row">
                             <input type="button" className="btn btn-success ml-3 mr-3" value="Simpan" onClick={this.btnUpdateLayanan}/>
