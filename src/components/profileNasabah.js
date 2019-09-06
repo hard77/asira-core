@@ -8,7 +8,7 @@ import {connect } from 'react-redux'
 import Cookie from 'universal-cookie'
 import { Redirect } from 'react-router-dom'
 import QueryString from 'query-string'
-import {serverUrlBorrower,serverUrl} from './url'
+import {serverUrlBorrower} from './url'
 import {Link} from 'react-router-dom'
 
 const kukie = new Cookie()
@@ -259,17 +259,17 @@ getLink = ()=>{
     })
   }
 
-  getBankName =(id)=>{
-    var config = {
-      headers: {'Authorization': "Bearer " + kukie.get('token')}
-    }
-    axios.get(serverUrl+`admin/banks/${id}`,config)
-    .then((res)=>{
-      this.setState({bankName:res.data.name})
-    })
-    .catch((err)=> console.log(err))
-    return this.state.bankName
-  }
+  // getBankName =(id)=>{
+  //   var config = {
+  //     headers: {'Authorization': "Bearer " + kukie.get('token')}
+  //   }
+  //   axios.get(serverUrl+`admin/banks/${id}`,config)
+  //   .then((res)=>{
+  //     this.setState({bankName:res.data.name})
+  //   })
+  //   .catch((err)=> console.log(err))
+  //   return this.state.bankName
+  // }
 
   onBtnSearch = ()=>{
     
@@ -358,7 +358,7 @@ getLink = ()=>{
             <td align="center">{this.state.page >0 ? index+1 + (this.state.rowsPerPage*(this.state.page -1)) : index+1}</td>
             <td align="center">{val.id}</td>
             <td align="center">{val.fullname}</td>
-            <td align="center">{this.getBankName(val.bank.Int64)}</td>            
+            {/* <td align="center">{this.getBankName(val.bank.Int64)}</td>             */}
             <td align="center"><Moment date={val.created_time} format=" DD  MMMM  YYYY" /></td>
             {/* <TableCell align="center">{val.status}</TableCell> */}
             <td align="center">
@@ -402,7 +402,7 @@ if(kukie.get("token")){
                   <th className="text-center" scope="col">#</th>
                   <th className="text-center" scope="col">Id Nasabah</th>
                   <th className="text-center" scope="col">Nama Nasabah</th>
-                  <th className="text-center" scope="col">Bank Akun</th>
+                  {/* <th className="text-center" scope="col">Bank Akun</th> */}
                   <th  className="text-center" scope="col">Tanggal Registrasi</th>
                   {/* <TableCell align="center">Status Nasabah</TableCell> */}
                   <th  className="text-center" scope="col">Action</th>
