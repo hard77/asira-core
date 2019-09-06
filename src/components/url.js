@@ -3,3 +3,4 @@
 
 export const serverUrl="http://asira.ayannah.com/api-lender/"
 export const serverUrlBorrower="http://asira.ayannah.com/api-borrower/"
+export const serverUrlGeo="http://asira.ayannah.com/api-geomapping/"

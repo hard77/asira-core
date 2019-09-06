@@ -5,7 +5,7 @@ import axios from 'axios'
 import Loader from 'react-loader-spinner'
 import swal from 'sweetalert'
 import {Redirect} from 'react-router-dom'
-import {serverUrl} from './url'
+import {serverUrl ,serverUrlGeo} from './url'
 import kokie from 'universal-cookie'
 import {keepLogin} from './../1.actions'
 import {connect} from 'react-redux'
@@ -44,7 +44,20 @@ class Login extends React.Component{
                     date.setTime(date.getTime() + (res.data.expires*1000));
                     kukie.set('token',res.data.token,{expires: date})
                     this.setState({loading : false,isLogin:true})
-                   
+                    if (kukie.get("token")){
+                        axios.get(serverUrlGeo+"clientauth",{
+                            auth:{
+                                username : `client`,
+                                password : `clientgeo`
+                            }
+                        })
+                        .then((res)=>{
+                            var date = new Date();
+                            date.setTime(date.getTime() + (res.data.expires*1000));
+                            kukie.set('tokenGeo',res.data.token,{expires: date})
+                        })
+                        .catch((err)=>console.log(err))
+                    }
                 })
                 .catch((err)=>{
                   this.setState({loading : false})
