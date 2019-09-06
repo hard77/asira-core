@@ -8,7 +8,9 @@ import swal from 'sweetalert'
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
 const cookie = new Cookies()
-
+const config = {
+    headers: {'Authorization': "Bearer " + cookie.get('token')}
+  };
 // const options = [
 //     { value: 'chocolate', label: 'Chocolate'},
 //     { value: 'strawberry', label: 'Strawberry' },
@@ -87,21 +89,17 @@ class Main extends React.Component{
         .catch((err)=> console.log(err))
       }
       getBankProduct = ()=>{
-        var config = {
-            headers: {'Authorization': "Bearer " + cookie.get('token')}
-          };
+ 
         axios.get(serverUrl+'admin/service_products',config)
         .then((res)=>{
-            console.log(res.data)
+            console.log(res.data.data)
             this.setState({bankProduct:res.data.data})
         })
         .catch((err)=> console.log(err))
       }
 
       getBankService = ()=>{
-        var config = {
-            headers: {'Authorization': "Bearer " + cookie.get('token')}
-          };
+    
         axios.get(serverUrl+'admin/bank_services',config)
         .then((res)=>{
             console.log(res.data)
@@ -117,10 +115,10 @@ class Main extends React.Component{
       }
         renderJenisProductJsx = ()=>{
         var jsx = this.state.bankProduct.map((val,index)=>{
-            return {id:val.id, value: val.service, label: val.service}
+            return {id:val.id, value: val.name, label: val.name}
         })
         return jsx
-         }
+        }
 
         
        renderProvinsiJsx = ()=>{
@@ -142,9 +140,7 @@ class Main extends React.Component{
 
 
       getBankType = () => {
-        var config = {
-            headers: {'Authorization': "Bearer " + cookie.get('token')}
-          };
+  
         axios.get(serverUrl+'admin/bank_types',config)
         .then((res)=>{
             console.log(res.data)
@@ -200,9 +196,7 @@ class Main extends React.Component{
                 var newData = {
                     name,type,address,province,city,pic,phone,services,products
                 }
-                var config = {
-                    headers: {'Authorization': "Bearer " + cookie.get('token')}
-                };
+            
                 axios.post(serverUrl+'admin/banks',newData,config)
                 .then((res)=>{
                     console.log(res.data)
