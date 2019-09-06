@@ -2,14 +2,19 @@ import React from 'react'
 import Cookies from 'universal-cookie';
 import { Redirect } from 'react-router-dom'
 import Select from 'react-select';
-import {serverUrl} from './url'
+import {serverUrl,serverUrlGeo} from './url'
 import axios from 'axios'
 import swal from 'sweetalert'
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
 
 const cookie = new Cookies()
-
+const config = {
+    headers: {'Authorization': "Bearer " + cookie.get('token')}
+  };
+  const configGeo = {
+    headers: {'Authorization': "Bearer " + cookie.get('tokenGeo')}
+  };
 
 // const options = [
 //     { value: 'chocolate', label: 'Chocolate' },
@@ -41,7 +46,7 @@ class BankEdit extends React.Component{
         jenisProduct:null, jenisLayanan: null, productID:[],serviceID:[],
         errorMessage: null, diKlik:false,
         typeBank:[],bankService:[],bankProduct:[],
-        provinsi:[],kabupaten:[],idProvinsi:null,dataBank:[],phone:'',provinsiEdit:null
+        provinsi:[],kabupaten:[],idProvinsi:null,dataBank:[],phone:'',provinsiEdit:null,namaTipeBank:''
     };
     componentWillReceiveProps(newProps){
         this.setState({errorMessage:newProps.error})
@@ -64,40 +69,57 @@ class BankEdit extends React.Component{
     }
     getBankDataById = ()=>{
         var id = this.props.match.params.id
-        var config = {
-            headers: {'Authorization': "Bearer " + cookie.get('token')}
-          };
+     
        // axios.get(serverUrl+'admin/banks/[bank_id]',config)
         axios.get(serverUrl+`admin/banks/${id}`,config)
         .then((res)=>{
             console.log(res.data)
             this.setState({dataBank:res.data,productID:res.data.products,serviceID:res.data.services})
+           if (this.state.dataBank){
+             this.getTypeBank()
+           }
         })
         .catch((err)=> console.log(err))
 
     }
+    // getAllProvinsi = () =>{
+    //   axios.get("https://cors-anywhere.herokuapp.com/http://dev.farizdotid.com/api/daerahindonesia/provinsi")
+    //   .then((res)=>{
+    //       console.log(res.data.semuaprovinsi)
+    //       this.setState({provinsi:res.data.semuaprovinsi})
+    //   })
+    //   .catch((err)=> console.log(err))
+    // }
     getAllProvinsi = () =>{
-      axios.get("https://cors-anywhere.herokuapp.com/http://dev.farizdotid.com/api/daerahindonesia/provinsi")
-      .then((res)=>{
-          console.log(res.data.semuaprovinsi)
-          this.setState({provinsi:res.data.semuaprovinsi})
-      })
-      .catch((err)=> console.log(err))
-    }
+        axios.get(serverUrlGeo+`client/provinsi`,configGeo)
+        .then((res)=>{
+            console.log(res.data.data)
+            this.setState({provinsi:res.data.data})
+           
+        })
+        .catch((err)=> console.log(err))
+      }
 
-    getAllKabupaten = (id) =>{
-      axios.get(`https://cors-anywhere.herokuapp.com/http://dev.farizdotid.com/api/daerahindonesia/provinsi/${id}/kabupaten`)
-      .then((res)=>{
-          console.log(res.data.kabupatens)
-          this.setState({kabupaten:res.data.kabupatens,provinsiEdit:"terpilih"})
+    // getAllKabupaten = (id) =>{
+    //   axios.get(`https://cors-anywhere.herokuapp.com/http://dev.farizdotid.com/api/daerahindonesia/provinsi/${id}/kabupaten`)
+    //   .then((res)=>{
+    //       console.log(res.data.kabupatens)
+    //       this.setState({kabupaten:res.data.kabupatens,provinsiEdit:"terpilih"})
          
-      })
-      .catch((err)=> console.log(err))
-    }
+    //   })
+    //   .catch((err)=> console.log(err))
+    // }
+    getAllKabupaten = (id) =>{
+        axios.get(serverUrlGeo+`client/provinsi/${id}/kota`,configGeo)
+        .then((res)=>{
+            console.log(res.data.data)
+            this.setState({kabupaten:res.data.data})
+           
+        })
+        .catch((err)=> console.log(err))
+      }
     getBankProduct = ()=>{
-      var config = {
-          headers: {'Authorization': "Bearer " + cookie.get('token')}
-        };
+  
       axios.get(serverUrl+'admin/service_products',config)
       .then((res)=>{
           console.log(res.data)
@@ -106,10 +128,17 @@ class BankEdit extends React.Component{
       .catch((err)=> console.log(err))
     }
 
+    getTypeBank = ()=>{
+        axios.get(serverUrl+`admin/bank_types/${this.state.dataBank.type}`,config)
+      .then((res)=>{
+          console.log(res.data.name)
+            this.setState({namaTipeBank:res.data.name})
+      })
+      .catch((err)=> console.log(err))
+    }
+
     getBankService = ()=>{
-      var config = {
-          headers: {'Authorization': "Bearer " + cookie.get('token')}
-        };
+   
       axios.get(serverUrl+'admin/bank_services',config)
       .then((res)=>{
           console.log(res.data)
@@ -119,10 +148,9 @@ class BankEdit extends React.Component{
     }
 
     renderProvinsiJsx = ()=>{
-    
         var jsx = this.state.provinsi.map((val,index)=>{
             return (
-                <option key={index} value={val.id+"T"+val.nama} > {val.nama} </option>
+                <option key={index} value={val.id+"-"+val.name} > {val.name} </option>
                 
             )
         })
@@ -131,7 +159,7 @@ class BankEdit extends React.Component{
     renderKabupatenJsx = ()=>{
         var jsx = this.state.kabupaten.map((val,index)=>{
             return (
-                <option key={index} value={val.nama}>{val.id_prov} - {val.nama}</option>
+                <option key={index} value={val.name}>{val.id} - {val.name}</option>
             )
         })
         return jsx
@@ -145,7 +173,7 @@ class BankEdit extends React.Component{
     }
       renderJenisProductJsx = ()=>{
       var jsx = this.state.bankProduct.map((val,index)=>{
-          return {id:val.id, value: val.service, label: val.service}
+          return {id:val.id, value: val.name, label: val.name}
       })
       return jsx
        }
@@ -157,12 +185,11 @@ class BankEdit extends React.Component{
         var name = this.refs.namaBank.value
         var type = parseInt(this.refs.tipeBank.value)
         var address = this.refs.alamat.value ? this.refs.alamat.value:this.refs.alamat.placeholder
-        var province = this.refs.provinsi.value.includes("T") ? this.refs.provinsi.value.slice(this.refs.provinsi.value.indexOf('T')+1,this.refs.provinsi.length):this.refs.provinsi.value
-        var city = this.refs.kota.value.includes("T") ? this.refs.kota.value.slice(this.refs.provinsi.value.indexOf('T')+1,this.refs.provinsi.length):this.refs.kota.value
+        var province = this.refs.provinsi.value.includes("-") ? this.refs.provinsi.value.slice(this.refs.provinsi.value.indexOf('-')+1,this.refs.provinsi.value.length) : this.refs.provinsi.value
+        var city = this.refs.kota.value.includes("-") ? this.refs.kota.value.slice(this.refs.provinsi.value.indexOf('-')+1,this.refs.provinsi.length):this.refs.kota.value
         var pic = this.refs.pic.value ? this.refs.pic.value:this.refs.pic.placeholder
         var phone = this.state.phone ? String(this.state.phone):String(this.state.dataBank.phone)
-
-        
+       
         if(city === "0" || city === null){
             this.setState({errorMessage:"Kota Kosong - Harap cek ulang"})
         }else if (pic.trim()===""){
@@ -189,9 +216,7 @@ class BankEdit extends React.Component{
             var newData = {
                 name,type,address,province,city,services,products,pic,phone
             }
-            var config = {
-                headers: {'Authorization': "Bearer " + cookie.get('token')}
-              };
+        
            
             axios.patch(serverUrl+`admin/banks/${id}`,newData,config)
             .then((res)=>{
@@ -200,7 +225,7 @@ class BankEdit extends React.Component{
             })
             .catch((err)=> console.log(err))
            
-        }
+       }
            
 
         
@@ -241,7 +266,7 @@ class BankEdit extends React.Component{
                         <div className="form-group row">
                             <label className="col-sm-2 col-form-label">Tipe Bank</label>
                             <div className="col-sm-10">
-                            <input type="text" id="disabledTextInput" className="form-control" ref="tipeBank"  defaultValue={this.state.dataBank.type}/>
+                            <input type="text" id="disabledTextInput" className="form-control" ref="tipeBank"  defaultValue={this.state.namaTipeBank}/>
                             </div>
                         </div>
                        </fieldset>
@@ -256,7 +281,7 @@ class BankEdit extends React.Component{
                         <div className="form-group row">
                             <label className="col-sm-2 col-form-label">Provinsi</label>
                             <div className="col-sm-10">
-                            <select id="provinsi" onChange={()=>{this.getAllKabupaten(this.refs.provinsi.value.slice(0,this.refs.provinsi.value.indexOf('T')))
+                            <select id="provinsi" onChange={()=>{this.getAllKabupaten(this.refs.provinsi.value.slice(0,this.refs.provinsi.value.indexOf('-')))
                             document.getElementById("kota").value ="0"
                         }} ref="provinsi" className="form-control">
                            
@@ -273,11 +298,11 @@ class BankEdit extends React.Component{
                             <div className="col-sm-10">
                             <select ref="kota" id="kota" className="form-control">
                               {this.state.provinsiEdit===null? <option value={this.state.dataBank.city}>{this.state.dataBank.city}</option>:
-                            <option value={0}>========= PILIH KOTA =========</option>
-                            } 
-                                <optgroup label="_________________________">
+                           null
+                            }  <option value={0}>========= PILIH KOTA =========</option>
+                               
                                 {this.renderKabupatenJsx()}
-                                </optgroup>
+                           
                             </select>
                             </div>
                         </div>

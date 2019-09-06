@@ -3,10 +3,9 @@ import './App.css';
 import {Route,withRouter,Switch} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {keepLogin} from './1.actions'
-import {serverUrl} from './components/url'
-import {serverUrlBorrower} from './components/url'
 
 
+import Testing from './components/testing'
 
 import PageNotFound from './components/404'
 
@@ -33,86 +32,30 @@ import PinjamanSetuju from './components/pinjamanSetuju'
 import PinjamanRejected from './components/pinjamanRejected'
 
 import ProductAdd from './components/productAdd'
-import ProductList from './components/productList'
 
 import Cookies from 'universal-cookie';
-import axios from 'axios'
+import ProductList from './components/productList'
+import TypeBankAdd from './components/typebankAdd'
+import TypeBankList from './components/typebankList'
+import TujuanAdd from './components/tujuanAdd'
+import TujuanList from './components/tujuanList'
+import TujuanEdit from './components/tujuanEdit'
+import TujuanDetail from './components/tujuanDetail'
+
 
 const kukie =new Cookies()
-var tokenClient = kukie.get("tokenClient")
+
 
 class App extends React.Component {
   state ={loading : true , tokenClient : null , Token : null}
- componentDidMount(){
-  this.getAuth()
-  this.getAuthBorrower()
-
-  if (tokenClient){
-   this.props.keepLogin()
-   }
-
-  }
-
-
-  getAuthBorrower =()=>{
-    var urlBorrow = serverUrlBorrower+"clientauth"
-    axios.get(urlBorrow ,{
-      auth : {
-          username : 'androkey',
-          password : 'androsecret'
-      }
-  })
-      .then((res)=>{
-          var date = new Date();
-          date.setTime(date.getTime() + (res.data.expires*1000));
-          kukie.set('tokenBorrower',res.data.token,{expires: date})
-          
-         
-      })
-      .catch((err)=>{
-        console.log(err)
-      }
-         
-      )
-  }
- getAuth = ()=>{
-  var url =serverUrl+"clientauth"
-  axios.get(url ,{
-      auth : {
-          username : 'reactkey',
-          password : 'reactpass'
-      }
-  })
-      .then((res)=>{
-          var date = new Date();
-          date.setTime(date.getTime() + (res.data.expires*1000));
-          kukie.set('token',res.data.token,{expires: date})
-          this.setState({loading : false})
-         
-      })
-      .catch((err)=>{
-        console.log(err)
-        setTimeout(function(){ alert("Coba reload halaman/ cek koneksi internet"); }, 2000);
-      }
-         
-      )
-}
-
-
-  render() {
-    if(this.state.loading){
-      return(
-        <p> loading ....</p>
-      )
-    }
-    
+  render() {  
       return (
       
         <div>
           <ScrollTop>
             <div className="row">
             {
-                kukie.get('tokenClient') ? 
+                kukie.get('token') ? 
               <div className="col-2 col-md-3">
               <Header/>
               </div>
@@ -121,6 +64,7 @@ class App extends React.Component {
             }
               <div className="col-10 col-md-9">
               <Switch> 
+                    <Route path='/test' component={Testing}></Route>
                     <Route path='/' component={Home} exact></Route>
                     <Route path='/profileNasabah' component={Nasabah}></Route>
                     <Route path="/profileNasabahDetail/:id" component={profileNasabahDetail}></Route>
@@ -141,11 +85,16 @@ class App extends React.Component {
                     <Route path='/tambahlayanan' component={LayananAdd}></Route>
                     <Route path='/listlayanan' component={LayananList}></Route>
 
+                    <Route path='/tambahtipe' component={TypeBankAdd}></Route>
+                    <Route path='/listtipe' component={TypeBankList}></Route>
 
-                    
+                    <Route path='/tambahtujuan' component={TujuanAdd}></Route>
+                    <Route path='/listtujuan' component={TujuanList}></Route>
+                    <Route path='/tujuanedit/:id' component={TujuanEdit}></Route>
+                    <Route path='/tujuandetail/:id' component={TujuanDetail}></Route>
 
 
-                    {kukie.get('tokenClient') ?  <Route path="/login" component={Home}></Route>:  <Route path="/login" component={Login}></Route>} 
+                    {kukie.get('token') ?  <Route path="/login" component={Home}></Route>:  <Route path="/login" component={Login}></Route>} 
 
                     <Route path='*' component={PageNotFound} />
               </Switch>

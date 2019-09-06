@@ -8,7 +8,7 @@ class Main extends React.Component{
         if(cookie.get('token')){
             return(
                 <div className="container">
-                   <p>CORE</p>
+                   <p>EDIT TUJUAN</p>
     
                 </div>
             )
