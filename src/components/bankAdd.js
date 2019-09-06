@@ -11,11 +11,6 @@ const cookie = new Cookies()
 const config = {
     headers: {'Authorization': "Bearer " + cookie.get('token')}
   };
-// const options = [
-//     { value: 'chocolate', label: 'Chocolate'},
-//     { value: 'strawberry', label: 'Strawberry' },
-//     { value: 'vanilla', label: 'Vanilla' },
-//   ];
 
   const customStyles = {
     option: (provided, state) => ({
