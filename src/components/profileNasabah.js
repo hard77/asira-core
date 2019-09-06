@@ -8,7 +8,7 @@ import {connect } from 'react-redux'
 import Cookie from 'universal-cookie'
 import { Redirect } from 'react-router-dom'
 import QueryString from 'query-string'
-import {serverUrlBorrower} from './url'
+import {serverUrlBorrower,serverUrl} from './url'
 import {Link} from 'react-router-dom'
 
 const kukie = new Cookie()
@@ -23,13 +23,12 @@ class profileNasabah extends React.Component {
     totalData:0,
     last_page:1,
     loading:true,
-    bankID:0
+    bankID:0,bankName:''
   };
 
   //-----------------------------------NIKO FUNCTION-------------------------------------------------------------
   componentDidMount(){
     this.getAllData()
-    
   }
 
   pushUrl = ()=>{
@@ -261,15 +260,15 @@ getLink = ()=>{
   }
 
   getBankName =(id)=>{
-    // var config = {
-    //   headers: {'Authorization': "Bearer " + kukie.get('token')}
-    // }
-    // axios.get(serverUrlBorrower+`client/banks/${id}`,config)
-    // .then((res)=>{
-    //   console.log(res.data)
-    // })
-    // .catch((err)=> console.log(err))
-    return id
+    var config = {
+      headers: {'Authorization': "Bearer " + kukie.get('token')}
+    }
+    axios.get(serverUrl+`admin/banks/${id}`,config)
+    .then((res)=>{
+      this.setState({bankName:res.data.name})
+    })
+    .catch((err)=> console.log(err))
+    return this.state.bankName
   }
 
   onBtnSearch = ()=>{
