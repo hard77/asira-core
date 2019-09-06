@@ -22,7 +22,8 @@ class profileNasabah extends React.Component {
     editIndex:Number,
     totalData:0,
     last_page:1,
-    loading:true
+    loading:true,
+    bankID:0
   };
 
   //-----------------------------------NIKO FUNCTION-------------------------------------------------------------
@@ -259,6 +260,17 @@ getLink = ()=>{
     })
   }
 
+  getBankName =(id)=>{
+    // var config = {
+    //   headers: {'Authorization': "Bearer " + kukie.get('token')}
+    // }
+    // axios.get(serverUrlBorrower+`client/banks/${id}`,config)
+    // .then((res)=>{
+    //   console.log(res.data)
+    // })
+    // .catch((err)=> console.log(err))
+    return id
+  }
 
   onBtnSearch = ()=>{
     
@@ -347,6 +359,7 @@ getLink = ()=>{
             <td align="center">{this.state.page >0 ? index+1 + (this.state.rowsPerPage*(this.state.page -1)) : index+1}</td>
             <td align="center">{val.id}</td>
             <td align="center">{val.fullname}</td>
+            <td align="center">{this.getBankName(val.bank.Int64)}</td>            
             <td align="center"><Moment date={val.created_time} format=" DD  MMMM  YYYY" /></td>
             {/* <TableCell align="center">{val.status}</TableCell> */}
             <td align="center">
@@ -390,6 +403,7 @@ if(kukie.get("token")){
                   <th className="text-center" scope="col">#</th>
                   <th className="text-center" scope="col">Id Nasabah</th>
                   <th className="text-center" scope="col">Nama Nasabah</th>
+                  <th className="text-center" scope="col">Bank Akun</th>
                   <th  className="text-center" scope="col">Tanggal Registrasi</th>
                   {/* <TableCell align="center">Status Nasabah</TableCell> */}
                   <th  className="text-center" scope="col">Action</th>
