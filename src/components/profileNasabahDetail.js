@@ -1,6 +1,6 @@
 import React from 'react'
 import Axios from 'axios';
-import {serverUrlBorrower} from './url'
+import {serverUrlBorrower,serverUrl} from './url'
 // import {serverUrlBorrower} from './url'
 import Cookies from 'universal-cookie';
 import './../support/css/profilenasabahdetail.css'
@@ -10,13 +10,48 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import Moment from 'react-moment';
 
 const kukie = new Cookies()
+const config = {headers: {'Authorization': "Bearer " + kukie.get('token')}}
 
 class profileNasabahDetail extends React.Component{
-    state={rows:[],modalKTP:false,modalNPWP:false,npwp:null,ktp:null,gambarKTP:null,gambarNPWP:null}
+    state={rows:[],modalKTP:false,modalNPWP:false,npwp:null,ktp:null,gambarKTP:null,gambarNPWP:null,
+        bankID:0,bankName:''}
 
     componentDidMount(){
         this.getDataDetail()  
         
+    }
+
+    getBankName = ()=>{
+      
+        Axios.get(serverUrl+`admin/banks/${this.state.bankID}`,config)
+        .then((res)=>{
+          this.setState({bankName:res.data.name})
+        })
+        .catch((err)=> console.log(err))
+        return this.state.bankName
+    }
+    getKTPImage = ()=>{
+      
+          //KTP
+          Axios.get(serverUrlBorrower+`admin/image/${this.state.ktp}`,config)
+          .then((res)=>{
+            
+              this.setState({gambarKTP:res.data.image_string})
+          })
+          .catch((err)=>{
+              console.log(err)
+          })
+    }
+    getNPWPImage = ()=>{
+    
+        Axios.get(serverUrlBorrower+`admin/image/${this.state.npwp}`,config)
+        .then((res)=>{
+
+            this.setState({gambarNPWP:res.data.image_string})
+        })
+        .catch((err)=>{
+            console.log(err)
+        })
     }
     formatMoney=(number)=>
     { return number.toLocaleString('in-RP', {style : 'currency', currency: 'IDR'})}
@@ -24,36 +59,16 @@ class profileNasabahDetail extends React.Component{
     getDataDetail =()=>{
          var id = this.props.match.params.id
         if (kukie.get('token')){
-            var config = {
-                headers: {'Authorization': "Bearer " + kukie.get('token')}
-              };
+           
               Axios.get(serverUrlBorrower+`admin/borrower/${id}`,config)
               .then((res)=>{
                   console.log(res.data)
-                  this.setState({rows:res.data,ktp:res.data.idcard_image.Int64,npwp:res.data.taxid_image.Int64})
+                  this.setState({rows:res.data,bankId:res,ktp:res.data.idcard_image.Int64,npwp:res.data.taxid_image.Int64, bankID:res.data.bank.Int64})
                   //KTP WAJIB KALO NPWP OPTIONAL
-                  if (this.state.ktp !==0){
-                    var config = {
-                        headers: {'Authorization': "Bearer " + kukie.get('token')}
-                      };
-                      //KTP
-                      Axios.get(serverUrlBorrower+`admin/image/${this.state.ktp}`,config)
-                      .then((res)=>{
-                        
-                          this.setState({gambarKTP:res.data.image_string})
-                      })
-                      .catch((err)=>{
-                          console.log(err)
-                      })
-                          //NPWP
-                          Axios.get(serverUrlBorrower+`admin/image/${this.state.npwp}`,config)
-                          .then((res)=>{
-
-                              this.setState({gambarNPWP:res.data.image_string})
-                          })
-                          .catch((err)=>{
-                              console.log(err)
-                          })
+                  this.getBankName() 
+                  if (this.state.ktp !==0){    
+                    this.getKTPImage()
+                    this.getNPWPImage()     
                 }
                 })
               .catch((err)=>{
@@ -124,7 +139,7 @@ class profileNasabahDetail extends React.Component{
                                 </tr>
                                 <tr>
                                     <td>Bank Nasabah</td>
-                                    <td>: {this.props.name}</td>
+                                    <td>: {this.state.bankName}</td>
                                 </tr>
 
                                 </tbody>
