@@ -5,7 +5,7 @@ import axios from 'axios'
 import Loader from 'react-loader-spinner'
 import swal from 'sweetalert'
 import {Redirect} from 'react-router-dom'
-import {serverUrl} from './url'
+import {serverUrl ,serverUrlGeo} from './url'
 import kokie from 'universal-cookie'
 import {keepLogin} from './../1.actions'
 import {connect} from 'react-redux'
@@ -21,39 +21,50 @@ class Login extends React.Component{
     //LOGIN BUTTON
     btnLogin = ()=>{
         this.setState({loading:true})
-        var url =serverUrl+"client/lender_login"
-        var config = {
-            headers: {'Authorization': "Bearer " + kukie.get('token')}
-        };
+     
         var username=this.refs.username.value
         var password=this.refs.password.value
-        var bodyParameters = {
-            key: username,
-            password
-         }
+       
         if (username==="" || password===""){
             swal("Error","Username and Password Empty","error")
             this.setState({loading:false})
 
         }else{
-            axios.post(url,bodyParameters,config)
-            .then((res)=>{
-               console.log(res)
-                if (res.status===200){
-                var date = new Date();
-                date.setTime(date.getTime() + (res.data.expires*1000));
-                kukie.set('tokenClient',res.data.token,{expires: date})
-
-                this.setState({loading:false , isLogin : true})
-                this.props.keepLogin()
-            
+            var url =serverUrl+"clientauth"
+            axios.get(url ,{
+                auth : {
+                    // username : 'gradios',
+                    // password : 'ultimus'
+                    username : `${username}`,
+                    password : `${password}`
                 }
-                
             })
-            .catch((err)=>{
-                this.setState({loading:false})
-                swal("Gagal Login","Cek ulang Username dan Password","info")
-            })
+                .then((res)=>{
+                    var date = new Date();
+                    date.setTime(date.getTime() + (res.data.expires*1000));
+                    kukie.set('token',res.data.token,{expires: date})
+                    this.setState({loading : false,isLogin:true})
+                    if (kukie.get("token")){
+                        axios.get(serverUrlGeo+"clientauth",{
+                            auth:{
+                                username : `client`,
+                                password : `clientgeo`
+                            }
+                        })
+                        .then((res)=>{
+                            var date = new Date();
+                            date.setTime(date.getTime() + (res.data.expires*1000));
+                            kukie.set('tokenGeo',res.data.token,{expires: date})
+                        })
+                        .catch((err)=>console.log(err))
+                    }
+                })
+                .catch((err)=>{
+                  this.setState({loading : false})
+                  swal("Warning","Username atau Password tidak benar","info")
+                }
+                   
+                )
         }
       
     } 

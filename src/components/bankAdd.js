@@ -2,7 +2,7 @@ import React from 'react'
 import Cookies from 'universal-cookie';
 import { Redirect , Link } from 'react-router-dom'
 import Select from 'react-select';
-import {serverUrl} from './url'
+import {serverUrl,serverUrlGeo} from './url'
 import axios from 'axios'
 import swal from 'sweetalert'
 import PhoneInput from 'react-phone-number-input'
@@ -10,6 +10,9 @@ import 'react-phone-number-input/style.css'
 const cookie = new Cookies()
 const config = {
     headers: {'Authorization': "Bearer " + cookie.get('token')}
+  };
+  const configGeo = {
+    headers: {'Authorization': "Bearer " + cookie.get('tokenGeo')}
   };
 
   const customStyles = {
@@ -64,21 +67,39 @@ class Main extends React.Component{
           this.getBankProduct()
           this.getAllProvinsi()
       }
+    //   getAllProvinsi = () =>{
+    //     axios.get("https://cors-anywhere.herokuapp.com/http://dev.farizdotid.com/api/daerahindonesia/provinsi")
+    //     .then((res)=>{
+    //         console.log(res.data.semuaprovinsi)
+    //         this.setState({provinsi:res.data.semuaprovinsi})
+           
+    //     })
+    //     .catch((err)=> console.log(err))
+    //   }
       getAllProvinsi = () =>{
-        axios.get("https://cors-anywhere.herokuapp.com/http://dev.farizdotid.com/api/daerahindonesia/provinsi")
+        axios.get(serverUrlGeo+`client/provinsi`,configGeo)
         .then((res)=>{
-            console.log(res.data.semuaprovinsi)
-            this.setState({provinsi:res.data.semuaprovinsi})
+            console.log(res.data.data)
+            this.setState({provinsi:res.data.data})
            
         })
         .catch((err)=> console.log(err))
       }
 
+    //   getAllKabupaten = (id) =>{
+    //     axios.get(`https://cors-anywhere.herokuapp.com/http://dev.farizdotid.com/api/daerahindonesia/provinsi/${id}/kabupaten`)
+    //     .then((res)=>{
+    //         console.log(res.data.kabupatens)
+    //         this.setState({kabupaten:res.data.kabupatens})
+           
+    //     })
+    //     .catch((err)=> console.log(err))
+    //   }
       getAllKabupaten = (id) =>{
-        axios.get(`https://cors-anywhere.herokuapp.com/http://dev.farizdotid.com/api/daerahindonesia/provinsi/${id}/kabupaten`)
+        axios.get(serverUrlGeo+`client/provinsi/${id}/kota`,configGeo)
         .then((res)=>{
-            console.log(res.data.kabupatens)
-            this.setState({kabupaten:res.data.kabupatens})
+            console.log(res.data.data)
+            this.setState({kabupaten:res.data.data})
            
         })
         .catch((err)=> console.log(err))
@@ -119,7 +140,7 @@ class Main extends React.Component{
        renderProvinsiJsx = ()=>{
             var jsx = this.state.provinsi.map((val,index)=>{
                 return (
-                    <option key={index} value={val.id+"T"+val.nama} > {val.nama} </option>
+                    <option key={index} value={val.id+"T"+val.name} > {val.name} </option>
                 )
             })
             return jsx
@@ -127,7 +148,7 @@ class Main extends React.Component{
         renderKabupatenJsx = ()=>{
             var jsx = this.state.kabupaten.map((val,index)=>{
                 return (
-                    <option key={index} value={val.nama}>{val.id_prov} - {val.nama}</option>
+                    <option key={index} value={val.name}>{val.id} - {val.name}</option>
                 )
             })
             return jsx

@@ -3,7 +3,6 @@ import {
   Collapse,
   Navbar,
   NavbarToggler,
-  NavbarBrand,
   Nav,
   UncontrolledDropdown,
   DropdownToggle,
@@ -11,7 +10,7 @@ import {
   DropdownItem } from 'reactstrap';
 
 import Logo from './../support/img/logo.jpeg'
-import {Link} from 'react-router-dom'
+import {Link,Redirect} from 'react-router-dom'
 import './../support/css/header.css'
 import {connect} from 'react-redux'
 import {resetUser} from './../1.actions/index'
@@ -21,7 +20,7 @@ const kukie =new Cookies()
 
 
  class Example extends React.Component {
-
+  state={isLogin:false}
   constructor(props) {
     super(props);
 
@@ -37,17 +36,23 @@ const kukie =new Cookies()
   }
   //Button log out function  
   logOutBtn =()=>{ 
-    this.props.resetUser()  
-    kukie.remove("tokenClient")
+    kukie.remove("tokenGeo")
+    kukie.remove("token")
+    this.setState({isLogin:true})
   }
   
   render() {
+    if(this.state.isLogin){
+      return(
+          <Redirect to='/' />
+      )
+  }
     return (
       <div className="sideBar">
         <Navbar>
-          <NavbarBrand href="/">
+          
               <img src={Logo} alt="Logo" width="100%" className="mb-4" />
-          </NavbarBrand>
+         
           <NavbarToggler onClick={this.toggle} style={{display:"none"}}/>
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav navbar>
@@ -81,6 +86,26 @@ const kukie =new Cookies()
                  <Link to="/tambahproduct" style={{color:"inherit",textDecoration:"none"}}><DropdownItem>Tambah </DropdownItem></Link>                   
                  <Link to="/listproduct" style={{color:"inherit",textDecoration:"none"}}><DropdownItem>List </DropdownItem>  </Link>                                  
                 </DropdownMenu>
+              </UncontrolledDropdown>
+
+              <UncontrolledDropdown  nav inNavbar>
+                <DropdownToggle nav caret style={{ color:"inherit",textDecoration:"none"}}>
+                <label><i className="fas fa-sliders-h"></i> Tipe Bank</label>
+                </DropdownToggle>
+              <DropdownMenu className="menuDropDown" style={{border:"1px solid black",marginBottom:"20px"}}>
+                 <Link to="/tambahtipe" style={{color:"inherit",textDecoration:"none"}}><DropdownItem>Tambah</DropdownItem></Link>                   
+                 <Link to="/listtipe" style={{color:"inherit",textDecoration:"none"}}>  <DropdownItem>List </DropdownItem>   </Link>                
+              </DropdownMenu>
+              </UncontrolledDropdown>
+              
+              <UncontrolledDropdown  nav inNavbar>
+                <DropdownToggle nav caret style={{ color:"inherit",textDecoration:"none"}}>
+                <label><i className="fas fa-bullseye"></i> Tujuan</label>
+                </DropdownToggle>
+              <DropdownMenu className="menuDropDown" style={{border:"1px solid black",marginBottom:"20px"}}>
+                 <Link to="/tambahtujuan" style={{color:"inherit",textDecoration:"none"}}><DropdownItem>Tambah</DropdownItem></Link>                   
+                 <Link to="/listtujuan" style={{color:"inherit",textDecoration:"none"}}>  <DropdownItem>List </DropdownItem>   </Link>                
+              </DropdownMenu>
               </UncontrolledDropdown>
            
         

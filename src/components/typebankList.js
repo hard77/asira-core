@@ -3,12 +3,12 @@ import Cookies from 'universal-cookie';
 import { Redirect } from 'react-router-dom'
 const cookie = new Cookies()
 
-class Main extends React.Component{
+class TypeBankList extends React.Component{
     render(){
         if(cookie.get('token')){
             return(
                 <div className="container">
-                   <p>CORE</p>
+                   <p>Type Bank - List</p>
     
                 </div>
             )
@@ -22,4 +22,4 @@ class Main extends React.Component{
     }
 }
 
-export default Main;
+export default TypeBankList;
