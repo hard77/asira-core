@@ -140,7 +140,7 @@ class Main extends React.Component{
        renderProvinsiJsx = ()=>{
             var jsx = this.state.provinsi.map((val,index)=>{
                 return (
-                    <option key={index} value={val.id+"T"+val.name} > {val.name} </option>
+                    <option key={index} value={val.id+"-"+val.name} > {val.name} </option>
                 )
             })
             return jsx
@@ -148,7 +148,7 @@ class Main extends React.Component{
         renderKabupatenJsx = ()=>{
             var jsx = this.state.kabupaten.map((val,index)=>{
                 return (
-                    <option key={index} value={val.name}>{val.id} - {val.name}</option>
+                    <option key={index} value={val.name}>{val.name}</option>
                 )
             })
             return jsx
@@ -183,7 +183,7 @@ class Main extends React.Component{
         var name = this.refs.namaBank.value
         var type = parseInt(this.refs.tipeBank.value)
         var address = this.refs.alamat.value
-        var province =  this.refs.provinsi.value.slice(this.refs.provinsi.value.indexOf('T')+1,this.refs.provinsi.value.length)
+        var province =  this.refs.provinsi.value.slice(this.refs.provinsi.value.indexOf('-')+1,this.refs.provinsi.value.length)
         var city = this.refs.kota.value
         var pic = this.refs.pic.value
         var phone = this.state.phone
@@ -276,7 +276,7 @@ class Main extends React.Component{
                         <div className="form-group row">
                             <label className="col-sm-2 col-form-label">Provinsi</label>
                             <div className="col-sm-10">
-                            <select onChange={()=>{this.getAllKabupaten(this.refs.provinsi.value.slice(0,this.refs.provinsi.value.indexOf('T')))
+                            <select onChange={()=>{this.getAllKabupaten(this.refs.provinsi.value.slice(0,this.refs.provinsi.value.indexOf('-')))
                              document.getElementById("kota").value = "0";
                              }
                         } ref="provinsi" className="form-control">
