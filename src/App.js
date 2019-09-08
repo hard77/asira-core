@@ -18,6 +18,7 @@ import DetailBank from './components/bankDetail'
 import LayananEdit from './components/layananEdit'
 import LayananAdd from './components/layananAdd'
 import LayananList from './components/layananList'
+import LayananDetail from './components/layananDetail'
 
 
 import Login from './components/login'
@@ -84,6 +85,8 @@ class App extends React.Component {
                     <Route path='/layananedit/:id' component={LayananEdit}></Route>
                     <Route path='/tambahlayanan' component={LayananAdd}></Route>
                     <Route path='/listlayanan' component={LayananList}></Route>
+                    <Route path='/layanandetail/:id' component={LayananDetail}></Route>
+
 
                     <Route path='/tambahtipe' component={TypeBankAdd}></Route>
                     <Route path='/listtipe' component={TypeBankList}></Route>
