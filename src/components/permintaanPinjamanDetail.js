@@ -1,15 +1,17 @@
 import React from 'react'
 import Cookies from 'universal-cookie';
 import { Redirect } from 'react-router-dom'
-import {serverUrl} from './url'
+import {serverUrlBorrower} from './url'
 import Moment from 'react-moment';
 
 import Axios from 'axios';
-import swal from 'sweetalert';
 const cookie = new Cookies()
+const config = {
+    headers: {'Authorization': "Bearer " + cookie.get('token')}
+  };
 
 class Main extends React.Component{
-    state = {rows:{},items:[],borrowerDetail:{},status:''}
+    state = {rows:{},items:[],borrowerDetail:{},status:'',borrower_info:{}}
 
     formatMoney=(number)=>
     { return number.toLocaleString('in-RP', {style : 'currency', currency: 'IDR'})}
@@ -22,14 +24,11 @@ class Main extends React.Component{
     
     getDataDetail =()=>{
        var idLoan = this.props.match.params.idLoan
-        if(cookie.get('tokenClient')){
-            var config = {
-                headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
-              };
-            Axios.get(serverUrl+`lender/loanrequest_list/${idLoan}/detail`,config)
+        if(cookie.get('token')){
+            Axios.get(serverUrlBorrower+`admin/loan/${idLoan}`,config)
             .then((res)=>{
                 console.log(res.data)
-                this.setState({rows:res.data,items:res.data.fees,status:res.data.status})
+                this.setState({rows:res.data,items:res.data.fees,status:res.data.status,borrower_info:res.data.borrower_info})
             })
             .catch((err)=>console.log(err))
         }
@@ -40,11 +39,8 @@ class Main extends React.Component{
    
     getDataBorrower =()=>{
         var idBorrower = this.props.match.params.idBorrower
-        if (cookie.get('tokenClient')){
-            var config = {
-                headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
-              };
-              Axios.get(serverUrl+`lender/borrower_list/${idBorrower}/detail`,config)
+        if (cookie.get('token')){
+              Axios.get(serverUrlBorrower+`admin/borrower/${idBorrower}`,config)
               .then((res)=>{
                   console.log(res.data)
                   this.setState({borrowerDetail:res.data})
@@ -55,35 +51,7 @@ class Main extends React.Component{
         }
         
     }
-    
-    btnTerimaPinjaman = ()=>{
-        var idLoan = this.props.match.params.idLoan
-        
-        var config = {
-            headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
-          };
-        Axios.get(serverUrl+`/lender/loanrequest_list/${idLoan}/detail/approve`,config)
-        .then((res)=>{
-            swal("Permintaan","Diterima","success")
-            this.setState({status:"approved"})
 
-        })
-        .catch((err)=>console.log(err))
-    }
-
-    btnTolakPinjaman = ()=>{
-        var idLoan = this.props.match.params.idLoan
-
-        var config = {
-            headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
-          };
-        Axios.get(serverUrl+`/lender/loanrequest_list/${idLoan}/detail/reject`,config)
-        .then((res)=>{
-            swal("Permintaan","Ditolak","error")
-            this.setState({status:"rejected"})
-        })
-        .catch((err)=>console.log(err))
-    }
 
     btnBack = ()=>{
         window.history.back()
@@ -91,9 +59,9 @@ class Main extends React.Component{
 
     getBiayaAdmin =()=>{
         var jsx = this.state.items
-        .map((val)=>{
+        .map((val,index)=>{
             return (
-                    <tr>
+                    <tr key={index}>
                     <td>{val.description}</td>
                     <td>: {this.formatMoney(parseInt(val.amount))}</td>
                     </tr>
@@ -103,7 +71,7 @@ class Main extends React.Component{
     }
 
     render(){
-        if(cookie.get('token') && cookie.get('tokenClient')){
+        if(cookie.get('token')){
             return(
                 <div>
 
@@ -121,7 +89,7 @@ class Main extends React.Component{
                                 </tr>
                                 <tr>
                                     <td>Nama Nasabah</td>
-                                    <td>: {this.state.rows.owner_name}</td>
+                                    <td>: {this.state.borrower_info.employer_name}</td>
                                 </tr>
                                 </tbody>
                              
@@ -252,45 +220,16 @@ class Main extends React.Component{
                                 
                                
                                 </tbody>
-                                
                             </table>
+                            <input type="button" onClick={this.btnBack}  className="mt-2 btn btn-info" value="Back"></input>
                         </div>
             </div>
-             {/* -----------------------------------------------------FOURTH ROW----------------------------------------------------------------- */}
-             <div className="row mt-3">
-                        <div className="col-12 col-md-6">
-                            <table>
-                                <tbody>
-                                    {
-                                         this.state.status === "approved" || this.state.status === "rejected"? 
-                                         <tr>
-                                 
-                                         <td>
-                                             <input type="button" onClick={this.btnBack}  className="btn btn-info" value="Back"></input>
-                                         </td>
-                                     </tr>
-                                         
-                                         :
-                                         <tr>
-                                         <td>
-                                             <input type="button" onClick={this.btnTerimaPinjaman} className="btn btn-success" value="Terima"></input>
-                                         </td>
-                                         <td>
-                                             <input type="button" onClick={this.btnTolakPinjaman}  className="btn btn-danger ml-2" value="Tolak"></input>
-                                         </td>
-                                     </tr>
-                                    }
-                               
-                                </tbody>
-                                
-                            </table>
-                        </div>
-            </div>
+             
 
                 </div>
             )
         }
-        if(cookie.get('token')){
+        if(!cookie.get('token')){
             return (
                 <Redirect to='/login' />
             )    
