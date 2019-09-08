@@ -32,7 +32,7 @@ class TypeBankDetail extends React.Component{
         if(cookie.get('token')){
             return(
                 <div className="container">
-                   <h2>Tipe Bank Detail</h2>
+                   <h2>Tipe Bank - Detail</h2>
                    <hr/>
                    
                    <form>
