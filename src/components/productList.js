@@ -18,7 +18,7 @@ class ProductList extends React.Component{
     }
     getAllProduct = ()=>{
         var config = {
-            headers: {'Authorization': "Bearer " + cookie.get('tokenClient')}
+            headers: {'Authorization': "Bearer " + cookie.get('token')}
           };
 
         axios.get(serverUrl+`admin/service_products`,config)
@@ -74,10 +74,10 @@ class ProductList extends React.Component{
 
 
     render(){
-        if(cookie.get('token') && cookie.get('tokenClient')){
+        if(cookie.get('token')){
             return(
                 <div className="container">
-                    <h2>Product List</h2>
+                    <h2>Product - List</h2>
                     <hr></hr>
 
                     <table className="table table-hover">
@@ -98,7 +98,7 @@ class ProductList extends React.Component{
                 </div>
             )
         }
-        if(cookie.get('token')){
+        if(!cookie.get('token')){
             return (
                 <Redirect to='/login' />
             )    
