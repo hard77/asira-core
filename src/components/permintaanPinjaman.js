@@ -4,16 +4,15 @@ import swal from 'sweetalert'
 import {connect } from 'react-redux'
 import Cookie from 'universal-cookie'
 import { Redirect } from 'react-router-dom'
-import {serverUrlBorrower} from './url'
+import {serverUrlBorrower,serverUrl} from './url'
 import {Link} from 'react-router-dom'
 import Loader from 'react-loader-spinner'
 import QueryString from 'query-string'
 import Moment from 'react-moment'
 
-
-
 const kukie = new Cookie()
 
+const config = {headers: {'Authorization': "Bearer " + kukie.get('token')}};
 
 class PermintaanPinjaman extends React.Component {
   state = {
@@ -25,7 +24,8 @@ class PermintaanPinjaman extends React.Component {
     udahdiklik : false,
     totalData:0,
     last_page:1,
-    loading:true
+    loading:true,
+    BankName:'',serviceName:'',productName:''
   };
 
   //-----------------------------------NIKO FUNCTION-------------------------------------------------------------
@@ -35,24 +35,27 @@ class PermintaanPinjaman extends React.Component {
   }
 
   getAllData = ()=>{
-      var config = {
-        headers: {'Authorization': "Bearer " + kukie.get('token')}
-      };
+      
       var newLink =`admin/loan`
       if (this.props.location.search){
         var hasil = this.getLink()
         if(!isNaN(hasil)){
-          newLink += `?id=${hasil}&status=processing`
+          newLink += `?id=${hasil}`
         }else{
-          newLink += `?owner_name=${hasil}&status=processing`
+          newLink += `?owner_name=${hasil}`
         }
       }else{
-        newLink += `?status=processing`
+        newLink += `?`
       }
       axios.get(serverUrlBorrower+newLink,config)
       .then((res)=>{
           console.log(res.data)
-          this.setState({loading:false,rows:res.data.data,rowsPerPage:res.data.rows,totalData:res.data.total_data,last_page:res.data.last_page,page:res.data.current_page})
+          this.setState({loading:false,
+            rows:res.data.data, 
+            rowsPerPage:res.data.rows,
+            totalData:res.data.total_data,
+            last_page:res.data.last_page,
+            page:res.data.current_page})
       })
       .catch((err)=>{
           console.log(err)
@@ -98,9 +101,9 @@ class PermintaanPinjaman extends React.Component {
     if(searching){
       //search function
       if(!isNaN(searching)){
-        newLink +=`?id=${searching}&status=processing`
+        newLink +=`?id=${searching}`
       }else{
-        newLink +=`?owner_name=${searching}&status=processing`
+        newLink +=`?owner_name=${searching}`
       }
       axios.get(serverUrlBorrower+newLink,config)
         .then((res)=>{
@@ -111,7 +114,7 @@ class PermintaanPinjaman extends React.Component {
             console.log(err)
         })
     }else{
-      axios.get(serverUrlBorrower+newLink+`?status=processing`,config)
+      axios.get(serverUrlBorrower+newLink,config)
       .then((res)=>{
           this.setState({loading:false,rows:res.data.data,searchRows:null})
       })
@@ -128,20 +131,20 @@ class PermintaanPinjaman extends React.Component {
       }
       else{
         this.setState({loading:true})
-        var newLink
+        var newLink=""
         var config = {
           headers: {'Authorization': "Bearer " + kukie.get('token')}
         };
 
         if(this.state.searchRows){
           if(!isNaN(this.state.searchRows)){
-            newLink +=`?id=${this.state.searchRows}&page=${this.state.page+1}&status=processing`
+            newLink +=`?id=${this.state.searchRows}&page=${this.state.page+1}`
           }else{
-            newLink +=`?owner_name=${this.state.searchRows}&page=${this.state.page+1}&status=processing`
+            newLink +=`?owner_name=${this.state.searchRows}&page=${this.state.page+1}`
           }
 
         }else{
-          newLink+=`?page=${this.state.page+1}&status=processing`
+          newLink+=`?page=${this.state.page+1}`
         }
 
         axios.get(serverUrlBorrower+`admin/loan?`+newLink,config)
@@ -162,20 +165,20 @@ getDataPreviousPage=()=>{
   }
   else{
     this.setState({loading:true})
-    var newLink
+    var newLink=""
     var config = {
       headers: {'Authorization': "Bearer " + kukie.get('token')}
     };
 
     if(this.state.searchRows){
       if(!isNaN(this.state.searchRows)){
-        newLink +=`?id=${this.state.searchRows}&page=${this.state.page-1}&status=processing`
+        newLink +=`?id=${this.state.searchRows}&page=${this.state.page-1}`
       }else{
-        newLink +=`?owner_name=${this.state.searchRows}&page=${this.state.page-1}&status=processing`
+        newLink +=`?owner_name=${this.state.searchRows}&page=${this.state.page-1}`
       }
 
     }else{
-      newLink+=`?page=${this.state.page-1}&status=processing`
+      newLink+=`?page=${this.state.page-1}`
     }
 
     axios.get(serverUrlBorrower+`admin/loan?`+newLink,config)
@@ -208,7 +211,10 @@ getDataPreviousPage=()=>{
       var jsx = pages.map((val,index)=>{
         return (
             <nav key={index}>
-              <p key={val} className="mr-2" style={{border:"1px solid black",width:"25px",textAlign:"center",cursor:"pointer"}}onClick={()=>this.getDataBaseOnPages(val)}>{val}</p>
+              <p key={val} className="mr-2" style={this.state.page === val ?
+                {border:"1px solid black",backgroundColor:"#F1E8E7",width:"25px",textAlign:"center",cursor:"pointer"}:
+                {border:"1px solid black",width:"25px",textAlign:"center",cursor:"pointer"}
+                }onClick={()=>this.getDataBaseOnPages(val)}>{val}</p>
             </nav>
         )
     })
@@ -251,16 +257,16 @@ getDataPreviousPage=()=>{
         var config = {
           headers: {'Authorization': "Bearer " + kukie.get('token')}
         };
-        var newLink
+        var newLink=""
         if(this.state.searchRows){
           if(!isNaN(this.state.searchRows)){
-            newLink+=`page=${num}&id=${this.state.searchRows}&status=processing`
+            newLink+=`page=${num}&id=${this.state.searchRows}`
 
           }else{
-            newLink+=`page=${num}&owner_name=${this.state.searchRows}&status=processing`
+            newLink+=`page=${num}&owner_name=${this.state.searchRows}`
           }
         }else{
-          newLink+=`page=${num}&status=processing`
+          newLink+=`page=${num}`
         }
         axios.get(serverUrlBorrower+`admin/loan?`+newLink,config)
         .then((res)=>{
@@ -282,16 +288,16 @@ getDataPreviousPage=()=>{
     var config = {
       headers: {'Authorization': "Bearer " + kukie.get('token')}
     };
-    var newLink
+    var newLink=""
     if(this.state.searchRows){
       if(!isNaN(this.state.searchRows)){
-        newLink+=`page=${num}&id=${this.state.searchRows}&status=processing`
+        newLink+=`page=${num}&id=${this.state.searchRows}`
 
       }else{
-        newLink+=`page=${num}&owner_name=${this.state.searchRows}&status=processing`
+        newLink+=`page=${num}&owner_name=${this.state.searchRows}`
       }
     }else{
-      newLink+=`page=${num}&status=processing`
+      newLink+=`page=${num}`
     }
     axios.get(serverUrlBorrower+`admin/loan?`+newLink,config)
     .then((res)=>{
@@ -302,6 +308,42 @@ getDataPreviousPage=()=>{
         console.log(err)
     })
   }
+
+  // getBankName = (id)=>{
+   
+  //   axios.get(serverUrl+`admin/banks/${id}`,config)
+  //   .then((res)=>{
+  //       this.setState({BankName:res.data.name})
+  //   })
+  //   .catch((err)=>{
+  //       console.log(err)
+  //   })
+  //   return this.state.BankName
+  // } 
+  // getServiceName = (id)=>{
+  
+  //   axios.get(serverUrl+`admin/bank_services/${id}`,config)
+  //   .then((res)=>{
+  //       this.setState({serviceName:res.data.name})
+  //   })
+  //   .catch((err)=>{
+  //       console.log(err)
+  //   })
+  //   return this.state.serviceName
+  // } 
+  // getProductName = (id)=>{
+ 
+  //   axios.get(serverUrl+`admin/service_products/${id}`,config)
+  //   .then((res)=>{
+      
+  //       this.setState({productName:res.data.name})
+  //   })
+  //   .catch((err)=>{
+  //       console.log(err)
+  //   })
+  //   return this.state.productName
+  // } 
+
   renderJSX = ()=>{
     if (this.state.loading){
       return  (
@@ -332,15 +374,15 @@ getDataPreviousPage=()=>{
             <tr key={index}>
               <td align="center">{this.state.page >0 ? index+1 + (this.state.rowsPerPage*(this.state.page -1)) : index+1}</td>
               <td align="center">{val.id}</td>
-              <td align="center">{val.owner_name}</td>
-              <td align="center"> {val.type} </td>
-              <td align="center"> {val.services === undefined ? "null" : val.services.toString()} </td>
-              <td align="center"> {val.products === undefined ? "null" : val.products.toString()} </td>
+              <td align="center">{val.borrower_info.fullname}</td>
+              {/* <td align="center"> {val.borrower_info.bank.Int64} </td>
+              <td align="center"> {val.service} </td>
+              <td align="center"> {val.product} </td> */}
               <td align="center"><Moment date={val.created_time} format=" DD  MMMM  YYYY" /></td>
               <td align="center">{val.status}</td>
               <td align="center">
               <Link style={{textDecoration:"none"}} to={`/permintaanpinjamanDetail/${val.id}/${val.owner.Int64}`}>
-              <i class="fas fa-eye" style={{color:"black",fontSize:"28px",marginRight:"10px"}}/>
+              <i className="fas fa-eye" style={{color:"black",fontSize:"28px",marginRight:"10px"}}/>
               </Link>
               </td>
             </tr>
@@ -379,9 +421,9 @@ if(kukie.get("token")){
                   <th className="text-center" scope="col">#</th>
                   <th className="text-center" scope="col">Id Pinjaman</th>
                   <th className="text-center" scope="col">Nama Nasabah</th>
-                  <th className="text-center" scope="col">Bank Akun</th>
+                  {/* <th className="text-center" scope="col">Bank Akun</th>
                   <th className="text-center" scope="col">Layanan</th>
-                  <th className="text-center" scope="col">Produk</th>
+                  <th className="text-center" scope="col">Produk</th> */}
                   <th className="text-center" scope="col">Tanggal Pengajuan</th>
                   <th className="text-center" scope="col">Status Pinjaman</th>
                   <th className="text-center" scope="col">Action</th>
