@@ -3,12 +3,12 @@ import axios from 'axios'
 import swal from 'sweetalert'
 
 import Loader from 'react-loader-spinner'
-
+import Moment from 'react-moment';
 import {connect } from 'react-redux'
 import Cookie from 'universal-cookie'
 import { Redirect } from 'react-router-dom'
 import QueryString from 'query-string'
-import {serverUrl} from './url'
+import {serverUrlBorrower} from './url'
 import {Link} from 'react-router-dom'
 
 const kukie = new Cookie()
@@ -22,13 +22,13 @@ class profileNasabah extends React.Component {
     editIndex:Number,
     totalData:0,
     last_page:1,
-    loading:true
+    loading:true,
+    bankID:0,bankName:''
   };
 
   //-----------------------------------NIKO FUNCTION-------------------------------------------------------------
   componentDidMount(){
     this.getAllData()
-    
   }
 
   pushUrl = ()=>{
@@ -60,9 +60,9 @@ getLink = ()=>{
   
   //Ambil data pertama kali
   getAllData = ()=>{
-   var newLink='lender/borrower_list'
+   var newLink='admin/borrower'
     var config = {
-      headers: {'Authorization': "Bearer " + kukie.get('tokenClient')}
+      headers: {'Authorization': "Bearer " + kukie.get('token')}
     };
     if (this.props.location.search){
       var hasil = this.getLink()
@@ -72,7 +72,7 @@ getLink = ()=>{
         newLink += `?fullname=${hasil}`
       }
     }
-    axios.get(serverUrl+newLink,config)
+    axios.get(serverUrlBorrower+newLink,config)
     .then((res)=>{
       console.log(res.data)
         this.setState({loading:false,rows:res.data.data,rowsPerPage:res.data.rows,jumlahBaris:null,totalData:res.data.total_data,last_page:res.data.last_page,page:res.data.current_page})
@@ -88,9 +88,9 @@ getLink = ()=>{
       swal("Access Denied","Halaman Terkahir","info")
     }else{
       this.setState({loading:true})
-      var newLink
+      var newLink=""
       var config = {
-        headers: {'Authorization': "Bearer " + kukie.get('tokenClient')}
+        headers: {'Authorization': "Bearer " + kukie.get('token')}
       };
       if(this.state.searchRows){
           if(!isNaN(this.state.searchRows)){
@@ -102,7 +102,7 @@ getLink = ()=>{
         newLink =`page=${this.state.page+1}`
       }
   
-        axios.get(serverUrl+`lender/borrower_list?`+newLink,config)
+        axios.get(serverUrlBorrower+`admin/borrower?`+newLink,config)
         .then((res)=>{
           
             this.setState({loading:false,rows:res.data.data,rowsPerPage:res.data.rows,page:this.state.page+1})
@@ -121,21 +121,21 @@ getLink = ()=>{
       swal("Access Denied","Halaman Terkahir","info")
       this.setState({page:1,loading:false})
     }else{
-      var newLink
+      var newLink=""
       this.setState({loading:true})
       var config = {
-        headers: {'Authorization': "Bearer " + kukie.get('tokenClient')}
+        headers: {'Authorization': "Bearer " + kukie.get('token')}
       };
       if(this.state.searchRows){
         if (!isNaN(this.state.searchRows)){
-          newLink += `id=${this.state.rowsPerPage}&page=${this.state.page-1}`
+          newLink += `id=${this.state.searchRows}&page=${this.state.page-1}`
         }else{
-          newLink += `fullname=${this.state.rowsPerPage}&page=${this.state.page-1}`
+          newLink += `fullname=${this.state.searchRows}&page=${this.state.page-1}`
         }
       }else{
         newLink+=`page=${this.state.page-1}`
       }
-      axios.get(serverUrl+`lender/borrower_list?`+newLink,config)
+      axios.get(serverUrlBorrower+`admin/borrower?`+newLink,config)
       .then((res)=>{
           console.log(res.data)
           this.setState({loading:false,rows:res.data.data,rowsPerPage:res.data.rows,page:this.state.page-1})
@@ -163,7 +163,10 @@ getLink = ()=>{
       var jsx = pages.map((val,index)=>{
         return (
             <nav key={index}>
-              <p className="mr-2" style={{border:"1px solid black",width:"25px",textAlign:"center",cursor:"pointer"}}onClick={()=>this.getDataBaseOnPages(val)}>{val}</p>
+              <p className="mr-2" style={this.state.page === val ?
+                {border:"1px solid black",backgroundColor:"#F1E8E7",width:"25px",textAlign:"center",cursor:"pointer"}:
+                {border:"1px solid black",width:"25px",textAlign:"center",cursor:"pointer"}
+                }onClick={()=>this.getDataBaseOnPages(val)}>{val}</p>
             </nav>
         )
     })
@@ -188,7 +191,7 @@ getLink = ()=>{
 //Function buat direct langsung ke halaman berapa
 
   getDataCustomePage =()=>{
-    var newLink
+    var newLink=""
     this.setState({loading:true})
     swal("Halaman Berapa:", {
       content: "input",
@@ -203,7 +206,7 @@ getLink = ()=>{
       }
       else{
         var config = {
-          headers: {'Authorization': "Bearer " + kukie.get('tokenClient')}
+          headers: {'Authorization': "Bearer " + kukie.get('token')}
         };
         if(this.state.searchRows){
           if(!isNaN(this.state.searchRows)){
@@ -215,7 +218,7 @@ getLink = ()=>{
         }else{
           newLink+=`page=${num}`
         }
-        axios.get(serverUrl+`lender/borrower_list?`+newLink,config)
+        axios.get(serverUrlBorrower+`admin/borrower?`+newLink,config)
         .then((res)=>{
             console.log(res.data)
             this.setState({loading:false,rows:res.data.data,rowsPerPage:res.data.rows,totalData:res.data.total_data,page:num})
@@ -231,9 +234,9 @@ getLink = ()=>{
   //pagination 
   getDataBaseOnPages=(num)=>{
     this.setState({loading:true})
-    var newLink
+    var newLink=""
     var config = {
-      headers: {'Authorization': "Bearer " + kukie.get('tokenClient')}
+      headers: {'Authorization': "Bearer " + kukie.get('token')}
     };
     if(this.state.searchRows){
       if(!isNaN(this.state.searchRows)){
@@ -246,7 +249,7 @@ getLink = ()=>{
       newLink+=`page=${num}`
     }
 
-    axios.get(serverUrl+`lender/borrower_list?`+newLink,config)
+    axios.get(serverUrlBorrower+`admin/borrower?`+newLink,config)
     .then((res)=>{
         console.log(res.data)
         this.setState({loading:false,rows:res.data.data,rowsPerPage:res.data.rows,totalData:res.data.total_data,page:num})
@@ -256,6 +259,17 @@ getLink = ()=>{
     })
   }
 
+  // getBankName =(id)=>{
+  //   var config = {
+  //     headers: {'Authorization': "Bearer " + kukie.get('token')}
+  //   }
+  //   axios.get(serverUrl+`admin/banks/${id}`,config)
+  //   .then((res)=>{
+  //     this.setState({bankName:res.data.name})
+  //   })
+  //   .catch((err)=> console.log(err))
+  //   return this.state.bankName
+  // }
 
   onBtnSearch = ()=>{
     
@@ -267,9 +281,9 @@ getLink = ()=>{
     
       if(!isNaN(searching)){
         var config = {
-          headers: {'Authorization': "Bearer " + kukie.get('tokenClient')}
+          headers: {'Authorization': "Bearer " + kukie.get('token')}
         };
-        axios.get(serverUrl+`lender/borrower_list?id=${searching}`,config)
+        axios.get(serverUrlBorrower+`admin/borrower?id=${searching}`,config)
         .then((res)=>{
             console.log(res.data)
             this.setState({loading:false,rows:res.data.data})
@@ -280,9 +294,9 @@ getLink = ()=>{
       }else{
        
        config = {
-         headers: {'Authorization': "Bearer " + kukie.get('tokenClient')}
+         headers: {'Authorization': "Bearer " + kukie.get('token')}
        };
-       axios.get(serverUrl+`lender/borrower_list?fullname=${searching}`,config)
+       axios.get(serverUrlBorrower+`admin/borrower?fullname=${searching}`,config)
        .then((res)=>{
            console.log(res.data)
            this.setState({loading:false,rows:res.data.data,searchRows:null})
@@ -295,9 +309,9 @@ getLink = ()=>{
      
     }else{
       config = {
-        headers: {'Authorization': "Bearer " + kukie.get('tokenClient')}
+        headers: {'Authorization': "Bearer " + kukie.get('token')}
       };
-      axios.get(serverUrl+`lender/borrower_list`,config)
+      axios.get(serverUrlBorrower+`admin/borrower`,config)
       .then((res)=>{
           this.setState({loading:false,rows:res.data.data,searchRows:null})
       })
@@ -344,11 +358,12 @@ getLink = ()=>{
             <td align="center">{this.state.page >0 ? index+1 + (this.state.rowsPerPage*(this.state.page -1)) : index+1}</td>
             <td align="center">{val.id}</td>
             <td align="center">{val.fullname}</td>
-            <td align="center">{val.created_time.substr(0, val.created_time.indexOf('T'))}</td>
+            {/* <td align="center">{this.getBankName(val.bank.Int64)}</td>             */}
+            <td align="center"><Moment date={val.created_time} format=" DD  MMMM  YYYY" /></td>
             {/* <TableCell align="center">{val.status}</TableCell> */}
             <td align="center">
             <Link style={{textDecoration:"none"}} to={`/profileNasabahDetail/${val.id}`}>
-                <input type="button" className="btn btn-primary" value="Details"/>
+              <i className="fas fa-eye" style={{color:"black",fontSize:"28px",marginRight:"10px"}}/>
             </Link>
             </td>
         </tr>
@@ -365,24 +380,32 @@ getLink = ()=>{
   render() {
    
 
-if(kukie.get("tokenClient")&&kukie.get("token")){
+if(kukie.get("token")){
     return (
         <div className="container">
-        <nav className="navbar">
-          <h2>Nasabah List</h2>
-          <input type="text" className="form-control" placeholder="Search" ref="search"></input>
-          <input type="button" className="btn btn-primary" onClick={this.onBtnSearch} value="Search"></input>
-        </nav>
+         <div className="row">
+                        <div className="col-6">
+                             <h2 className="mt-3">Nasabah - List</h2>
+                        </div>
+                        <div className="col-5 mt-3 ml-5">
+                        <div className="input-group">
+                            <input type="text" className="form-control" ref="search" placeholder="Search.." style={{width:"150px"}} />
+                            <span className="input-group-addon ml-2" style={{border:"1px solid grey",width:"35px",height:"35px",paddingTop:"2px",borderRadius:"4px",paddingLeft:"2px",marginTop:"6px",cursor:"pointer"}} onClick={this.onBtnSearch}> 
+                            <i className="fas fa-search" style={{fontSize:"28px"}} ></i></span>
+                        </div>
+                        </div>
+          </div>
         <hr></hr>
           <table className="table table-hover">
           <thead className="table-warning">
               <tr>
-              <td align="center">#</td>
-                  <td align="center">Id Nasabah</td>
-                  <td align="center">Nama Nasabah</td>
-                  <td align="center">Tanggal Registrasi</td>
+                  <th className="text-center" scope="col">#</th>
+                  <th className="text-center" scope="col">Id Nasabah</th>
+                  <th className="text-center" scope="col">Nama Nasabah</th>
+                  {/* <th className="text-center" scope="col">Bank Akun</th> */}
+                  <th  className="text-center" scope="col">Tanggal Registrasi</th>
                   {/* <TableCell align="center">Status Nasabah</TableCell> */}
-                  <td align="center">Action</td>
+                  <th  className="text-center" scope="col">Action</th>
                  
               </tr>     
           </thead>
@@ -395,15 +418,15 @@ if(kukie.get("tokenClient")&&kukie.get("token")){
           </table>
                 <hr/>
                 <nav className="navbar" style={{float:"right"}}> 
-                <p className="mr-2" style={{cursor:"pointer"}} onClick={this.getDataPreviousPage}>Prev</p> 
+                <p className="mr-2" style={{cursor:"pointer"}} onClick={this.getDataPreviousPage}><i className="fas fa-arrow-left"></i></p> 
                 {this.getNumberOfPages()} 
-                <p style={{cursor:"pointer"}}  onClick={this.getDataNextPage}>Next</p>
+                <p style={{cursor:"pointer"}}  onClick={this.getDataNextPage}><i className="fas fa-arrow-right"></i></p>
                
           </nav>
         </div>
     );
 
-}else if (kukie.get("token")){
+}else if (!kukie.get("token")){
   return  <Redirect to='/login' />
 }
     
