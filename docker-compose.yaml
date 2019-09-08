@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  asira_core:
+    build: .
+    ports:
+      - 3001:3001
+    image: asira_core:development
+    #volumes:
+     # - FrontEnd/asira_fe
+    hostname: localhost
+    container_name: asira_core
+
+  
