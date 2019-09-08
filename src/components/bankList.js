@@ -5,10 +5,13 @@ import Loader from 'react-loader-spinner'
 import {Link} from 'react-router-dom'
 import axios from 'axios'
 import {serverUrl} from './url'
-import swal from 'sweetalert'
-
+import 'rc-pagination/assets/index.css';
+import Pagination from 'rc-pagination';
+import './../support/css/pagination.css'
 const cookie = new Cookies()
-
+const config = {
+  headers: {'Authorization': "Bearer " + cookie.get('token')}
+};
 class BankList extends React.Component{
     state={
         loading:true,
@@ -20,9 +23,7 @@ class BankList extends React.Component{
         this.getAllBankData()
     }
     getAllBankData = ()=>{
-        var config = {
-            headers: {'Authorization': "Bearer " + cookie.get('token')}
-          };
+        
         axios.get(serverUrl+`admin/banks?${this.state.halamanConfig}`,config)
         .then((res)=>{
             console.log(res.data)
@@ -44,9 +45,7 @@ class BankList extends React.Component{
     
       var searching = this.refs.search.value
       this.setState({loading:true,searchRows:searching})
-      var config = {
-        headers: {'Authorization': "Bearer " + cookie.get('token')}
-      };
+      
       if(searching){
         //search function
        
@@ -112,179 +111,21 @@ class BankList extends React.Component{
 
     }
 
-    //PAGINATION
-
-    getNumberOfPages = ()=>{
-        var pages =[]
-        if (this.state.last_page===0){
-          this.setState({last_page:1})
-        }
-        for (var i=1;i<= this.state.last_page;i++){
-            pages.push(i)
-        }
-        
-        
-        if(pages.length<10){
-          var jsx = pages.map((val,index)=>{
-            return (
-                <nav key={index}>
-                  <p className="mr-2" style={
-                    this.state.page === val ?
-                    {border:"1px solid black",backgroundColor:"#F1E8E7" ,width:"25px",textAlign:"center",cursor:"pointer"}:
-                    {border:"1px solid black",width:"25px",textAlign:"center",cursor:"pointer"}
-                    }onClick={()=>this.getDataBaseOnPages(val)}>{val}</p>
-                </nav>
-            )
-        })
-         return jsx;
-        }
-        else{
-          return(
-            
-              <nav className="navbar">
-                  <p className="mr-2" style={{border:"1px solid black",width:"25px",textAlign:"center",cursor:"pointer"}}onClick={()=>this.getDataBaseOnPages(1)}>1</p>
-                  <p className="mr-2" style={{border:"1px solid black",width:"25px",textAlign:"center",cursor:"pointer"}}onClick={()=>this.getDataBaseOnPages(2)}>2</p>
-                  <p className="mr-2" style={{border:"1px solid black",width:"25px",textAlign:"center",cursor:"pointer"}}onClick={()=>this.getDataBaseOnPages(3)}>3</p>
-                  <p className="mr-2" style={{border:"1px solid black",width:"25px",textAlign:"center",cursor:"pointer"}}onClick={()=>this.getDataCustomePage()}>...</p>
-                  <p className="mr-2" style={{border:"1px solid black",width:"25px",textAlign:"center",cursor:"pointer"}}onClick={()=>this.getDataCustomePage(this.state.last_page)}>{this.state.last_page}</p>
-    
-              </nav>
-          )
-        }
-      }
-
-      getDataNextPage=()=>{
-
-        if(this.state.page===this.state.last_page){
-          swal("Access Denied","Halaman Terkahir","info")
-        }else{
-          this.setState({loading:true})
-          var newLink=""
-          var config = {
-            headers: {'Authorization': "Bearer " + cookie.get('token')}
-          };
-          if(this.state.searchRows){
-              if(!isNaN(this.state.searchRows)){
-                newLink+=`id=${this.state.searchRows}&page=${this.state.page+1}&${this.state.halamanConfig}`
-              }else{
-                newLink+=`name=${this.state.searchRows}&page=${this.state.page+1}&${this.state.halamanConfig}`
-              }
-          }else{
-            newLink =`page=${this.state.page+1}&${this.state.halamanConfig}`
-          }
-      
-            axios.get(serverUrl+`admin/banks?`+newLink,config)
-            .then((res)=>{
-                console.log(res.data)
-                this.setState({loading:false,rows:res.data.data,dataPerhalaman:res.data.rows,page:this.state.page+1})
-            })
-            .catch((err)=>{
-                console.log(err)
-            })
-        }
-       
-       
-      }
-
-      getDataPreviousPage=()=>{
-
-        if (this.state.page===1){
-          swal("Access Denied","Halaman Terkahir","info")
-          this.setState({page:1,loading:false})
-        }else{
-          var newLink=""
-          this.setState({loading:true})
-          var config = {
-            headers: {'Authorization': "Bearer " + cookie.get('token')}
-          };
-          if(this.state.searchRows){
-            if (!isNaN(this.state.searchRows)){
-              newLink += `id=${this.state.searchRows}&page=${this.state.page-1}&${this.state.halamanConfig}`
-            }else{
-              newLink += `name=${this.state.searchRows}&page=${this.state.page-1}&${this.state.halamanConfig}`
-            }
-          }else{
-            newLink+=`page=${this.state.page-1}&${this.state.halamanConfig}`
-          }
-          axios.get(serverUrl+`admin/banks?`+newLink,config)
-          .then((res)=>{
-              console.log(res.data)
-              this.setState({loading:false,rows:res.data.data,dataPerhalaman:res.data.rows,page:this.state.page-1})
-          })
-          .catch((err)=>{
-              console.log(err)
-          })
-        }
-    
-      }
-
-      getDataCustomePage =()=>{
-        var newLink=""
+      onChange = (current, pageSize) => {
         this.setState({loading:true})
-        swal("Halaman Berapa:", {
-          content: "input",
-        })
-        .then((num) => {
-          if(num > this.state.last_page){
-            swal("error","Halaman melebihi","error")
-            this.setState({loading:false})
-          }else if(isNaN(num) || num<0){
-            swal("error","Invalid Input","error")
-            this.setState({loading:false})
-          }
-          else{
-            var config = {
-              headers: {'Authorization': "Bearer " + cookie.get('token')}
-            };
-            if(this.state.searchRows){
-              if(!isNaN(this.state.searchRows)){
-                newLink+=`page=${num}&id=${this.state.searchRows}&${this.state.halamanConfig}`
-    
-              }else{
-                newLink+=`page=${num}&name=${this.state.searchRows}&${this.state.halamanConfig}`
-              }
-            }else{
-              newLink+=`page=${num}&${this.state.halamanConfig}`
-            }
-            axios.get(serverUrl+`admin/banks?`+newLink,config)
-            .then((res)=>{
-                console.log(res.data)
-                this.setState({loading:false,rows:res.data.data,dataPerhalaman:res.data.rows,total_data:res.data.total_data,page:num})
-            })
-            .catch((err)=>{
-                console.log(err)
-            })
-          }
-          
-        });
-      }
-    
-      //pagination 
-      getDataBaseOnPages=(num)=>{
-        this.setState({loading:true})
-        var newLink=""
-        var config = {
-          headers: {'Authorization': "Bearer " + cookie.get('token')}
-        };
-        if(this.state.searchRows){
-          if(!isNaN(this.state.searchRows)){
-            newLink+=`page=${num}&id=${this.state.searchRows}&${this.state.halamanConfig}`
-    
-          }else{
-            newLink+=`page=${num}&name=${this.state.searchRows}&${this.state.halamanConfig}`
-          }
-        }else{
-          newLink+=`page=${num}&${this.state.halamanConfig}`
-        }
+        console.log('onChange:current=', current);
+        console.log('onChange:pageSize=', pageSize);
+        var newLink =`page=${current}&${this.state.halamanConfig}`
         axios.get(serverUrl+`admin/banks?`+newLink,config)
         .then((res)=>{
             console.log(res.data)
-            this.setState({loading:false,rows:res.data.data,dataPerhalaman:res.data.rows,total_data:res.data.total_data,page:num})
+            this.setState({loading:false,rows:res.data.data,dataPerhalaman:res.data.rows,page:current})
         })
         .catch((err)=>{
             console.log(err)
         })
       }
+ 
 
     render(){
         if(cookie.get('token')){
@@ -320,13 +161,15 @@ class BankList extends React.Component{
                        </tbody>
                    </table>
                    <hr/>
-                <nav className="navbar" style={{float:"right"}}> 
-                    <p className="mr-2" style={{cursor:"pointer"}} onClick={this.getDataPreviousPage}><i className="fas fa-arrow-left"></i></p> 
-                    {this.getNumberOfPages()} 
-                    <p style={{cursor:"pointer"}}  onClick={this.getDataNextPage}><i className="fas fa-arrow-right"></i></p>
-                
+                <nav style={{float:"right",color:"black"}}> 
+                <Pagination className="ant-pagination"  
+                showTotal={(total, range) => `${range[0]} - ${range[1]} of ${total} items`}
+                total={this.state.total_data}
+                pageSize={10}
+                onChange={this.onChange}
+                />
                 </nav>
-    
+               
                 </div>
             )
         }

@@ -11,6 +11,7 @@
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
     "query-string": "^6.8.2",
+    "rc-pagination": "^1.20.5",
     "react": "^16.8.6",
     "react-burger-menu": "^2.6.10",
     "react-csv": "^1.1.1",
