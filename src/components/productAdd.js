@@ -290,7 +290,7 @@ class ProductAdd extends React.Component{
                               
 
                                     <div className="form-check form-check-inline">
-                                    <input className="form-check-input agunan" type="checkbox" value="Setifikat Tanah" style={{marginLeft:"110px"}}/>
+                                    <input className="form-check-input agunan" type="checkbox" value="Sertifikat Tanah" style={{marginLeft:"110px"}}/>
                                     <label className="form-check-label">Sertifikat Tanah</label>
                                     </div>
 
