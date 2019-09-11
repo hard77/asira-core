@@ -88,6 +88,20 @@ class BankDetail extends React.Component{
                             </div>
                         </div>
                         <div className="form-group row">
+                            <label className="col-sm-4 col-form-label">Admin Fee setup</label>
+                            <div className="col-sm-8">
+                            : {this.state.rows.adminfee_setup}
+
+                            </div>
+                        </div>
+                        <div className="form-group row">
+                            <label className="col-sm-4 col-form-label">Convinience Fee setup</label>
+                            <div className="col-sm-8">
+                            : {this.state.rows.convfee_setup}
+
+                            </div>
+                        </div>
+                        <div className="form-group row">
                             <label className="col-sm-4 col-form-label">Jenis Layanan</label>
                             <div className="col-sm-8">
                             : {this.state.layanan === undefined ? "-" :this.state.layanan.toString()}
