@@ -86,10 +86,12 @@ class ProductAdd extends React.Component{
             this.setState({errorMessage:"Rentang Pengajuan tidak benar - Harap cek ulang"})
         }else if(parseFloat(adminfee) <0){
             this.setState({errorMessage:"Admin Fee tidak benar - Harap cek ulang"})
+        }else if(parseFloat(adminfee) >100){
+            this.setState({errorMessage:"Admin Fee lebih dari 100% - Harap cek ulang"})
         }else if(parseFloat(asn_fee) <0){
             this.setState({errorMessage:"Convinience Fee tidak boleh minus - Harap cek ulang"})
         }else if(parseFloat(asn_fee) >100){
-            this.setState({errorMessage:"Convinience Fee tidak boleh lebih dari 100% - Harap cek ulang"})
+            this.setState({errorMessage:"Convinience Fee lebih dari 100% - Harap cek ulang"})
         }else if(parseInt(service)===0){
             this.setState({errorMessage:"Layanan belum terpilih - Harap cek ulang"})
         }else if(this.state.selectedOption===null){
@@ -98,12 +100,12 @@ class ProductAdd extends React.Component{
             this.setState({errorMessage:"Convience Fee mesti angka atau jika desimal menggunakan titik (.) Contoh: 2.00 - Harap cek ulang"})
         }
         else if(isNaN(adminfee)){
-            this.setState({errorMessage:"Admin mesti angka  - Harap cek ulang"})
+            this.setState({errorMessage:"Admin mesti mesti angka atau jika desimal menggunakan titik (.) Contoh: 2.00 - Harap cek ulang"})
         }
         else{
             fees.push({
                 "description": "Admin Fee",
-                "amount":`${adminfee}%`
+                "amount":`${adminfee}`
             })
            
                //===========CODING BAGIAN SEKTOR PEMBIAYAAN
