@@ -128,16 +128,24 @@ class ProductEdit extends React.Component{
             this.setState({errorMessage:"Rentang Pengajuan tidak benar - Harap cek ulang"})
         }else if(parseFloat(adminfee) <0){
             this.setState({errorMessage:"Admin Fee tidak benar - Harap cek ulang"})
+        }else if(parseFloat(adminfee) >100){
+            this.setState({errorMessage:"Admin Fee lebih dari 100%- Harap cek ulang"})
+        }else if(parseFloat(asn_fee) >100){
+            this.setState({errorMessage:"Convinience Fee lebih dari 100% - Harap cek ulang"})
         }else if(parseFloat(asn_fee) <0){
             this.setState({errorMessage:"Convinience Fee tidak benar - Harap cek ulang"})
+        }else if(isNaN(asn_fee)){
+            this.setState({errorMessage:"Convience Fee mesti angka atau desimal harus menggunakan titik (.) contoh 2.00  - Harap cek ulang"})
+        }else if(isNaN(adminfee)){
+            this.setState({errorMessage:"Admin Fee mesti angka atau desimal harus menggunakan titik (.) contoh 2.00 - Harap cek ulang"})
         }
         else{
-       
+            String(asn_fee)
+            String(adminfee)
             fees.push({
                 "description": "Admin Fee",
                 "amount":`${adminfee}`
             })
-            console.log(fees + " "+ typeof(fees))
                //===========CODING BAGIAN SEKTOR PEMBIAYAAN
 
                     var financing_sector = []
@@ -149,7 +157,6 @@ class ProductEdit extends React.Component{
                         financing_sector = this.state.financing_sector
                     }
                     
-
 
                 //======= CODING BAGIAN AGUNAN
                     var collaterals =[]
@@ -227,7 +234,7 @@ class ProductEdit extends React.Component{
                 </td>
                 <td>
                 <div className="form-inline">
-                    <input type="text" className="form-control" ref="adminFee" style={{width:"80px"}} defaultValue={val.amount} placeholder={val.amount} />   
+                    <input type="text" className="form-control" ref="adminFee" style={{width:"80px"}} defaultValue={val.amount} placeholder={val.amount} /><label>%</label>
                 </div>
                 </td>
             </tr>
@@ -376,7 +383,7 @@ class ProductEdit extends React.Component{
                                 </td>
                                 <td>
                                 <div className="form-inline">
-                                    <input type="text" className="form-control" ref="convinienceFee" style={{width:"80px"}} placeholder={this.state.rows.asn_fee}/> 
+                                    <input type="text" className="form-control" ref="convinienceFee" style={{width:"80px"}} placeholder={this.state.rows.asn_fee}/> <label>%</label>
                                 </div>
                                 </td>
                             </tr>
