@@ -434,7 +434,7 @@ class ProductEdit extends React.Component{
                                         value={this.state.selectedOption}
                                         onChange={this.handleChange}
                                         isMulti={true}
-                                        options={this.renderSektorPembiayaan()}
+                                        options={options}
                                         styles={customStyles}
                                         placeholder={this.state.financing_sector.toString()}
                                         
