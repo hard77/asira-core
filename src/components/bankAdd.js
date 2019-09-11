@@ -42,7 +42,7 @@ class Main extends React.Component{
        jenisProduct:null, jenisLayanan: null, 
        errorMessage: null, diKlik:false,
        typeBank:[],bankService:[],bankProduct:[],
-       provinsi:[],kabupaten:[],idProvinsi:null,phone:''
+       provinsi:[],kabupaten:[],idProvinsi:null,phone:'',adminFeeRadioValue:'Potong dari plafond',convinienceFeeRadioValue:'Potong dari plafond'
       };
 
 
@@ -187,7 +187,9 @@ class Main extends React.Component{
         var city = this.refs.kota.value
         var pic = this.refs.pic.value
         var phone = this.state.phone
-
+        var adminfee_setup = this.state.adminFeeRadioValue
+        var convfee_setup = this.state.convinienceFeeRadioValue
+        
         if(this.state.jenisLayanan===null || this.state.jenisProduct===null || 
         this.refs.namaBank.value === "" || this.refs.tipeBank.value ==="0" || 
         this.refs.alamat.value ==="" || this.refs.provinsi.value==="0" || 
@@ -210,7 +212,7 @@ class Main extends React.Component{
                 }
              
                 var newData = {
-                    name,type,address,province,city,pic,phone,services,products
+                    name,type,address,province,city,pic,phone,services,products,adminfee_setup,convfee_setup
                 }
             
                 axios.post(serverUrl+'admin/banks',newData,config)
@@ -220,15 +222,17 @@ class Main extends React.Component{
                     this.setState({errorMessage:null,diKlik:true})
                 })
                 .catch((err)=>{
-                    if(err.response.status === 422){
-                        alert("Username sudah di pakai")
-                    }else{
-                        console.log(err)
-                    }
+                   console.log(err)
                 })
         }
 
 
+    }
+    handleChangeRadioAdmin =(e)=>{
+        this.setState({adminFeeRadioValue:e.target.value})
+    }
+    handleChangeRadioConvience =(e)=>{
+        this.setState({convinienceFeeRadioValue:e.target.value})
     }
 
     render(){
@@ -292,6 +296,24 @@ class Main extends React.Component{
                                 <option value={0}>===== Pilih Kota =====</option>
                                 {this.renderKabupatenJsx()}
                             </select>
+                            </div>
+                        </div>
+                        <div className="form-group row">
+                            <label className="col-sm-2 col-form-label">Admin Fee Setup</label>
+                            <div className="col-sm-10">
+                            <label className="form-control" style={{border:"none"}}>
+                                <input type="radio" name="adminfeeSetup" defaultChecked={true} value="Potong dari plafond" onChange={this.handleChangeRadioAdmin} /> Potong dari plafond
+                                <input type="radio" name="adminfeeSetup" className="ml-3" value="Bebankan ke cicilan" onChange={this.handleChangeRadioAdmin} /> Bebankan ke cicilan
+                            </label> 
+                            </div>
+                        </div>
+                        <div className="form-group row">
+                            <label className="col-sm-2 col-form-label">Convinience Fee Setup</label>
+                            <div className="col-sm-10">
+                            <label className="form-control" style={{border:"none"}}>
+                                <input type="radio" name="convinienceFeeSetup" defaultChecked={true} value="Potong dari plafond" onChange={this.handleChangeRadioConvience} /> Potong dari plafond
+                                <input type="radio" name="convinienceFeeSetup" className="ml-3" value="Bebankan ke cicilan" onChange={this.handleChangeRadioConvience} /> Bebankan ke cicilan
+                            </label> 
                             </div>
                         </div>
                         <div className="form-group row">
