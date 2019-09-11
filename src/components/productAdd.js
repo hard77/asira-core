@@ -10,8 +10,8 @@ import swal from 'sweetalert'
 
 const cookie = new Cookies()
 const options = [
-    { value: 'pendidikan', label: 'Pendidikan' },
-    { value: 'konsumtif', label: 'Konsumtif' }
+    { value: 'Pendidikan', label: 'Pendidikan' },
+    { value: 'Konsumtif', label: 'Konsumtif' }
   ];
 const customStyles = {
     option: (provided, state) => ({
