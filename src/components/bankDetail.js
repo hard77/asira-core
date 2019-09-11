@@ -20,7 +20,6 @@ class BankDetail extends React.Component{
             var config = {
                 headers: {'Authorization': "Bearer " + cookie.get('token')}
               };
-          
             axios.get(serverUrl+`admin/banks/${id}`,config)
             .then((res)=>{
                 console.log(res.data)
@@ -35,7 +34,6 @@ class BankDetail extends React.Component{
                 <div className="container">
                    <h2>Bank - Detail</h2>
                    <hr/>
-                   
                    <form>
                         <div className="form-group row">
                             <label className="col-sm-4 col-form-label">ID Bank</label>
@@ -48,8 +46,6 @@ class BankDetail extends React.Component{
                             <label className="col-sm-4 col-form-label">Nama Bank</label>
                             <div className="col-sm-8">
                             : {this.state.rows.name}
-                            
-
                             </div>
                         </div>
                         <div className="form-group row">
@@ -63,7 +59,6 @@ class BankDetail extends React.Component{
                             <label className="col-sm-4 col-form-label">Alamat Bank</label>
                             <div className="col-sm-8">
                             : {this.state.rows.address}
-
                             </div>
                         </div>
                         <div className="form-group row">
@@ -82,7 +77,6 @@ class BankDetail extends React.Component{
                             <label className="col-sm-4 col-form-label">Admin Fee setup</label>
                             <div className="col-sm-8">
                             : {this.state.rows.adminfee_setup}
-
                             </div>
                         </div>
                         <div className="form-group row">
@@ -118,12 +112,10 @@ class BankDetail extends React.Component{
 
                             </div>
                         </div>
-                        
                         <div className="form-group row">
                             <label className="col-sm-4 col-form-label">Tanggal Bergabung</label>
                             <div className="col-sm-8">
                             :  <Moment date={this.state.rows.join_date} format=" DD  MMMM  YYYY" />                         
-
                             </div>
                         </div>
                         <div className="form-group row">
@@ -131,10 +123,8 @@ class BankDetail extends React.Component{
                                 <input type="button" className="btn btn btn-secondary" value="Kembali" onClick={()=>  window.history.back()}/>
                             </label>
                             <div className="col-sm-8">
-
                             </div>
                         </div>
-
                    </form>
     
                 </div>
