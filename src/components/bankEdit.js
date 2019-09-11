@@ -46,7 +46,7 @@ class BankEdit extends React.Component{
         jenisProduct:null, jenisLayanan: null, productID:[],serviceID:[],
         errorMessage: null, diKlik:false,
         typeBank:[],bankService:[],bankProduct:[],
-        provinsi:[],kabupaten:[],idProvinsi:null,dataBank:[],phone:'',provinsiEdit:null,namaTipeBank:''
+        provinsi:[],kabupaten:[],idProvinsi:null,dataBank:[],phone:'',provinsiEdit:null,namaTipeBank:'',adminFeeRadioValue:'Potong dari plafond',convinienceFeeRadioValue:'Potong dari plafond'
     };
     componentWillReceiveProps(newProps){
         this.setState({errorMessage:newProps.error})
@@ -177,7 +177,13 @@ class BankEdit extends React.Component{
       })
       return jsx
        }
-   
+
+    handleChangeRadioAdmin =(e)=>{
+        this.setState({adminFeeRadioValue:e.target.value})
+    }
+    handleChangeRadioConvience =(e)=>{
+        this.setState({convinienceFeeRadioValue:e.target.value})
+    }
     btnEdit = ()=>{
         var services =[]
         var products =[]
@@ -189,7 +195,9 @@ class BankEdit extends React.Component{
         var city = this.refs.kota.value.includes("-") ? this.refs.kota.value.slice(this.refs.provinsi.value.indexOf('-')+1,this.refs.provinsi.length):this.refs.kota.value
         var pic = this.refs.pic.value ? this.refs.pic.value:this.refs.pic.placeholder
         var phone = this.state.phone ? String(this.state.phone):String(this.state.dataBank.phone)
-       
+        var adminfee_setup = this.state.adminFeeRadioValue
+        var convfee_setup = this.state.convinienceFeeRadioValue
+
         if(city === "0" || city === null){
             this.setState({errorMessage:"Kota Kosong - Harap cek ulang"})
         }else if (pic.trim()===""){
@@ -214,7 +222,7 @@ class BankEdit extends React.Component{
             }
     
             var newData = {
-                name,type,address,province,city,services,products,pic,phone
+                name,type,address,province,city,services,products,pic,phone,adminfee_setup,convfee_setup
             }
         
            
@@ -304,6 +312,38 @@ class BankEdit extends React.Component{
                                 {this.renderKabupatenJsx()}
                            
                             </select>
+                            </div>
+                        </div>
+                        <div className="form-group row">
+                            <label className="col-sm-2 col-form-label">Admin Fee Setup</label>
+                            <div className="col-sm-10">
+                                {this.state.dataBank.adminfee_setup === 'Bebankan ke cicilan' ?
+                                <label className="form-control" style={{border:"none"}}>
+                                    <input type="radio" name="adminfeeSetup"  value="Potong dari plafond" onChange={this.handleChangeRadioAdmin} /> Potong dari plafond
+                                    <input type="radio" name="adminfeeSetup" defaultChecked={true} className="ml-3" value="Bebankan ke cicilan" onChange={this.handleChangeRadioAdmin} /> Bebankan ke cicilan
+                                </label> 
+                                    :
+                                <label className="form-control" style={{border:"none"}}>
+                                    <input type="radio" name="adminfeeSetup" defaultChecked={true} value="Potong dari plafond" onChange={this.handleChangeRadioAdmin} /> Potong dari plafond
+                                    <input type="radio" name="adminfeeSetup"  className="ml-3" value="Bebankan ke cicilan" onChange={this.handleChangeRadioAdmin} /> Bebankan ke cicilan
+                                </label> 
+                                }
+                            </div>
+                        </div>
+                        <div className="form-group row">
+                            <label className="col-sm-2 col-form-label">Convinience Fee Setup</label>
+                            <div className="col-sm-10">
+                            {this.state.dataBank.convfee_setup === 'Bebankan ke cicilan' ?
+                                <label className="form-control" style={{border:"none"}}>
+                                    <input type="radio" name="convinienceFeeSetup" value="Potong dari plafond" onChange={this.handleChangeRadioConvience} /> Potong dari plafond
+                                    <input type="radio" name="convinienceFeeSetup" defaultChecked={true} className="ml-3" value="Bebankan ke cicilan" onChange={this.handleChangeRadioConvience} /> Bebankan ke cicilan
+                                </label> 
+                                    :
+                                <label className="form-control" style={{border:"none"}}>
+                                    <input type="radio" name="convinienceFeeSetup" defaultChecked={true} value="Potong dari plafond" onChange={this.handleChangeRadioConvience} /> Potong dari plafond
+                                    <input type="radio" name="convinienceFeeSetup" className="ml-3" value="Bebankan ke cicilan" onChange={this.handleChangeRadioConvience} /> Bebankan ke cicilan
+                                </label> 
+                                }
                             </div>
                         </div>
 
