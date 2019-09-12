@@ -74,7 +74,7 @@ class ProductAdd extends React.Component{
         if(name==="" || name.trim()===""){
             this.setState({errorMessage:"Nama Product Kosong"})
         }else if (interest>200){
-            this.setState({errorMessage:"Imbal Hasil tidak boleh lebih dari 200 - Harap cek ulang"})
+            this.setState({errorMessage:"Imbal Hasil tidak boleh lebih dari 200% - Harap cek ulang"})
         }else if(min_timespan==="0" || max_timespan==="0"){
             this.setState({errorMessage:"Jangka Waktu Kosong"})
         }else if(parseInt(min_timespan) > parseInt(max_timespan)){
@@ -97,10 +97,10 @@ class ProductAdd extends React.Component{
         }else if(this.state.selectedOption===null){
             this.setState({errorMessage:"Sektor Pembiayaan belum terpilih - Harap cek ulang"})
         }else if(isNaN(asn_fee)){
-            this.setState({errorMessage:"Convience Fee mesti angka atau jika desimal menggunakan titik (.) Contoh: 2.00 - Harap cek ulang"})
+            this.setState({errorMessage:"Convience Fee harus angka atau jika desimal menggunakan titik (.) Contoh: 2.00 - Harap cek ulang"})
         }
         else if(isNaN(adminfee)){
-            this.setState({errorMessage:"Admin mesti mesti angka atau jika desimal menggunakan titik (.) Contoh: 2.00 - Harap cek ulang"})
+            this.setState({errorMessage:"Admin Fee harus angka atau jika desimal menggunakan titik (.) Contoh: 2.00 - Harap cek ulang"})
         }
         else{
             fees.push({
