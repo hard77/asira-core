@@ -110,7 +110,7 @@ const kukie =new Cookies()
 
               <UncontrolledDropdown  nav inNavbar>
                 <DropdownToggle nav caret style={{ color:"inherit",textDecoration:"none"}}>
-                <label><i class="fas fa-handshake"></i> Role</label>
+                <label><i className="fas fa-handshake"></i> Role</label>
                 </DropdownToggle>
               <DropdownMenu className="menuDropDown" style={{border:"1px solid black",marginBottom:"20px"}}>
                  <Link to="/tambahrole" style={{color:"inherit",textDecoration:"none"}}><DropdownItem>Tambah</DropdownItem></Link>                   
