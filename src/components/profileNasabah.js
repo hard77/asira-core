@@ -13,7 +13,7 @@ import Pagination from 'rc-pagination';
 import './../support/css/pagination.css'
 import localeInfo from 'rc-pagination/lib/locale/id_ID';
 const kukie = new Cookie()
-const config = {
+var config = {
   headers: {'Authorization': "Bearer " + kukie.get('token')}
 };
 class profileNasabah extends React.Component {
@@ -63,6 +63,9 @@ getLink = ()=>{
   
   //Ambil data pertama kali
   getAllData = ()=>{
+    config = {
+      headers: {'Authorization': "Bearer " + kukie.get('token')}
+    };
    var newLink='admin/borrower'
    
     if (this.props.location.search){
@@ -75,7 +78,6 @@ getLink = ()=>{
     }
     axios.get(serverUrlBorrower+newLink,config)
     .then((res)=>{
-      console.log(res.data)
         this.setState({loading:false,rows:res.data.data,rowsPerPage:res.data.rows,jumlahBaris:null,totalData:res.data.total_data,last_page:res.data.last_page,page:res.data.current_page})
     })
     .catch((err)=>{

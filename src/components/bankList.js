@@ -11,7 +11,7 @@ import './../support/css/pagination.css'
 import localeInfo from 'rc-pagination/lib/locale/id_ID';
 import QueryString from 'query-string'
 const cookie = new Cookies()
-const config = {
+var config = {
   headers: {'Authorization': "Bearer " + cookie.get('token')}
 };
 class BankList extends React.Component{
@@ -50,6 +50,9 @@ class BankList extends React.Component{
         this.props.history.push(newLink)
     }
     getAllBankData = ()=>{
+        config = {
+            headers: {'Authorization': "Bearer " + cookie.get('token')}
+          };
         var newLink =`admin/banks`
         if (this.props.location.search){
           var hasil = this.getLink()
@@ -64,7 +67,6 @@ class BankList extends React.Component{
         
         axios.get(serverUrl+newLink,config)
         .then((res)=>{
-            console.log(res.data)
             this.setState({
                 rows:res.data.data,
                 total_data:res.data.total_data,

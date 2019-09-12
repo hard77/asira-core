@@ -14,7 +14,7 @@ import localeInfo from 'rc-pagination/lib/locale/id_ID'
 
 const kukie = new Cookie()
 
-const config = {headers: {'Authorization': "Bearer " + kukie.get('token')}};
+var config = {headers: {'Authorization': "Bearer " + kukie.get('token')}};
 
 class PermintaanPinjaman extends React.Component {
   state = {
@@ -37,7 +37,7 @@ class PermintaanPinjaman extends React.Component {
   }
 
   getAllData = ()=>{
-      
+    config = {headers: {'Authorization': "Bearer " + kukie.get('token')}};
       var newLink =`admin/loan`
       if (this.props.location.search){
         var hasil = this.getLink()
@@ -51,7 +51,6 @@ class PermintaanPinjaman extends React.Component {
       }
       axios.get(serverUrlBorrower+newLink,config)
       .then((res)=>{
-          console.log(res.data)
           this.setState({loading:false,
             rows:res.data.data, 
             rowsPerPage:res.data.rows,
