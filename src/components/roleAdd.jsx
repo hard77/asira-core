@@ -36,7 +36,7 @@ class RoleAdd extends React.Component{
             axios.post(serverUrlBorrower+'admin/internal_role',newData,config)
             .then((res)=>{
                 swal("Success","Role berhasil di tambah","success")
-                this.setState({errorMessage:null,diKlik:true})
+                this.setState({diKlik:true})
             })
             .catch((err)=>{
                 console.log(err.response)
