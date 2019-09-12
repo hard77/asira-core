@@ -54,7 +54,7 @@ class RoleDetail extends React.Component{
                         <div className="form-group row">
                             <label className="col-sm-4 col-form-label">Sistem</label>
                             <div className="col-sm-8">
-                            :  {this.state.rows.system}
+                            : {this.state.rows.system}
                             </div>
                         </div>
                     </form>
@@ -62,7 +62,7 @@ class RoleDetail extends React.Component{
                         <div className="form-group row">
                             <label className="col-sm-4 col-form-label">Deskripsi</label>
                             <div className="col-sm-8">
-                            :  {this.state.rows.description}
+                            : {this.state.rows.description}
                             </div>
                         </div>
                     </form>
@@ -70,7 +70,7 @@ class RoleDetail extends React.Component{
                         <div className="form-group row">
                             <label className="col-sm-4 col-form-label">Status</label>
                             <div className="col-sm-8">
-                            :{this.state.rows.status ?"Active":"Inactive"}
+                            : {this.state.rows.status ?"Active":"Inactive"}
                             </div>
                         </div>
                     </form>
