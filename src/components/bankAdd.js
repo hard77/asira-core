@@ -8,10 +8,10 @@ import swal from 'sweetalert'
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
 const cookie = new Cookies()
-const config = {
+    var config = {
     headers: {'Authorization': "Bearer " + cookie.get('token')}
   };
-  const configGeo = {
+  var configGeo = {
     headers: {'Authorization': "Bearer " + cookie.get('tokenGeo')}
   };
 
@@ -77,6 +77,9 @@ class Main extends React.Component{
     //     .catch((err)=> console.log(err))
     //   }
       getAllProvinsi = () =>{
+        configGeo = {
+            headers: {'Authorization': "Bearer " + cookie.get('tokenGeo')}
+          };
         axios.get(serverUrlGeo+`client/provinsi`,configGeo)
         .then((res)=>{
             console.log(res.data.data)
@@ -105,7 +108,9 @@ class Main extends React.Component{
         .catch((err)=> console.log(err))
       }
       getBankProduct = ()=>{
- 
+        config = {
+            headers: {'Authorization': "Bearer " + cookie.get('token')}
+          };
         axios.get(serverUrl+'admin/service_products',config)
         .then((res)=>{
             console.log(res.data.data)
@@ -115,7 +120,9 @@ class Main extends React.Component{
       }
 
       getBankService = ()=>{
-    
+        config = {
+            headers: {'Authorization': "Bearer " + cookie.get('token')}
+          };
         axios.get(serverUrl+'admin/bank_services',config)
         .then((res)=>{
             console.log(res.data)
@@ -156,7 +163,9 @@ class Main extends React.Component{
 
 
       getBankType = () => {
-  
+        config = {
+            headers: {'Authorization': "Bearer " + cookie.get('token')}
+          };
         axios.get(serverUrl+'admin/bank_types',config)
         .then((res)=>{
             console.log(res.data)
