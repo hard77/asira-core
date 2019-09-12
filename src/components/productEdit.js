@@ -135,9 +135,9 @@ class ProductEdit extends React.Component{
         }else if(parseFloat(asn_fee) <0){
             this.setState({errorMessage:"Convinience Fee tidak benar - Harap cek ulang"})
         }else if(isNaN(asn_fee)){
-            this.setState({errorMessage:"Convience Fee mesti angka atau desimal harus menggunakan titik (.) contoh 2.00  - Harap cek ulang"})
+            this.setState({errorMessage:"Convience Fee harus angka atau desimal harus menggunakan titik (.) contoh 2.00  - Harap cek ulang"})
         }else if(isNaN(adminfee)){
-            this.setState({errorMessage:"Admin Fee mesti angka atau desimal harus menggunakan titik (.) contoh 2.00 - Harap cek ulang"})
+            this.setState({errorMessage:"Admin Fee harus angka atau desimal harus menggunakan titik (.) contoh 2.00 - Harap cek ulang"})
         }
         else{
             String(asn_fee)
