@@ -235,7 +235,7 @@ if(kukie.get("token")){
           <Pagination className="ant-pagination"  
                 showTotal={(total, range) => `${range[0]} - ${range[1]} of ${total} items`}
                 total={this.state.totalData}
-                pageSize={25}
+                pageSize={this.state.rowsPerPage}
                 onChange={this.onChangePage}
                 locale={localeInfo}
                 />     
