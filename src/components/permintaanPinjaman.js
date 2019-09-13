@@ -27,7 +27,9 @@ class PermintaanPinjaman extends React.Component {
     totalData:0,
     last_page:1,
     loading:true,
-    BankName:'',serviceName:'',productName:''
+    BankName:'',serviceName:'',productName:'',
+    halamanConfig:`orderby=id&sort=ASC&rows=10`
+    
   };
 
   //-----------------------------------NIKO FUNCTION-------------------------------------------------------------
@@ -42,12 +44,12 @@ class PermintaanPinjaman extends React.Component {
       if (this.props.location.search){
         var hasil = this.getLink()
         if(!isNaN(hasil)){
-          newLink += `?id=${hasil}`
+          newLink += `?id=${hasil}`+this.state.halamanConfig
         }else{
-          newLink += `?owner_name=${hasil}`
+          newLink += `?owner_name=${hasil}`+this.state.halamanConfig
         }
       }else{
-        newLink += `?`
+        newLink += `?`+this.state.halamanConfig
       }
       axios.get(serverUrlBorrower+newLink,config)
       .then((res)=>{
@@ -100,13 +102,13 @@ class PermintaanPinjaman extends React.Component {
     if(searching){
       //search function
       if(!isNaN(searching)){
-        newLink +=`admin/loan?id=${searching}`
+        newLink +=`admin/loan?id=${searching}&${this.state.halamanConfig}`
       }else{
-        newLink +=`admin/loan?owner_name=${searching}`
+        newLink +=`admin/loan?owner_name=${searching}&${this.state.halamanConfig}`
       }
   
     }else{
-      newLink+=`admin/loan`
+      newLink+=`admin/loan?${this.state.halamanConfig}`
     
     }  
     axios.get(serverUrlBorrower+newLink,config)
@@ -124,7 +126,7 @@ class PermintaanPinjaman extends React.Component {
     console.log('onChange:current=', current);
     console.log('onChange:pageSize=', pageSize);
 
-    var newLink =`page=${current}`
+    var newLink =`page=${current}&${this.state.halamanConfig}`
     axios.get(serverUrlBorrower+`admin/loan?`+newLink,config)
     .then((res)=>{
         console.log(res.data)

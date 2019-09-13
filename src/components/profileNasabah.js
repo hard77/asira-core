@@ -26,7 +26,8 @@ class profileNasabah extends React.Component {
     totalData:0,
     last_page:1,
     loading:true,
-    bankID:0,bankName:''
+    bankID:0,bankName:'',
+    halamanConfig:`orderby=id&sort=ASC&rows=10`
   };
 
   //-----------------------------------NIKO FUNCTION-------------------------------------------------------------
@@ -66,14 +67,14 @@ getLink = ()=>{
     config = {
       headers: {'Authorization': "Bearer " + kukie.get('token')}
     };
-   var newLink='admin/borrower'
+   var newLink='admin/borrower?'+this.state.halamanConfig
    
     if (this.props.location.search){
       var hasil = this.getLink()
       if(!isNaN(hasil)){
-        newLink += `?id=${hasil}`
+        newLink += `?id=${hasil}&${this.state.halamanConfig}`
       }else{
-        newLink += `?fullname=${hasil}`
+        newLink += `?fullname=${hasil}&${this.state.halamanConfig}`
       }
     }
     axios.get(serverUrlBorrower+newLink,config)
@@ -95,15 +96,15 @@ getLink = ()=>{
       //search function
     
       if(!isNaN(searching)){
-        newLink += `admin/borrower?id=${searching}`
+        newLink += `admin/borrower?id=${searching}&${this.state.halamanConfig}`
        
       }else{
-        newLink += `admin/borrower?fullname=${searching}`
+        newLink += `admin/borrower?fullname=${searching}&${this.state.halamanConfig}`
       }
 
      
     }else{
-      newLink += `admin/borrower`
+      newLink += `admin/borrower?${this.state.halamanConfig}`
       
     }
     axios.get(serverUrlBorrower+newLink,config)
@@ -126,7 +127,7 @@ getLink = ()=>{
   console.log('onChange:current=', current);
   console.log('onChange:pageSize=', pageSize);
 
-  var newLink =`page=${current}`
+  var newLink =`page=${current}&${this.state.halamanConfig}`
   axios.get(serverUrlBorrower+`admin/borrower?`+newLink,config)
   .then((res)=>{
       console.log(res.data)
