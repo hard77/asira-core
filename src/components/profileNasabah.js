@@ -109,7 +109,7 @@ getLink = ()=>{
     }
     axios.get(serverUrlBorrower+newLink,config)
       .then((res)=>{
-          this.setState({loading:false,rows:res.data.data,searchRows:null})
+          this.setState({loading:false,rows:res.data.data,searchRows:null,rowsPerPage:res.data.rows,totalData:res.data.total_data})
       })
       .catch((err)=>{
           console.log(err)
@@ -126,12 +126,28 @@ getLink = ()=>{
   this.setState({loading:true})
   console.log('onChange:current=', current);
   console.log('onChange:pageSize=', pageSize);
+  var searching = this.refs.search.value
 
-  var newLink =`page=${current}&${this.state.halamanConfig}`
-  axios.get(serverUrlBorrower+`admin/borrower?`+newLink,config)
+  var newLink=''
+    if(searching){
+      //search function
+    
+      if(!isNaN(searching)){
+        newLink += `admin/borrower?id=${searching}&${this.state.halamanConfig}&page=${current}`
+       
+      }else{
+        newLink += `admin/borrower?fullname=${searching}&${this.state.halamanConfig}&page=${current}`
+      }
+
+     
+    }else{
+      newLink += `admin/borrower?${this.state.halamanConfig}&page=${current}`
+      
+    }
+  axios.get(serverUrlBorrower+newLink,config)
   .then((res)=>{
       console.log(res.data)
-      this.setState({loading:false,rows:res.data.data,dataPerhalaman:res.data.rows,page:current})
+      this.setState({loading:false,rows:res.data.data,dataPerhalaman:res.data.rows,page:current,totalData:res.data.total_data})
   })
   .catch((err)=>{
       console.log(err)
