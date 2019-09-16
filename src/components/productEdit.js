@@ -140,6 +140,10 @@ class ProductEdit extends React.Component{
             this.setState({errorMessage:"Admin Fee harus angka atau desimal harus menggunakan titik (.) contoh 2.00 - Harap cek ulang"})
         }
         else{
+
+            String(asn_fee)
+            String(adminfee)
+        
             
             fees.push({
                 "description": "Admin Fee",
