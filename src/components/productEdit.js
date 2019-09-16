@@ -104,7 +104,7 @@ class ProductEdit extends React.Component{
         var min_loan = this.state.rentangDari ? parseInt(this.state.rentangDari) : this.state.rows.min_loan
         var max_loan = this.state.rentangAkhir ? parseInt(this.state.rentangAkhir) : this.state.rows.max_loan
         var adminfee = this.refs.adminFee.value ? this.refs.adminFee.value : this.refs.adminFee.placeholder
-        var asn_fee = this.refs.convinienceFee.value ? parseInt(this.refs.convinienceFee.value) : this.refs.convinienceFee.placeholder
+        var asn_fee = this.refs.convinienceFee.value ? this.refs.convinienceFee.value : this.refs.convinienceFee.placeholder
         var service = parseInt(this.refs.layanan.value)
         
         var fees= []
@@ -140,11 +140,10 @@ class ProductEdit extends React.Component{
             this.setState({errorMessage:"Admin Fee harus angka atau desimal harus menggunakan titik (.) contoh 2.00 - Harap cek ulang"})
         }
         else{
-            String(asn_fee)
-            String(adminfee)
+            
             fees.push({
                 "description": "Admin Fee",
-                "amount":`${adminfee}`
+                "amount":`${adminfee}%`
             })
                //===========CODING BAGIAN SEKTOR PEMBIAYAAN
 
@@ -234,7 +233,7 @@ class ProductEdit extends React.Component{
                 </td>
                 <td>
                 <div className="form-inline">
-                    <input type="text" className="form-control" ref="adminFee" style={{width:"80px"}} defaultValue={val.amount} placeholder={val.amount} /><label>%</label>
+                    <input type="text" className="form-control" ref="adminFee" style={{width:"80px"}} defaultValue={val.amount.slice(0,val.amount.indexOf('%'))} placeholder={val.amount.slice(0,val.amount.indexOf('%'))} /><label>%</label>
                 </div>
                 </td>
             </tr>
