@@ -99,7 +99,7 @@ class BankList extends React.Component{
       axios.get(serverUrl+`admin/banks?`+newLink,config)
       .then((res)=>{
           console.log(res)
-          this.setState({loading:false,rows:res.data.data,searchRows:null})
+          this.setState({loading:false,rows:res.data.data,searchRows:null,total_data:res.data.total_data,dataPerhalaman:res.data.rows})
       })
       .catch((err)=>{
           console.log(err)
@@ -159,12 +159,22 @@ class BankList extends React.Component{
         this.setState({loading:true})
         console.log('onChange:current=', current);
         console.log('onChange:pageSize=', pageSize);
-
-        var newLink =`page=${current}&${this.state.halamanConfig}`
+        var searching = this.refs.search.value
+        var newLink=""
+        if(searching){
+          //search function
+        if(!isNaN(searching)){
+            newLink += `id=${searching}&${this.state.halamanConfig}&page=${current}` 
+          }else{
+            newLink += `name=${searching}&${this.state.halamanConfig}&page=${current}`
+          }     
+        }else{
+          newLink +=this.state.halamanConfig+`&page=${current}`
+        }
         axios.get(serverUrl+`admin/banks?`+newLink,config)
         .then((res)=>{
             console.log(res.data)
-            this.setState({loading:false,rows:res.data.data,dataPerhalaman:res.data.rows,page:current})
+            this.setState({loading:false,rows:res.data.data,dataPerhalaman:res.data.rows,total_data:res.data.total_data,page:current})
         })
         .catch((err)=>{
             console.log(err)
