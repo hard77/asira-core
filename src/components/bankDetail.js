@@ -16,7 +16,7 @@ class BankDetail extends React.Component{
 
     getBankDetail = ()=>{
         var id = this.props.match.params.id
-        if(cookie.get('token')){
+       
             var config = {
                 headers: {'Authorization': "Bearer " + cookie.get('token')}
               };
@@ -27,7 +27,7 @@ class BankDetail extends React.Component{
                 this.setState({rows:res.data,layanan:res.data.services,produk:res.data.products})
             })
             .catch((err)=>console.log(err))
-        }
+        
     }
     render(){
         if(cookie.get('token')){
