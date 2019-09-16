@@ -18,7 +18,11 @@ class BankDetail extends React.Component{
 
     getBankDetail = ()=>{
         var id = this.props.match.params.id
-        if(cookie.get('token')){
+        // if(cookie.get('token')){
+            var config = {
+                headers: {'Authorization': "Bearer " + cookie.get('token')}
+              };
+          
             axios.get(serverUrl+`admin/banks/${id}`,config)
             .then((res)=>{
                 console.log(res.data)
@@ -28,7 +32,7 @@ class BankDetail extends React.Component{
                 }
             })
             .catch((err)=>console.log(err))
-        }
+        // }
     }
     getTypeBank = ()=>{
         axios.get(serverUrl+`admin/bank_types/${this.state.tipe}`,config)
