@@ -105,7 +105,7 @@ class ProductAdd extends React.Component{
         else{
             fees.push({
                 "description": "Admin Fee",
-                "amount":`${adminfee}`
+                "amount":`${adminfee}%`
             })
            
                //===========CODING BAGIAN SEKTOR PEMBIAYAAN
