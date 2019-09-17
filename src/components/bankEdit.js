@@ -9,10 +9,10 @@ import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
 
 const cookie = new Cookies()
-const config = {
+var config = {
     headers: {'Authorization': "Bearer " + cookie.get('token')}
   };
-  const configGeo = {
+  var configGeo = {
     headers: {'Authorization': "Bearer " + cookie.get('tokenGeo')}
   };
 
@@ -69,7 +69,9 @@ class BankEdit extends React.Component{
     }
     getBankDataById = ()=>{
         var id = this.props.match.params.id
-     
+        config = {
+            headers: {'Authorization': "Bearer " + cookie.get('token')}
+          };
        // axios.get(serverUrl+'admin/banks/[bank_id]',config)
         axios.get(serverUrl+`admin/banks/${id}`,config)
         .then((res)=>{
@@ -91,6 +93,9 @@ class BankEdit extends React.Component{
     //   .catch((err)=> console.log(err))
     // }
     getAllProvinsi = () =>{
+        configGeo = {
+            headers: {'Authorization': "Bearer " + cookie.get('tokenGeo')}
+          };
         axios.get(serverUrlGeo+`client/provinsi`,configGeo)
         .then((res)=>{
             console.log(res.data.data)
@@ -119,7 +124,9 @@ class BankEdit extends React.Component{
         .catch((err)=> console.log(err))
       }
     getBankProduct = ()=>{
-  
+        config = {
+            headers: {'Authorization': "Bearer " + cookie.get('token')}
+          };
       axios.get(serverUrl+'admin/service_products',config)
       .then((res)=>{
           console.log(res.data)
@@ -138,7 +145,9 @@ class BankEdit extends React.Component{
     }
 
     getBankService = ()=>{
-   
+        config = {
+            headers: {'Authorization': "Bearer " + cookie.get('token')}
+          };
       axios.get(serverUrl+'admin/bank_services',config)
       .then((res)=>{
           console.log(res.data)
