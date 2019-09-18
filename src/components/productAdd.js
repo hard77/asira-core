@@ -132,7 +132,7 @@ class ProductAdd extends React.Component{
                 //====== BIKIN AGUNAN INDEX TERAKHIR JADI YANG PERTAMA BUAT EDIT NYA
                     collaterals.reverse()
                     
-                   
+            asn_fee = asn_fee+"%"
             var newData = {
                 name,min_timespan,max_timespan,interest,min_loan,max_loan,fees,asn_fee,service,collaterals,financing_sector,assurance,status
             }
