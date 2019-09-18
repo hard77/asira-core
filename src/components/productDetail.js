@@ -120,7 +120,7 @@ class ProductDetail extends React.Component{
                         <div className="form-group row">
                             <label className="col-sm-4 col-form-label">Convinence Fee</label>
                             <div className="col-sm-8">
-                            : {this.state.rows.asn_fee}%
+                            : {this.state.rows.asn_fee}
                             </div>
                         </div>
                     </form>
