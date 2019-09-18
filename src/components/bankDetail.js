@@ -7,11 +7,19 @@ import Moment from 'react-moment'
 import axios from 'axios'
 
 const cookie = new Cookies()
+<<<<<<< HEAD
 const config = {
     headers: {'Authorization': "Bearer " + cookie.get('token')}
   };
 class BankDetail extends React.Component{
     state = {rows:[],layanan:["c","d","s"],produk:["a","b","c"],tipe:0,namaTipeBank:''}
+=======
+var config = {
+    headers: {'Authorization': "Bearer " + cookie.get('token')}
+  };
+class BankDetail extends React.Component{
+    state = {rows:[],layanan:[],produk:[],tipe:0,namaTipeBank:''}
+>>>>>>> 366-bank-detail-newfield
     componentDidMount(){
         this.getBankDetail()
     }
