@@ -7,9 +7,11 @@ import Moment from 'react-moment'
 import axios from 'axios'
 
 const cookie = new Cookies()
-
+var config = {
+    headers: {'Authorization': "Bearer " + cookie.get('token')}
+  };
 class BankDetail extends React.Component{
-    state = {rows:[],layanan:["c","d","s"],produk:["a","b","c"]}
+    state = {rows:[],layanan:[],produk:[],tipe:0,namaTipeBank:''}
     componentDidMount(){
         this.getBankDetail()
     }
@@ -24,10 +26,21 @@ class BankDetail extends React.Component{
             axios.get(serverUrl+`admin/banks/${id}`,config)
             .then((res)=>{
                 console.log(res.data)
-                this.setState({rows:res.data,layanan:res.data.services,produk:res.data.products})
+                this.setState({rows:res.data,layanan:res.data.services,tipe:res.data.type,produk:res.data.products})
+                if (this.state.tipe!==0){
+                    this.getTypeBank()
+                }
             })
             .catch((err)=>console.log(err))
         // }
+    }
+    getTypeBank = ()=>{
+        axios.get(serverUrl+`admin/bank_types/${this.state.tipe}`,config)
+      .then((res)=>{
+          console.log(res.data.name)
+            this.setState({namaTipeBank:res.data.name})
+      })
+      .catch((err)=> console.log(err))
     }
     render(){
         if(cookie.get('token')){
@@ -55,7 +68,7 @@ class BankDetail extends React.Component{
                         <div className="form-group row">
                             <label className="col-sm-4 col-form-label">Tipe Bank</label>
                             <div className="col-sm-8">
-                            : {this.state.rows.type}
+                            : {this.state.namaTipeBank}
                         
                             </div>
                         </div>
