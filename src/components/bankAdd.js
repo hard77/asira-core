@@ -198,8 +198,6 @@ class Main extends React.Component{
         var phone = this.state.phone
         var adminfee_setup = this.state.adminFeeRadioValue
         var convfee_setup = this.state.adminFeeRadioValue
-        console.log(adminfee_setup)
-        console.log(convfee_setup)
 
         if(this.state.jenisLayanan===null || this.state.jenisProduct===null || 
         this.refs.namaBank.value === "" || this.refs.tipeBank.value ==="0" || 
