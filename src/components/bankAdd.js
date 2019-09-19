@@ -224,15 +224,15 @@ class Main extends React.Component{
                     name,type,address,province,city,pic,phone,services,products,adminfee_setup,convfee_setup
                 }
             
-                // axios.post(serverUrl+'admin/banks',newData,config)
-                // .then((res)=>{
-                //     console.log(res.data)
-                //     swal("Berhasil","Bank berhasil bertambah","success")
-                //     this.setState({errorMessage:null,diKlik:true})
-                // })
-                // .catch((err)=>{
-                //    console.log(err)
-                // })
+                axios.post(serverUrl+'admin/banks',newData,config)
+                .then((res)=>{
+                    console.log(res.data)
+                    swal("Berhasil","Bank berhasil bertambah","success")
+                    this.setState({errorMessage:null,diKlik:true})
+                })
+                .catch((err)=>{
+                   console.log(err)
+                })
         }
 
 
