@@ -42,7 +42,7 @@ class Main extends React.Component{
        jenisProduct:null, jenisLayanan: null, 
        errorMessage: null, diKlik:false,
        typeBank:[],bankService:[],bankProduct:[],
-       provinsi:[],kabupaten:[],idProvinsi:null,phone:'',adminFeeRadioValue:'Potong dari plafond',convinienceFeeRadioValue:'Potong dari plafond'
+       provinsi:[],kabupaten:[],idProvinsi:null,phone:'',adminFeeRadioValue:'potong_plafon',convinienceFeeRadioValue:'beban_plafon'
       };
 
 
@@ -224,15 +224,15 @@ class Main extends React.Component{
                     name,type,address,province,city,pic,phone,services,products,adminfee_setup,convfee_setup
                 }
             
-                axios.post(serverUrl+'admin/banks',newData,config)
-                .then((res)=>{
-                    console.log(res.data)
-                    swal("Berhasil","Bank berhasil bertambah","success")
-                    this.setState({errorMessage:null,diKlik:true})
-                })
-                .catch((err)=>{
-                   console.log(err)
-                })
+                // axios.post(serverUrl+'admin/banks',newData,config)
+                // .then((res)=>{
+                //     console.log(res.data)
+                //     swal("Berhasil","Bank berhasil bertambah","success")
+                //     this.setState({errorMessage:null,diKlik:true})
+                // })
+                // .catch((err)=>{
+                //    console.log(err)
+                // })
         }
 
 
