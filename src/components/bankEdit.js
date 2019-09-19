@@ -205,7 +205,7 @@ class BankEdit extends React.Component{
         var pic = this.refs.pic.value ? this.refs.pic.value:this.refs.pic.placeholder
         var phone = this.state.phone ? String(this.state.phone):String(this.state.dataBank.phone)
         var adminfee_setup = this.state.adminFeeRadioValue ? this.state.adminFeeRadioValue : this.state.dataBank.adminfee_setup
-        var convfee_setup = this.state.convinienceFeeRadioValue ? this.state.convinienceFeeRadioValue : this.state.dataBank.convfee_setup
+        var convfee_setup =  this.state.adminFeeRadioValue ? this.state.adminFeeRadioValue : this.state.dataBank.adminfee_setup
        
         if(city === "0" || city === null){
             this.setState({errorMessage:"Kota Kosong - Harap cek ulang"})
@@ -326,15 +326,15 @@ class BankEdit extends React.Component{
                         <div className="form-group row">
                             <label className="col-sm-2 col-form-label">Admin Fee Setup</label>
                             <div className="col-sm-10">
-                                {this.state.dataBank.adminfee_setup === 'Bebankan ke cicilan' ?
+                                {this.state.dataBank.adminfee_setup === 'beban_plafon' ?
                                 <label className="form-control" style={{border:"none"}}>
-                                    <input type="radio" name="adminfeeSetup"  value="Potong dari plafond" onClick={this.handleChangeRadioAdmin} /> Potong dari plafond
-                                    <input type="radio" name="adminfeeSetup" defaultChecked={true} className="ml-3" value="Bebankan ke cicilan" onClick={this.handleChangeRadioAdmin} /> Bebankan ke cicilan
+                                    <input type="radio" name="adminfeeSetup"  value="potong_plafon" onClick={this.handleChangeRadioAdmin} /> Potong dari plafond
+                                    <input type="radio" name="adminfeeSetup" defaultChecked={true} className="ml-3" value="beban_plafon" onClick={this.handleChangeRadioAdmin} /> Bebankan ke cicilan
                                 </label> 
                                     :
                                 <label className="form-control" style={{border:"none"}}>
-                                    <input type="radio" name="adminfeeSetup" defaultChecked={true} value="Potong dari plafond" onClick={this.handleChangeRadioAdmin} /> Potong dari plafond
-                                    <input type="radio" name="adminfeeSetup"  className="ml-3" value="Bebankan ke cicilan" onClick={this.handleChangeRadioAdmin} /> Bebankan ke cicilan
+                                    <input type="radio" name="adminfeeSetup" defaultChecked={true} value="potong_plafon" onClick={this.handleChangeRadioAdmin} /> Potong dari plafond
+                                    <input type="radio" name="adminfeeSetup"  className="ml-3" value="beban_plafon" onClick={this.handleChangeRadioAdmin} /> Bebankan ke cicilan
                                 </label> 
                                 }
                             </div>
@@ -342,17 +342,11 @@ class BankEdit extends React.Component{
                         <div className="form-group row">
                             <label className="col-sm-2 col-form-label">Convinience Fee Setup</label>
                             <div className="col-sm-10">
-                            {this.state.dataBank.convfee_setup === 'Bebankan ke cicilan' ?
-                                <div onClick={this.handleChangeRadioConvience} className="form-control" style={{border:"none"}}>
-                                    <input type="radio" name="convinienceFeeSetup" value="Potong dari plafond"  /> Potong dari plafond
-                                    <input type="radio" name="convinienceFeeSetup" defaultChecked={true} className="ml-3" value="Bebankan ke cicilan" /> Bebankan ke cicilan
+                                <div className="form-control" style={{border:"none",cursor: "not-allowed"}}>
+                                    <input type="radio" disabled="disabled" checked={this.state.adminFeeRadioValue==="potong_plafon"?"checked":""} name="convinienceFeeSetup" readOnly value="potong_plafon"  /> Potong dari plafond
+                                    <input type="radio" disabled="disabled" checked={this.state.adminFeeRadioValue==="beban_plafon"?"checked":""} name="convinienceFeeSetup" readOnly className="ml-3" value="beban_plafon" /> Bebankan ke cicilan
                                 </div> 
-                                    :
-                                <div onClick={this.handleChangeRadioConvience} className="form-control" style={{border:"none"}}>
-                                    <input type="radio" name="convinienceFeeSetup" defaultChecked={true} value="Potong dari plafond"  /> Potong dari plafond
-                                    <input type="radio" name="convinienceFeeSetup" className="ml-3" value="Bebankan ke cicilan"  /> Bebankan ke cicilan
-                                </div> 
-                                }
+                         
                             </div>
                         </div>
 
