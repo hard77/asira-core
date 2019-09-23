@@ -159,7 +159,7 @@ class BankEdit extends React.Component{
     renderKabupatenJsx = ()=>{
         var jsx = this.state.kabupaten.map((val,index)=>{
             return (
-                <option key={index} value={val.name}>{val.id} - {val.name}</option>
+                <option key={index} value={val.name}>{val.name}</option>
             )
         })
         return jsx
