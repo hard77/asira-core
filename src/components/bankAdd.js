@@ -8,10 +8,10 @@ import swal from 'sweetalert'
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
 const cookie = new Cookies()
-const config = {
+    var config = {
     headers: {'Authorization': "Bearer " + cookie.get('token')}
   };
-  const configGeo = {
+  var configGeo = {
     headers: {'Authorization': "Bearer " + cookie.get('tokenGeo')}
   };
 
@@ -42,7 +42,7 @@ class Main extends React.Component{
        jenisProduct:null, jenisLayanan: null, 
        errorMessage: null, diKlik:false,
        typeBank:[],bankService:[],bankProduct:[],
-       provinsi:[],kabupaten:[],idProvinsi:null,phone:''
+       provinsi:[],kabupaten:[],idProvinsi:null,phone:'',adminFeeRadioValue:'potong_plafon',convinienceFeeRadioValue:'beban_plafon'
       };
 
 
@@ -77,6 +77,9 @@ class Main extends React.Component{
     //     .catch((err)=> console.log(err))
     //   }
       getAllProvinsi = () =>{
+        configGeo = {
+            headers: {'Authorization': "Bearer " + cookie.get('tokenGeo')}
+          };
         axios.get(serverUrlGeo+`client/provinsi`,configGeo)
         .then((res)=>{
             console.log(res.data.data)
@@ -105,7 +108,9 @@ class Main extends React.Component{
         .catch((err)=> console.log(err))
       }
       getBankProduct = ()=>{
- 
+        config = {
+            headers: {'Authorization': "Bearer " + cookie.get('token')}
+          };
         axios.get(serverUrl+'admin/service_products',config)
         .then((res)=>{
             console.log(res.data.data)
@@ -115,7 +120,9 @@ class Main extends React.Component{
       }
 
       getBankService = ()=>{
-    
+        config = {
+            headers: {'Authorization': "Bearer " + cookie.get('token')}
+          };
         axios.get(serverUrl+'admin/bank_services',config)
         .then((res)=>{
             console.log(res.data)
@@ -156,7 +163,9 @@ class Main extends React.Component{
 
 
       getBankType = () => {
-  
+        config = {
+            headers: {'Authorization': "Bearer " + cookie.get('token')}
+          };
         axios.get(serverUrl+'admin/bank_types',config)
         .then((res)=>{
             console.log(res.data)
@@ -187,6 +196,8 @@ class Main extends React.Component{
         var city = this.refs.kota.value
         var pic = this.refs.pic.value
         var phone = this.state.phone
+        var adminfee_setup = this.state.adminFeeRadioValue
+        var convfee_setup = this.state.adminFeeRadioValue
 
         if(this.state.jenisLayanan===null || this.state.jenisProduct===null || 
         this.refs.namaBank.value === "" || this.refs.tipeBank.value ==="0" || 
@@ -210,7 +221,7 @@ class Main extends React.Component{
                 }
              
                 var newData = {
-                    name,type,address,province,city,pic,phone,services,products
+                    name,type,address,province,city,pic,phone,services,products,adminfee_setup,convfee_setup
                 }
             
                 axios.post(serverUrl+'admin/banks',newData,config)
@@ -220,15 +231,17 @@ class Main extends React.Component{
                     this.setState({errorMessage:null,diKlik:true})
                 })
                 .catch((err)=>{
-                    if(err.response.status === 422){
-                        alert("Username sudah di pakai")
-                    }else{
-                        console.log(err)
-                    }
+                   console.log(err)
                 })
         }
 
 
+    }
+    handleChangeRadioAdmin =(e)=>{
+        this.setState({adminFeeRadioValue:e.target.value})
+    }
+    handleChangeRadioConvience =(e)=>{
+        this.setState({convinienceFeeRadioValue:e.target.value})
     }
 
     render(){
@@ -292,6 +305,24 @@ class Main extends React.Component{
                                 <option value={0}>===== Pilih Kota =====</option>
                                 {this.renderKabupatenJsx()}
                             </select>
+                            </div>
+                        </div>
+                        <div className="form-group row">
+                            <label className="col-sm-2 col-form-label">Admin Fee Setup</label>
+                            <div className="col-sm-10">
+                            <label className="form-control" style={{border:"none"}}>
+                                <input type="radio" name="adminfeeSetup" defaultChecked={true} value="potong_plafon" onChange={this.handleChangeRadioAdmin} /> Potong dari plafond
+                                <input type="radio" name="adminfeeSetup" className="ml-3" value="beban_plafon" onChange={this.handleChangeRadioAdmin} /> Bebankan ke cicilan
+                            </label> 
+                            </div>
+                        </div>
+                        <div className="form-group row">
+                            <label className="col-sm-2 col-form-label">Convinience Fee Setup</label>
+                            <div className="col-sm-10">
+                            <label className="form-control" style={{border:"none",cursor:"not-allowed"}}>
+                                <input type="radio" name="convinienceFeeSetup" disabled="disabled" checked={this.state.adminFeeRadioValue==="potong_plafon"?"checked":"checked"}  value="potong_plafon" /> Potong dari plafond
+                                <input type="radio" name="convinienceFeeSetup" disabled="disabled" checked={this.state.adminFeeRadioValue==="beban_plafon"?"checked":""} className="ml-3" value="beban_plafon"  /> Bebankan ke cicilan
+                            </label> 
                             </div>
                         </div>
                         <div className="form-group row">
