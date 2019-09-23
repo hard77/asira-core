@@ -47,6 +47,13 @@ import TujuanDetail from './components/tujuanDetail'
 
 import TypeBankEdit from './components/typebankEdit'
 import TypeBankDetail from './components/typebankDetail'
+
+import RoleAdd from './components/roleAdd'
+import RoleList from './components/roleList'
+import RoleDetail from './components/roleDetail'
+import RoleEdit from './components/roleEdit'
+
+
 const kukie =new Cookies()
 
 
@@ -102,6 +109,11 @@ class App extends React.Component {
                     <Route path='/listtujuan' component={TujuanList}></Route>
                     <Route path='/tujuanedit/:id' component={TujuanEdit}></Route>
                     <Route path='/tujuandetail/:id' component={TujuanDetail}></Route>
+                    
+                    <Route path='/tambahrole' component={RoleAdd}></Route>
+                    <Route path='/listrole' component={RoleList}></Route>
+                    <Route path='/editrole/:id' component={RoleEdit}></Route>
+                    <Route path='/detailrole/:id' component={RoleDetail}></Route>
 
 
                     {kukie.get('token') ?  <Route path="/login" component={Home}></Route>:  <Route path="/login" component={Login}></Route>} 
