@@ -39,7 +39,7 @@ class ProductEdit extends React.Component{
     state = {
         selectedOption: null, errorMessage:null,rentangDari:0,rentangAkhir:0,
         collaterals:[],
-        bankService:[],diKlik:false,rows:[],fees:[],bankServicebyID:{},financing_sector:[],
+        bankService:[],diKlik:false,rows:[],fees:[],bankServicebyID:{},financing_sector:[],asn_fee:'',
         agunan:["Sertifikat Tanah","Sertifikat Rumah","Kios/Lapak","Deposito","BPKB Kendaraan"]
       };
 
@@ -57,8 +57,8 @@ class ProductEdit extends React.Component{
          //axios.get(serverUrl+`admin/service_products/[bank_id]`,config)
        axios.get(serverUrl+`admin/service_products/${id}`,config)
         .then((res)=>{
-            console.log(res.data)
-            this.setState({rows:res.data,fees:res.data.fees,
+            
+            this.setState({rows:res.data,fees:res.data.fees,asn_fee:res.data.asn_fee,
                 collaterals:res.data.collaterals,
                 financing_sector:res.data.financing_sector})
             if (this.state.rows.service !== undefined || this.state.rows.service !== null){
@@ -104,7 +104,7 @@ class ProductEdit extends React.Component{
         var min_loan = this.state.rentangDari ? parseInt(this.state.rentangDari) : this.state.rows.min_loan
         var max_loan = this.state.rentangAkhir ? parseInt(this.state.rentangAkhir) : this.state.rows.max_loan
         var adminfee = this.refs.adminFee.value ? this.refs.adminFee.value : this.refs.adminFee.placeholder
-        var asn_fee = this.refs.convinienceFee.value ? parseInt(this.refs.convinienceFee.value) : this.refs.convinienceFee.placeholder
+        var asn_fee = this.refs.convinienceFee.value ? this.refs.convinienceFee.value : parseInt(this.refs.convinienceFee.placeholder)
         var service = parseInt(this.refs.layanan.value)
         
         var fees= []
@@ -128,16 +128,27 @@ class ProductEdit extends React.Component{
             this.setState({errorMessage:"Rentang Pengajuan tidak benar - Harap cek ulang"})
         }else if(parseFloat(adminfee) <0){
             this.setState({errorMessage:"Admin Fee tidak benar - Harap cek ulang"})
+        }else if(parseFloat(adminfee) >100){
+            this.setState({errorMessage:"Admin Fee lebih dari 100%- Harap cek ulang"})
+        }else if(parseFloat(asn_fee) >100){
+            this.setState({errorMessage:"Convinience Fee lebih dari 100% - Harap cek ulang"})
         }else if(parseFloat(asn_fee) <0){
             this.setState({errorMessage:"Convinience Fee tidak benar - Harap cek ulang"})
+        }else if(isNaN(asn_fee)){
+            this.setState({errorMessage:"Convience Fee harus angka atau desimal harus menggunakan titik (.) contoh 2.00  - Harap cek ulang"})
+        }else if(isNaN(adminfee)){
+            this.setState({errorMessage:"Admin Fee harus angka atau desimal harus menggunakan titik (.) contoh 2.00 - Harap cek ulang"})
         }
         else{
-       
+
+            asn_fee=asn_fee+"%"
+            String(adminfee)
+        
+            
             fees.push({
                 "description": "Admin Fee",
-                "amount":`${adminfee}`
+                "amount":`${adminfee}%`
             })
-            console.log(fees + " "+ typeof(fees))
                //===========CODING BAGIAN SEKTOR PEMBIAYAAN
 
                     var financing_sector = []
@@ -149,7 +160,6 @@ class ProductEdit extends React.Component{
                         financing_sector = this.state.financing_sector
                     }
                     
-
 
                 //======= CODING BAGIAN AGUNAN
                     var collaterals =[]
@@ -227,7 +237,7 @@ class ProductEdit extends React.Component{
                 </td>
                 <td>
                 <div className="form-inline">
-                    <input type="text" className="form-control" ref="adminFee" style={{width:"80px"}} defaultValue={val.amount} placeholder={val.amount} />   
+                    <input type="text" className="form-control" ref="adminFee" style={{width:"80px"}} defaultValue={val.amount.slice(0,val.amount.indexOf('%'))} placeholder={val.amount.slice(0,val.amount.indexOf('%'))} /><label>%</label>
                 </div>
                 </td>
             </tr>
@@ -376,7 +386,7 @@ class ProductEdit extends React.Component{
                                 </td>
                                 <td>
                                 <div className="form-inline">
-                                    <input type="text" className="form-control" ref="convinienceFee" style={{width:"80px"}} placeholder={this.state.rows.asn_fee}/> 
+                                    <input type="text" className="form-control" ref="convinienceFee" placeholder={this.state.asn_fee.slice(0,this.state.asn_fee.indexOf('%'))} defaultValue={this.state.asn_fee.slice(0,this.state.asn_fee.indexOf('%'))} style={{width:"80px"}}/> <label>%</label>
                                 </div>
                                 </td>
                             </tr>
