@@ -10,7 +10,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import Moment from 'react-moment';
 
 const kukie = new Cookies()
-const config = {headers: {'Authorization': "Bearer " + kukie.get('token')}}
+var config = {headers: {'Authorization': "Bearer " + kukie.get('token')}}
 
 class profileNasabahDetail extends React.Component{
     state={rows:[],modalKTP:false,modalNPWP:false,npwp:null,ktp:null,gambarKTP:null,gambarNPWP:null,
@@ -58,6 +58,9 @@ class profileNasabahDetail extends React.Component{
 
     getDataDetail =()=>{
          var id = this.props.match.params.id
+         config = {
+            headers: {'Authorization': "Bearer " + kukie.get('token')}
+          };
         if (kukie.get('token')){
            
               Axios.get(serverUrlBorrower+`admin/borrower/${id}`,config)

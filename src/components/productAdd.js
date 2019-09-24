@@ -10,8 +10,8 @@ import swal from 'sweetalert'
 
 const cookie = new Cookies()
 const options = [
-    { value: 'pendidikan', label: 'Pendidikan' },
-    { value: 'konsumtif', label: 'Konsumtif' }
+    { value: 'Pendidikan', label: 'Pendidikan' },
+    { value: 'Konsumtif', label: 'Konsumtif' }
   ];
 const customStyles = {
     option: (provided, state) => ({
@@ -74,7 +74,7 @@ class ProductAdd extends React.Component{
         if(name==="" || name.trim()===""){
             this.setState({errorMessage:"Nama Product Kosong"})
         }else if (interest>200){
-            this.setState({errorMessage:"Imbal Hasil tidak boleh lebih dari 200 - Harap cek ulang"})
+            this.setState({errorMessage:"Imbal Hasil tidak boleh lebih dari 200% - Harap cek ulang"})
         }else if(min_timespan==="0" || max_timespan==="0"){
             this.setState({errorMessage:"Jangka Waktu Kosong"})
         }else if(parseInt(min_timespan) > parseInt(max_timespan)){
@@ -86,21 +86,28 @@ class ProductAdd extends React.Component{
             this.setState({errorMessage:"Rentang Pengajuan tidak benar - Harap cek ulang"})
         }else if(parseFloat(adminfee) <0){
             this.setState({errorMessage:"Admin Fee tidak benar - Harap cek ulang"})
+        }else if(parseFloat(adminfee) >100){
+            this.setState({errorMessage:"Admin Fee lebih dari 100% - Harap cek ulang"})
         }else if(parseFloat(asn_fee) <0){
-            this.setState({errorMessage:"Convinience Fee tidak benar - Harap cek ulang"})
+            this.setState({errorMessage:"Convinience Fee tidak boleh minus - Harap cek ulang"})
+        }else if(parseFloat(asn_fee) >100){
+            this.setState({errorMessage:"Convinience Fee lebih dari 100% - Harap cek ulang"})
         }else if(parseInt(service)===0){
             this.setState({errorMessage:"Layanan belum terpilih - Harap cek ulang"})
         }else if(this.state.selectedOption===null){
             this.setState({errorMessage:"Sektor Pembiayaan belum terpilih - Harap cek ulang"})
-        }else if(isNaN(adminfee) || isNaN(asn_fee)){
-            this.setState({errorMessage:"Admin atau Convience Fee mesti angka  - Harap cek ulang"})
+        }else if(isNaN(asn_fee)){
+            this.setState({errorMessage:"Convience Fee harus angka atau jika desimal menggunakan titik (.) Contoh: 2.00 - Harap cek ulang"})
+        }
+        else if(isNaN(adminfee)){
+            this.setState({errorMessage:"Admin Fee harus angka atau jika desimal menggunakan titik (.) Contoh: 2.00 - Harap cek ulang"})
         }
         else{
             fees.push({
                 "description": "Admin Fee",
-                "amount":`${adminfee}`
+                "amount":`${adminfee}%`
             })
-
+           
                //===========CODING BAGIAN SEKTOR PEMBIAYAAN
 
                     var financing_sector = []
@@ -112,16 +119,20 @@ class ProductAdd extends React.Component{
                 //======= CODING BAGIAN AGUNAN
                     var collaterals =[]
                     var agunan = document.querySelectorAll('.agunan:checked')
-
+                    
 
                     for ( i = 0; i < agunan.length; i++) {
                         collaterals.push(agunan[i].value)   
                     }
+                   
                     if (otheragunan){
                         collaterals.push(otheragunan)
                     }
+
                 //====== BIKIN AGUNAN INDEX TERAKHIR JADI YANG PERTAMA BUAT EDIT NYA
                     collaterals.reverse()
+                    
+            asn_fee = asn_fee+"%"
             var newData = {
                 name,min_timespan,max_timespan,interest,min_loan,max_loan,fees,asn_fee,service,collaterals,financing_sector,assurance,status
             }
@@ -240,7 +251,7 @@ class ProductAdd extends React.Component{
                                 </td>
                                 <td>
                                 <div className="form-inline">
-                                    <input type="text" className="form-control" ref="adminFee" style={{width:"80px"}} placeholder="0" />  
+                                    <input type="text" className="form-control" ref="adminFee" style={{width:"80px"}} placeholder="0" /><label>%</label>
                                 </div>
                                 </td>
                             </tr>
@@ -250,7 +261,7 @@ class ProductAdd extends React.Component{
                                 </td>
                                 <td>
                                 <div className="form-inline">
-                                    <input type="text" className="form-control" ref="convinienceFee" style={{width:"80px"}} placeholder="0" /> 
+                                    <input type="text" className="form-control" pattern="[0-9.,]+" ref="convinienceFee" style={{width:"80px"}} placeholder="0" /><label>%</label>
                                 </div>
                                 </td>
                             </tr>
@@ -279,17 +290,17 @@ class ProductAdd extends React.Component{
                               
 
                                     <div className="form-check form-check-inline">
-                                    <input className="form-check-input agunan" type="checkbox" value="setifikat tanah" style={{marginLeft:"110px"}}/>
+                                    <input className="form-check-input agunan" type="checkbox" value="Sertifikat Tanah" style={{marginLeft:"110px"}}/>
                                     <label className="form-check-label">Sertifikat Tanah</label>
                                     </div>
 
                                     <div className="form-check form-check-inline">
-                                    <input className="form-check-input agunan" type="checkbox" value="sertifikat rumah"/>
+                                    <input className="form-check-input agunan" type="checkbox" value="Sertifikat Rumah"/>
                                     <label className="form-check-label" >Sertifikat Rumah</label>
                                     </div>
 
                                     <div className="form-check form-check-inline">
-                                    <input className="form-check-input agunan" type="checkbox" value="bpkb kendaraan"/>
+                                    <input className="form-check-input agunan" type="checkbox" value="BPKB Kendaraan"/>
                                     <label className="form-check-label">BPKB Kendaraan</label>
                                     </div> 
                                 
@@ -300,12 +311,12 @@ class ProductAdd extends React.Component{
                             <div className="row">
                                 <div className="col">
                                     <div className="form-check form-check-inline">
-                                    <input className="form-check-input agunan" type="checkbox" name="agunan" value="kios/lapak" style={{marginLeft:"110px"}}/>
+                                    <input className="form-check-input agunan" type="checkbox" name="agunan" value="Kios/Lapak" style={{marginLeft:"110px"}}/>
                                     <label className="form-check-label">Kios/ Lapak</label>
                                     </div>
 
                                     <div className="form-check form-check-inline">
-                                    <input className="form-check-input agunan" type="checkbox" name="agunan" value="deposito"/>
+                                    <input className="form-check-input agunan" type="checkbox" name="agunan" value="Deposito"/>
                                     <label className="form-check-label" >Deposito</label>
                                     </div>
 

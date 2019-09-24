@@ -55,7 +55,7 @@ class ProductDetail extends React.Component{
                 <div className="form-group row" key={index}>
                             <label className="col-sm-4 col-form-label">{val.description} </label>
                             <div className="col-sm-8">
-                            : {val.amount}
+                            : {val.amount} 
                             </div>
                         </div>
             )
@@ -89,7 +89,7 @@ class ProductDetail extends React.Component{
                         <div className="form-group row">
                             <label className="col-sm-4 col-form-label">Imbal Hasil</label>
                             <div className="col-sm-8">
-                            : {this.state.rows.interest} %
+                            : {this.state.rows.interest}%
                             </div>
                         </div>
                     </form>
