@@ -9,10 +9,10 @@ import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
 
 const cookie = new Cookies()
-const config = {
+var config = {
     headers: {'Authorization': "Bearer " + cookie.get('token')}
   };
-  const configGeo = {
+  var configGeo = {
     headers: {'Authorization': "Bearer " + cookie.get('tokenGeo')}
   };
 
@@ -46,7 +46,7 @@ class BankEdit extends React.Component{
         jenisProduct:null, jenisLayanan: null, productID:[],serviceID:[],
         errorMessage: null, diKlik:false,
         typeBank:[],bankService:[],bankProduct:[],
-        provinsi:[],kabupaten:[],idProvinsi:null,dataBank:[],phone:'',provinsiEdit:null,namaTipeBank:''
+        provinsi:[],kabupaten:[],idProvinsi:null,dataBank:[],phone:'',provinsiEdit:null,namaTipeBank:'',adminFeeRadioValue:'',convinienceFeeRadioValue:''
     };
     componentWillReceiveProps(newProps){
         this.setState({errorMessage:newProps.error})
@@ -69,7 +69,9 @@ class BankEdit extends React.Component{
     }
     getBankDataById = ()=>{
         var id = this.props.match.params.id
-     
+        config = {
+            headers: {'Authorization': "Bearer " + cookie.get('token')}
+          };
        // axios.get(serverUrl+'admin/banks/[bank_id]',config)
         axios.get(serverUrl+`admin/banks/${id}`,config)
         .then((res)=>{
@@ -91,6 +93,9 @@ class BankEdit extends React.Component{
     //   .catch((err)=> console.log(err))
     // }
     getAllProvinsi = () =>{
+        configGeo = {
+            headers: {'Authorization': "Bearer " + cookie.get('tokenGeo')}
+          };
         axios.get(serverUrlGeo+`client/provinsi`,configGeo)
         .then((res)=>{
             console.log(res.data.data)
@@ -119,7 +124,9 @@ class BankEdit extends React.Component{
         .catch((err)=> console.log(err))
       }
     getBankProduct = ()=>{
-  
+        config = {
+            headers: {'Authorization': "Bearer " + cookie.get('token')}
+          };
       axios.get(serverUrl+'admin/service_products',config)
       .then((res)=>{
           console.log(res.data)
@@ -138,7 +145,9 @@ class BankEdit extends React.Component{
     }
 
     getBankService = ()=>{
-   
+        config = {
+            headers: {'Authorization': "Bearer " + cookie.get('token')}
+          };
       axios.get(serverUrl+'admin/bank_services',config)
       .then((res)=>{
           console.log(res.data)
@@ -159,7 +168,7 @@ class BankEdit extends React.Component{
     renderKabupatenJsx = ()=>{
         var jsx = this.state.kabupaten.map((val,index)=>{
             return (
-                <option key={index} value={val.name}>{val.id} - {val.name}</option>
+                <option key={index} value={val.name}>{val.name}</option>
             )
         })
         return jsx
@@ -177,7 +186,13 @@ class BankEdit extends React.Component{
       })
       return jsx
        }
-   
+
+    handleChangeRadioAdmin =(e)=>{
+        this.setState({adminFeeRadioValue:e.target.value})
+    }
+    handleChangeRadioConvience =(e)=>{
+        this.setState({convinienceFeeRadioValue:e.target.value})
+    }
     btnEdit = ()=>{
         var services =[]
         var products =[]
@@ -189,6 +204,8 @@ class BankEdit extends React.Component{
         var city = this.refs.kota.value.includes("-") ? this.refs.kota.value.slice(this.refs.provinsi.value.indexOf('-')+1,this.refs.provinsi.length):this.refs.kota.value
         var pic = this.refs.pic.value ? this.refs.pic.value:this.refs.pic.placeholder
         var phone = this.state.phone ? String(this.state.phone):String(this.state.dataBank.phone)
+        var adminfee_setup = this.state.adminFeeRadioValue ? this.state.adminFeeRadioValue : this.state.dataBank.adminfee_setup
+        var convfee_setup =  this.state.adminFeeRadioValue ? this.state.adminFeeRadioValue : this.state.dataBank.adminfee_setup
        
         if(city === "0" || city === null){
             this.setState({errorMessage:"Kota Kosong - Harap cek ulang"})
@@ -214,7 +231,7 @@ class BankEdit extends React.Component{
             }
     
             var newData = {
-                name,type,address,province,city,services,products,pic,phone
+                name,type,address,province,city,services,products,pic,phone,adminfee_setup,convfee_setup
             }
         
            
@@ -304,6 +321,32 @@ class BankEdit extends React.Component{
                                 {this.renderKabupatenJsx()}
                            
                             </select>
+                            </div>
+                        </div>
+                        <div className="form-group row">
+                            <label className="col-sm-2 col-form-label">Admin Fee Setup</label>
+                            <div className="col-sm-10">
+                                {this.state.dataBank.adminfee_setup === 'beban_plafon' ?
+                                <label className="form-control" style={{border:"none"}}>
+                                    <input type="radio" name="adminfeeSetup"  value="potong_plafon" onClick={this.handleChangeRadioAdmin} /> Potong dari plafond
+                                    <input type="radio" name="adminfeeSetup" defaultChecked={true} className="ml-3" value="beban_plafon" onClick={this.handleChangeRadioAdmin} /> Bebankan ke cicilan
+                                </label> 
+                                    :
+                                <label className="form-control" style={{border:"none"}}>
+                                    <input type="radio" name="adminfeeSetup" defaultChecked={true} value="potong_plafon" onClick={this.handleChangeRadioAdmin} /> Potong dari plafond
+                                    <input type="radio" name="adminfeeSetup"  className="ml-3" value="beban_plafon" onClick={this.handleChangeRadioAdmin} /> Bebankan ke cicilan
+                                </label> 
+                                }
+                            </div>
+                        </div>
+                        <div className="form-group row">
+                            <label className="col-sm-2 col-form-label">Convinience Fee Setup</label>
+                            <div className="col-sm-10">
+                                <div className="form-control" style={{border:"none",cursor: "not-allowed"}}>
+                                    <input type="radio" disabled="disabled" checked={this.state.adminFeeRadioValue==="potong_plafon"?"checked":""} name="convinienceFeeSetup" readOnly value="potong_plafon"  /> Potong dari plafond
+                                    <input type="radio" disabled="disabled" checked={this.state.adminFeeRadioValue==="beban_plafon"?"checked":""} name="convinienceFeeSetup" readOnly className="ml-3" value="beban_plafon" /> Bebankan ke cicilan
+                                </div> 
+                         
                             </div>
                         </div>
 

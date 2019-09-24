@@ -8,8 +8,10 @@ import {serverUrl} from './url'
 import 'rc-pagination/assets/index.css';
 import Pagination from 'rc-pagination';
 import './../support/css/pagination.css'
+import localeInfo from 'rc-pagination/lib/locale/id_ID';
+import QueryString from 'query-string'
 const cookie = new Cookies()
-const config = {
+var config = {
   headers: {'Authorization': "Bearer " + cookie.get('token')}
 };
 class BankList extends React.Component{
@@ -22,11 +24,49 @@ class BankList extends React.Component{
     componentDidMount(){
         this.getAllBankData()
     }
+
+    getLink = ()=>{
+       var obj = QueryString.parse(this.props.location.search)
+       return obj.query 
+      }
+      pushUrl = ()=>{
+        var newLink ='/listbank/search'
+        var params =[]
+        //categoryDropdown,search
+        if(this.refs.search.value){
+            params.push({
+                params:'query',
+                value:this.refs.search.value
+            })
+        }
+
+        for (var i=0;i<params.length;i++){
+            if(i===0){
+                newLink += '?'+params[i].params+ '='+ params[i].value
+            }else{
+                newLink += '&'+params[i].params+ '='+ params[i].value
+            }
+        }
+        this.props.history.push(newLink)
+    }
     getAllBankData = ()=>{
+        config = {
+            headers: {'Authorization': "Bearer " + cookie.get('token')}
+          };
+        var newLink =`admin/banks`
+        if (this.props.location.search){
+          var hasil = this.getLink()
+          if(!isNaN(hasil)){
+            newLink += `?id=${hasil}&`+this.state.halamanConfig
+          }else{
+            newLink += `?name=${hasil}&`+this.state.halamanConfig
+          }
+        }else{
+          newLink += `?`+this.state.halamanConfig
+        }
         
-        axios.get(serverUrl+`admin/banks?${this.state.halamanConfig}`,config)
+        axios.get(serverUrl+newLink,config)
         .then((res)=>{
-            console.log(res.data)
             this.setState({
                 rows:res.data.data,
                 total_data:res.data.total_data,
@@ -42,28 +82,24 @@ class BankList extends React.Component{
     }
 
     onBtnSearch = ()=>{
-    
+      this.pushUrl()
       var searching = this.refs.search.value
       this.setState({loading:true,searchRows:searching})
-      
+      var newLink=""
       if(searching){
         //search function
-       
-        var newLink=""
-        
       if(!isNaN(searching)){
           newLink += `id=${searching}&${this.state.halamanConfig}` 
         }else{
           newLink += `name=${searching}&${this.state.halamanConfig}`
         }     
       }else{
-        newLink +=""
+        newLink +=this.state.halamanConfig
       }
-
       axios.get(serverUrl+`admin/banks?`+newLink,config)
       .then((res)=>{
           console.log(res)
-          this.setState({loading:false,rows:res.data.data,searchRows:null})
+          this.setState({loading:false,rows:res.data.data,searchRows:null,total_data:res.data.total_data,dataPerhalaman:res.data.rows})
       })
       .catch((err)=>{
           console.log(err)
@@ -85,48 +121,66 @@ class BankList extends React.Component{
                 </td>
               </tr>
             )
+        }else{
+            if(this.state.rows.length===0){
+                return(
+                  <tr>
+                     <td align="center" colSpan={6}>Data empty</td>
+                  </tr>
+                )
+              }else{
+                var jsx = this.state.rows.map((val,index)=>{
+                    return(
+                        <tr key={index}>
+                        <td align="center">{this.state.page >1 ? index+1 + (this.state.dataPerhalaman*(this.state.page -1)) : index+1}</td>
+                        <td align="center">{val.id}</td>
+                        <td align="center">{val.name}</td>
+                        {/* <td align="center">{val.type}</td> */}
+                        <td align="center">{val.pic}</td>
+                        <td align="center">
+                            <Link to={`/bankedit/${val.id}`} className="mr-2">
+                                 <i className="fas fa-edit" style={{color:"black",fontSize:"18px"}}/>
+                            </Link>
+                            <Link to={`/bankdetail/${val.id}`} >
+                                 <i className="fas fa-eye" style={{color:"black",fontSize:"18px"}}/>
+                            </Link>
+                        </td>
+                </tr>  
+                    )
+                })
+                return jsx;
+              }
         }
-        var jsx = this.state.rows.map((val,index)=>{
-            return(
-                <tr key={index}>
-                <td align="center">{this.state.page >1 ? index+1 + (this.state.dataPerhalaman*(this.state.page -1)) : index+1}</td>
-                <td align="center">{val.id}</td>
-                <td align="center">{val.name}</td>
-                <td align="center">{val.type}</td>
-                <td align="center">{val.pic}</td>
-                <td align="center">
-                    <Link to={`/bankedit/${val.id}`} className="mr-2">
-                         <i className="fas fa-edit" style={{color:"black",fontSize:"18px"}}/>
-                    </Link>
-                    <Link to={`/bankdetail/${val.id}`} >
-                         <i className="fas fa-eye" style={{color:"black",fontSize:"18px"}}/>
-                    </Link>
-                </td>
-        </tr>  
-            )
-                   
-        })
-                     
-        return jsx;
+      
 
     }
 
-      onChange = (current, pageSize) => {
+    onChangePage = (current, pageSize) => {
         this.setState({loading:true})
         console.log('onChange:current=', current);
         console.log('onChange:pageSize=', pageSize);
-        var newLink =`page=${current}&${this.state.halamanConfig}`
+        var searching = this.refs.search.value
+        var newLink=""
+        if(searching){
+          //search function
+        if(!isNaN(searching)){
+            newLink += `id=${searching}&${this.state.halamanConfig}&page=${current}` 
+          }else{
+            newLink += `name=${searching}&${this.state.halamanConfig}&page=${current}`
+          }     
+        }else{
+          newLink +=this.state.halamanConfig+`&page=${current}`
+        }
         axios.get(serverUrl+`admin/banks?`+newLink,config)
         .then((res)=>{
             console.log(res.data)
-            this.setState({loading:false,rows:res.data.data,dataPerhalaman:res.data.rows,page:current})
+            this.setState({loading:false,rows:res.data.data,dataPerhalaman:res.data.rows,total_data:res.data.total_data,page:current})
         })
         .catch((err)=>{
             console.log(err)
         })
       }
  
-
     render(){
         if(cookie.get('token')){
             return(
@@ -150,7 +204,7 @@ class BankList extends React.Component{
                             <th className="text-center" scope="col">#</th>
                             <th className="text-center" scope="col">Bank ID</th>
                             <th className="text-center" scope="col">Bank Name</th>
-                            <th className="text-center" scope="col">Bank Type</th>
+                            {/* <th className="text-center" scope="col">Bank Type</th> */}
                             <th className="text-center" scope="col">PIC</th>
                             <th className="text-center" scope="col">Action</th>
                         </tr>     
@@ -165,8 +219,9 @@ class BankList extends React.Component{
                 <Pagination className="ant-pagination"  
                 showTotal={(total, range) => `${range[0]} - ${range[1]} of ${total} items`}
                 total={this.state.total_data}
-                pageSize={10}
-                onChange={this.onChange}
+                pageSize={this.state.dataPerhalaman}
+                onChange={this.onChangePage}
+                locale={localeInfo}
                 />
                 </nav>
                
