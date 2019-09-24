@@ -6,7 +6,7 @@ import Moment from 'react-moment';
 
 import Axios from 'axios';
 const cookie = new Cookies()
-const config = {
+var config = {
     headers: {'Authorization': "Bearer " + cookie.get('token')}
   };
 
@@ -24,14 +24,17 @@ class Main extends React.Component{
     
     getDataDetail =()=>{
        var idLoan = this.props.match.params.idLoan
-        if(cookie.get('token')){
+       config = {
+        headers: {'Authorization': "Bearer " + cookie.get('token')}
+      };
+       
             Axios.get(serverUrlBorrower+`admin/loan/${idLoan}`,config)
             .then((res)=>{
                 console.log(res.data)
                 this.setState({rows:res.data,items:res.data.fees,status:res.data.status,borrower_info:res.data.borrower_info})
             })
             .catch((err)=>console.log(err))
-        }
+        
     
     }
 
@@ -39,7 +42,10 @@ class Main extends React.Component{
    
     getDataBorrower =()=>{
         var idBorrower = this.props.match.params.idBorrower
-        if (cookie.get('token')){
+        config = {
+            headers: {'Authorization': "Bearer " + cookie.get('token')}
+          };
+     
               Axios.get(serverUrlBorrower+`admin/borrower/${idBorrower}`,config)
               .then((res)=>{
                   console.log(res.data)
@@ -48,7 +54,7 @@ class Main extends React.Component{
               .catch((err)=>{
                   console.log(err)
               })
-        }
+        
         
     }
 
