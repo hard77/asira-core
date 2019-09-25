@@ -117,6 +117,7 @@ const kukie =new Cookies()
                  <Link to="/listrole" style={{color:"inherit",textDecoration:"none"}}>  <DropdownItem>List </DropdownItem>   </Link>                
               </DropdownMenu>
               </UncontrolledDropdown>
+            <Link to="/report"><label><i className="far fa-newspaper"></i> Report</label></Link>
            
         
             <p style={{ cursor:"pointer"}} onClick={this.logOutBtn}><label><i className="fas fa-sign-out-alt"></i> Log Out</label></p>

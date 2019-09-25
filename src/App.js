@@ -53,7 +53,7 @@ import RoleList from './components/roleList'
 import RoleDetail from './components/roleDetail'
 import RoleEdit from './components/roleEdit'
 
-
+import Report from './components/report/report'
 const kukie =new Cookies()
 
 
@@ -115,6 +115,7 @@ class App extends React.Component {
                     <Route path='/editrole/:id' component={RoleEdit}></Route>
                     <Route path='/detailrole/:id' component={RoleDetail}></Route>
 
+                    <Route path='/report' component={Report}></Route>
 
                     {kukie.get('token') ?  <Route path="/login" component={Home}></Route>:  <Route path="/login" component={Login}></Route>} 
 
