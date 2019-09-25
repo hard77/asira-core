@@ -54,7 +54,9 @@ class Main extends React.Component{
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
                 <td>{val.amount}</td>
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                <td>{GlobalFunction.formatMoney(parseInt(val.amount.slice(0,val.amount.indexOf("%")))*this.state.rows.loan_amount/100)}</td>
+                <td>{String(val.amount).includes("%")  ?
+                    GlobalFunction.formatMoney(parseInt(val.amount.slice(0,val.amount.indexOf("%")))*this.state.rows.loan_amount/100):
+                    GlobalFunction.formatMoney(parseInt(val.amount))}</td>
             </tr>
             )
         })
