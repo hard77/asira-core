@@ -33,7 +33,7 @@ class RoleAdd extends React.Component{
         }else{
             var newData = {name,system,description,status}
             var config = {headers: {'Authorization': "Bearer " + cookie.get('token')}};
-            axios.post(serverUrlBorrower+'admin/internal_role',newData,config)
+            axios.post(serverUrlBorrower+'admin/roles',newData,config)
             .then((res)=>{
                 swal("Success","Role berhasil di tambah","success")
                 this.setState({diKlik:true})

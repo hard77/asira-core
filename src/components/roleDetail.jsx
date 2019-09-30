@@ -15,7 +15,7 @@ class RoleDetail extends React.Component{
         var config = {
             headers: {'Authorization': "Bearer " + cookie.get('token')}
           };
-        Axios.get(serverUrlBorrower+`admin/internal_role/${id}`,config)
+        Axios.get(serverUrlBorrower+`admin/roles/${id}`,config)
         .then((res)=>{
             console.log(res.data)
             this.setState({loading:false,rows:res.data})
