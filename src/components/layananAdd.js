@@ -12,7 +12,8 @@ class LayananAdd extends React.Component{
         selectedFile:null,
         base64img:null,
         errorMessage:'',
-        diKlik:false
+        diKlik:false,
+        check:false
     
     }
     componentWillReceiveProps(newProps){
@@ -47,9 +48,7 @@ class LayananAdd extends React.Component{
                 console.log(reader)
                 var arr = reader.result.split(",")   
                 var image = arr[1].toString()
-                var status =  document.querySelector('.messageCheckbox').checked;
-
-                status ? status= "active": status= "inactive"
+                var status = this.state.check ? "active": "inactive"
 
                 var newData = {name,status,image}
                 var config = {headers: {'Authorization': "Bearer " + cookie.get('token')}};
@@ -72,7 +71,9 @@ class LayananAdd extends React.Component{
     btnCancel = ()=>{
         this.setState({diKlik:true})
     }
-
+    handleChecked=(e)=>{
+        this.setState({check:!this.state.check})
+    }
     render(){
         if(this.state.diKlik){
             return <Redirect to='/listlayanan'/>            
@@ -105,8 +106,8 @@ class LayananAdd extends React.Component{
                     <div className="form-group row">
                             <label className="col-sm-3 col-form-label">Status</label>
                             <div className="col-sm-9">
-                            <input className="form-check-input messageCheckbox AddStyleButtonCheckbox" value="active" type="checkbox" /> 
-                            <label style={{position:"relative",left:"130px",paddingTop:"3px"}} >Aktif</label>           
+                            <input className="form-check-input messageCheckbox AddStyleButtonCheckbox" type="checkbox" onChange={this.handleChecked} defaultChecked={this.state.check} /> 
+                            <label style={{position:"relative",left:"18%",paddingTop:"3px"}}>{this.state.check ? 'Aktif' : 'Non-Aktif'}</label>           
                             </div>
                     </div>
                     <div className="form-group row">
