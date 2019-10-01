@@ -22,23 +22,20 @@ class Login extends React.Component{
     btnLogin = ()=>{
         this.setState({loading:true})
      
-        var username=this.refs.username.value
+        var key=this.refs.username.value
         var password=this.refs.password.value
        
-        if (username==="" || password===""){
+        if (key==="" || password===""){
             swal("Error","Username and Password Empty","error")
             this.setState({loading:false})
 
         }else{
-            var url =serverUrl+"clientauth"
-            axios.get(url ,{
-                auth : {
-                    // username : 'gradios',
-                    // password : 'ultimus'
-                    username : `${username}`,
-                    password : `${password}`
-                }
-            })
+            var config = {
+                headers: {'Authorization': "Bearer " + kukie.get('tokenAuth')}
+              };
+            var url =serverUrl+"client/admin_login"
+            var logindata ={key,password}
+            axios.post(url,logindata,config)
                 .then((res)=>{
                     var date = new Date();
                     date.setTime(date.getTime() + (res.data.expires*1000));

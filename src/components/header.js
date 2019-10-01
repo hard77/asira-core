@@ -38,6 +38,7 @@ const kukie =new Cookies()
   logOutBtn =()=>{ 
     kukie.remove("tokenGeo")
     kukie.remove("token")
+    kukie.remove("tokenAuth")
     this.setState({isLogin:true})
   }
   
