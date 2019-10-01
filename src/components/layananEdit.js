@@ -138,7 +138,7 @@ class LayananEdit extends React.Component{
                    <div className="form-group row">
                             <label className="col-sm-3 col-form-label">Nama Layanan</label>
                             <div className="col-sm-9">
-                            <input type="text" placeholder={this.state.rows.name} style={{width:"50%",marginLeft:"100px",height:"35px",borderRadius:"3px"}} ref="namaLayanan"></input>                            
+                            <input disabled type="text" placeholder={this.state.rows.name} style={{width:"50%",marginLeft:"100px",height:"35px",borderRadius:"3px"}} ref="namaLayanan"></input>                            
                             </div>
                     </div>
                     <div className="form-group row">
