@@ -3,6 +3,7 @@ import './App.css';
 import {Route,withRouter,Switch} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {keepLogin} from './1.actions'
+import {serverUrl} from './components/url'
 
 
 import Testing from './components/testing'
@@ -53,13 +54,46 @@ import RoleList from './components/roleList'
 import RoleDetail from './components/roleDetail'
 import RoleEdit from './components/roleEdit'
 
-
+import axios from 'axios'
 const kukie =new Cookies()
+
 
 
 class App extends React.Component {
   state ={loading : true , tokenClient : null , Token : null}
+  componentDidMount(){
+    this.getAuth()
+  
+  
+    }
+  getAuth = ()=>{
+    var url =serverUrl+"clientauth"
+    axios.get(url ,{
+        auth : {
+            username : 'reactkey',
+            password : 'reactsecret'
+        }
+    })
+        .then((res)=>{
+            var date = new Date();
+            date.setTime(date.getTime() + (res.data.expires*1000));
+            kukie.set('tokenAuth',res.data.token,{expires: date})
+            this.setState({loading : false})
+           
+        })
+        .catch((err)=>{
+          console.log(err)
+          setTimeout(function(){ alert("Coba reload halaman/ cek koneksi internet"); }, 5000);
+        }
+           
+        )
+  }
   render() {  
+    if(this.state.loading){
+      return(
+        <p> loading ....</p>
+      )
+    }
       return (
       
         <div>
