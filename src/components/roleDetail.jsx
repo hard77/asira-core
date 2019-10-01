@@ -1,7 +1,7 @@
 import React from 'react'
 import Cookies from 'universal-cookie';
 import { Redirect } from 'react-router-dom'
-import { serverUrlBorrower } from './url';
+import { serverUrl } from './url';
 import Axios from 'axios';
 const cookie = new Cookies()
 
@@ -15,7 +15,7 @@ class RoleDetail extends React.Component{
         var config = {
             headers: {'Authorization': "Bearer " + cookie.get('token')}
           };
-        Axios.get(serverUrlBorrower+`admin/roles/${id}`,config)
+        Axios.get(serverUrl+`admin/roles/${id}`,config)
         .then((res)=>{
             console.log(res.data)
             this.setState({loading:false,rows:res.data})
