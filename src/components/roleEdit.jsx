@@ -1,7 +1,7 @@
 import React from 'react'
 import Cookies from 'universal-cookie';
 import { Redirect } from 'react-router-dom'
-import { serverUrlBorrower } from './url';
+import { serverUrl } from './url';
 import Axios from 'axios';
 import swal from 'sweetalert'
 const cookie = new Cookies()
@@ -27,7 +27,7 @@ class RoleEdit extends React.Component{
         config = {
             headers: {'Authorization': "Bearer " + cookie.get('token')}
         };
-        Axios.get(serverUrlBorrower+`admin/internal_role/${id}`,config)
+        Axios.get(serverUrl+`admin/roles/${id}`,config)
         .then((res)=>{
             console.log(res.data)
             this.setState({dataRole:res.data})
@@ -41,7 +41,7 @@ class RoleEdit extends React.Component{
         var status =  document.querySelector('.messageCheckbox').checked;
         //status ? status= "active": status= "inactive"
                 var newData = {description,status}
-                Axios.patch(serverUrlBorrower+`admin/internal_role/${id}`,newData,config)
+                Axios.patch(serverUrl+`admin/roles/${id}`,newData,config)
                 .then((res)=>{
                     swal("Success","Role berhasil di Edit","success")
                     this.setState({diKlik:true})

@@ -94,14 +94,14 @@ class BankDetail extends React.Component{
                         <div className="form-group row">
                             <label className="col-sm-4 col-form-label">Admin Fee setup</label>
                             <div className="col-sm-8">
-                            : {this.state.rows.adminfee_setup}
+                            : {this.state.rows.adminfee_setup === "potong_plafon"? "Potong dari plafond" : "Bebankan ke cicilan"}
 
                             </div>
                         </div>
                         <div className="form-group row">
                             <label className="col-sm-4 col-form-label">Convinience Fee setup</label>
                             <div className="col-sm-8">
-                            : {this.state.rows.convfee_setup}
+                            : {this.state.rows.convfee_setup === "potong_plafon"? "Potong dari plafond" : "Bebankan ke cicilan"}
 
                             </div>
                         </div>
