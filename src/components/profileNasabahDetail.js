@@ -8,51 +8,41 @@ import { Redirect } from 'react-router-dom'
 import {connect} from 'react-redux'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import Moment from 'react-moment';
+import BrokenLink from './../support/img/default.png'
+import Loader from 'react-loader-spinner'
+
 
 const kukie = new Cookies()
 var config = {headers: {'Authorization': "Bearer " + kukie.get('token')}}
 
 class profileNasabahDetail extends React.Component{
     state={rows:[],modalKTP:false,modalNPWP:false,npwp:null,ktp:null,gambarKTP:null,gambarNPWP:null,
-        bankID:0,bankName:''}
+        bankID:0,bankName:'',diKlik:false,progress:true,errorMessage:''}
 
     componentDidMount(){
         this.getDataDetail()  
-        
     }
 
     getBankName = ()=>{
-      
         Axios.get(serverUrl+`admin/banks/${this.state.bankID}`,config)
         .then((res)=>{
           this.setState({bankName:res.data.name})
+
         })
         .catch((err)=> console.log(err))
         return this.state.bankName
     }
-    getKTPImage = ()=>{
-      
+    getImage = (idImage, stringStates)=>{
           //KTP
-          Axios.get(serverUrlBorrower+`admin/image/${this.state.ktp}`,config)
+          Axios.get(serverUrlBorrower+`admin/image/${idImage}`,config)
           .then((res)=>{
-            
-              this.setState({gambarKTP:res.data.image_string})
+              this.setState({[stringStates]:res.data.image_string,progress:false})
           })
           .catch((err)=>{
-              console.log(err)
+              this.setState({progress:false,errorMessage:'Gambar KTP Tidak di temukan'})
           })
     }
-    getNPWPImage = ()=>{
     
-        Axios.get(serverUrlBorrower+`admin/image/${this.state.npwp}`,config)
-        .then((res)=>{
-
-            this.setState({gambarNPWP:res.data.image_string})
-        })
-        .catch((err)=>{
-            console.log(err)
-        })
-    }
     formatMoney=(number)=>
     { return number.toLocaleString('in-RP', {style : 'currency', currency: 'IDR'})}
 
@@ -68,11 +58,10 @@ class profileNasabahDetail extends React.Component{
                   console.log(res.data)
                   this.setState({rows:res.data,bankId:res,ktp:res.data.idcard_image.Int64,npwp:res.data.taxid_image.Int64, bankID:res.data.bank.Int64})
                   //KTP WAJIB KALO NPWP OPTIONAL
-                  this.getBankName() 
-                  if (this.state.ktp !==0){    
-                    this.getKTPImage()
-                    this.getNPWPImage()     
-                }
+                    this.getBankName() 
+                    this.getImage(this.state.ktp,'gambarKTP')
+                    this.getImage(this.state.npwp,'gambarNPWP')
+                
                 })
               .catch((err)=>{
                   console.log(err)
@@ -94,38 +83,64 @@ class profileNasabahDetail extends React.Component{
     }
     btnModalCancelNPWP=()=>{
         this.setState({modalNPWP:false})
-    }
-  
+    }  
     render(){
+        if (this.state.progress){
+            return (
+                <div className="mt-2">
+                 <Loader 
+                    type="ThreeDots"
+                    color="#00BFFF"
+                    height="30"	
+                    width="30"
+                />  
+                </div>
+            )
+        }else{
+            
+        
+        if(this.state.diKlik){
+            return(
+                <Redirect to="/profileNasabah"></Redirect>
+            )
+        }
         if(kukie.get('token')){
             return(
                 <div className="container">
    {/* ------------------------------------------------------FOTO KTP------------------------------------------------------ */}
-        <Modal isOpen={this.state.modalKTP} className={this.props.className}>
+
+   <Modal isOpen={this.state.modalKTP} className={this.props.className}>
           <ModalHeader toggle={this.toggle}>KTP Detail</ModalHeader>
           <ModalBody>
-              {this.state.ktp ===0 ?"Gambar KTP Tidak ada":
-             <img width="100%" alt="KTP" src={`data:image/*;base64,${this.state.gambarKTP}`}></img>
+              {this.state.ktp ===0 || this.state.gambarKTP === '' ?"Gambar KTP Tidak ada":
+             <img width="100%" alt="KTP" onError={(e)=>{
+                e.target.attributes.getNamedItem("src").value = BrokenLink
+             }} src={`data:image/*;base64,${this.state.gambarKTP}`}></img>
             }
           </ModalBody>
           <ModalFooter>
             <Button color="secondary" onClick={this.btnModalCancelKTP}>Close</Button>
           </ModalFooter>
         </Modal>
+        
 
     {/* ------------------------------------------------------FOTO NPWP------------------------------------------------------ */}
-         <Modal isOpen={this.state.modalNPWP} className={this.props.className}>
+    
+    <Modal isOpen={this.state.modalNPWP} className={this.props.className}>
           <ModalHeader toggle={this.toggle}>NPWP Detail</ModalHeader>
           <ModalBody>
-            {this.state.npwp ===0 ?"Gambar NPWP Tidak ada":
-                <img width="100%" alt="NPWP" src={`data:image/jpeg;png;base64,${this.state.gambarNPWP}`}></img>}
+            {this.state.npwp ===0 || this.state.gambarNPWP === '' ?"Gambar NPWP Tidak ada":
+                <img width="100%" alt="NPWP" onError={(e)=>{
+                    e.target.attributes.getNamedItem("src").value = BrokenLink
+                 }} src={`data:image/*;base64,${this.state.gambarNPWP}`}></img>}
           </ModalBody>
           <ModalFooter>
             <Button color="secondary" onClick={this.btnModalCancelNPWP}>Close</Button>
           </ModalFooter>
         </Modal>
         
-                <h2>Nasabah - Detail</h2>
+        
+                <h2>Nasabah - Detail</h2>{this.state.errorMessage}
                 <hr/>
                    <input style={{width:"120px"}} type="button" className="btn btn-primary" value="KTP Detail" onClick={this.btnModalKTP}></input>
                    <input style={{width:"120px"}} type="button" className="ml-2 btn btn-primary" value="NPWP Detail" onClick={this.btnModalNPWP}></input>
@@ -413,7 +428,7 @@ class profileNasabahDetail extends React.Component{
                                 </tbody>
                                 
                             </table>
-                            <input style={{width:"120px", float:"left"}} type="button" className="mt-3 btn btn-secondary" value="Back" onClick={()=> window.history.back()}></input>
+                            <input style={{width:"120px", float:"left"}} type="button" className="mt-3 btn btn-secondary" value="Kembali" onClick={()=> this.setState({diKlik:true})}></input>
     
                         </div>
                        
@@ -425,7 +440,7 @@ class profileNasabahDetail extends React.Component{
                     
                 </div>
             )
-        
+                                    }
         }
         if(!kukie.get('token')){
             return (
