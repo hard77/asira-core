@@ -39,7 +39,7 @@ class profileNasabahDetail extends React.Component{
               this.setState({[stringStates]:res.data.image_string,progress:false})
           })
           .catch((err)=>{
-              this.setState({progress:false,errorMessage:'Gambar KTP Tidak di temukan'})
+              this.setState({progress:false,errorMessage:'ID Gambar KTP dalam Database Tidak ditemukan'})
           })
     }
     
@@ -140,7 +140,10 @@ class profileNasabahDetail extends React.Component{
         </Modal>
         
         
-                <h2>Nasabah - Detail</h2>{this.state.errorMessage}
+                <h2>Nasabah - Detail</h2>
+                <div style={{color:'red'}}>
+                    {this.state.errorMessage}
+                </div>
                 <hr/>
                    <input style={{width:"120px"}} type="button" className="btn btn-primary" value="KTP Detail" onClick={this.btnModalKTP}></input>
                    <input style={{width:"120px"}} type="button" className="ml-2 btn btn-primary" value="NPWP Detail" onClick={this.btnModalNPWP}></input>
