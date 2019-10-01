@@ -113,7 +113,7 @@ class profileNasabahDetail extends React.Component{
           <ModalHeader toggle={this.toggle}>KTP Detail</ModalHeader>
           <ModalBody>
               {this.state.ktp ===0 || this.state.gambarKTP === '' ?"Gambar KTP Tidak ada":
-             <img width="100%" alt="KTP" onError={(e)=>{
+             <img width="100%" height="300px" alt="KTP" onError={(e)=>{
                 e.target.attributes.getNamedItem("src").value = BrokenLink
              }} src={`data:image/*;base64,${this.state.gambarKTP}`}></img>
             }
@@ -130,7 +130,7 @@ class profileNasabahDetail extends React.Component{
           <ModalHeader toggle={this.toggle}>NPWP Detail</ModalHeader>
           <ModalBody>
             {this.state.npwp ===0 || this.state.gambarNPWP === '' ?"Gambar NPWP Tidak ada":
-                <img width="100%" alt="NPWP" onError={(e)=>{
+                <img width="100%" height="300px" alt="NPWP" onError={(e)=>{
                     e.target.attributes.getNamedItem("src").value = BrokenLink
                  }} src={`data:image/*;base64,${this.state.gambarNPWP}`}></img>}
           </ModalBody>
