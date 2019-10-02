@@ -11,7 +11,8 @@ var config = {
 class RoleEdit extends React.Component{
     state = {
         diKlik:false,
-        dataRole:''
+        dataRole:'',
+        check:true
     };
     btnCancel = ()=>{
         this.setState({diKlik:true})
@@ -30,7 +31,7 @@ class RoleEdit extends React.Component{
         Axios.get(serverUrl+`admin/roles/${id}`,config)
         .then((res)=>{
             console.log(res.data)
-            this.setState({dataRole:res.data})
+            this.setState({dataRole:res.data,check:res.data.status})
         })
         .catch((err)=> console.log(err))
 
@@ -38,7 +39,7 @@ class RoleEdit extends React.Component{
     btnEdit = ()=>{
         var id = this.props.match.params.id
         var description = this.refs.deskripsi.value ?  this.refs.deskripsi.value :  this.refs.deskripsi.placeholder
-        var status =  document.querySelector('.messageCheckbox').checked;
+        var status =  this.state.check
         //status ? status= "active": status= "inactive"
                 var newData = {description,status}
                 Axios.patch(serverUrl+`admin/roles/${id}`,newData,config)
@@ -48,6 +49,9 @@ class RoleEdit extends React.Component{
                 })
                 .catch((err)=>{console.log(err)})
       
+    }
+    handleChecked = () =>{
+        this.setState({check:!this.state.check})
     }
     render(){
         if(this.state.diKlik){
@@ -93,10 +97,8 @@ class RoleEdit extends React.Component{
                             <div className="form-group row">
                             <label className="col-sm-2 col-form-label">Status</label>
                             <div className="col-sm-10">
-                            {this.state.dataRole.status === true ?<input className="form-check-input messageCheckbox AddStyleButtonCheckbox" value="active" type="checkbox" defaultChecked/>   :
-                            <input className="form-check-input messageCheckbox AddStyleButtonCheckbox" value="active" type="checkbox"/> 
-                        }
-                            <label style={{position:"relative",left:"140px",paddingTop:"3px"}} >Aktif</label>           
+                            <input className="form-check-input messageCheckbox AddStyleButtonCheckbox" type="checkbox" onChange={this.handleChecked} checked={this.state.check} /> 
+                            <label style={{position:"relative",left:"18%",paddingTop:"3px"}}>{this.state.check ? 'Aktif' : 'Non-Aktif'}</label>        
                             </div>
 
                             <div className="form-group row">

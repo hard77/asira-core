@@ -11,7 +11,7 @@ class TujuanEdit extends React.Component{
     state={
         errorMessage:'',
         diKlik:false,
-        rows:[]
+        rows:[],check:true
     }
 
     componentDidMount(){
@@ -26,18 +26,15 @@ class TujuanEdit extends React.Component{
         var config = {headers: {'Authorization': "Bearer " + cookie.get('token')}};
         axios.get(serverUrlBorrower+`admin/loan_purposes/${id}`,config)
         .then((res)=>{
-            console.log(res.data)
-            this.setState({rows:res.data})
+            this.setState({rows:res.data,check:res.data.status==="active"?true:false})
         })
         .catch((err)=>{console.log(err)})
     }
     btnUpdateLayanan = ()=>{
         var name =this.refs.tujuan.value ? this.refs.tujuan.value : this.refs.tujuan.placeholder
-        var status =  document.querySelector('.messageCheckbox').checked;
+        var status = this.state.check?"active":"inactive"
         var id = this.props.match.params.id
-      
-        status ? status= "active": status= "inactive"
-      
+            
         if(name==="" || name.trim()===""){
             this.setState({errorMessage:"Tujuan field Kosong -  Harap cek ulang"})
         }else{
@@ -53,7 +50,9 @@ class TujuanEdit extends React.Component{
     }
         
     
-
+    handleChecked = () => {
+        this.setState({check : !this.state.check})
+    }
     btnCancel = ()=>{
         this.setState({diKlik:true})
     }
@@ -81,21 +80,15 @@ class TujuanEdit extends React.Component{
                             </div>
                     </div>
                   
+                
                     <div className="form-group row">
                             <label className="col-sm-3 col-form-label">Status</label>
-                           
-                            {this.state.rows.status ==="active"? 
                             <div className="col-sm-9">
-                            <input className="form-check-input messageCheckbox AddStyleButtonCheckbox" value="active" type="checkbox" defaultChecked/> 
-                            <label style={{position:"relative",left:"130px",paddingTop:"3px"}} >Aktif</label>           
-                            </div> :
-                            <div className="col-sm-9">
-                            <input className="form-check-input messageCheckbox AddStyleButtonCheckbox" value="active" type="checkbox" /> 
-                            <label style={{position:"relative",left:"130px",paddingTop:"3px"}} >Aktif</label>           
+                            <input className="form-check-input messageCheckbox AddStyleButtonCheckbox" type="checkbox" onChange={this.handleChecked} checked={this.state.check} /> 
+                            <label style={{position:"relative",left:"18%",paddingTop:"3px"}}>{this.state.check ? 'Aktif' : 'Non-Aktif'}</label>           
                             </div>
-                            }    
-                           
                     </div>
+                    
                     <div className="form-group row">
                             <input type="button" className="btn btn-success ml-3 mr-3" value="Simpan" onClick={this.btnUpdateLayanan}/>
                             <input type="button" className="btn btn-warning" value="Batal" onClick={this.btnCancel}/>

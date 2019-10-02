@@ -156,7 +156,7 @@ class CheckBoxClass extends React.Component {
                         labelPlacement='top'
                         control={                      
                           <CheckBox
-                            checked={this.props.onChecked(object)}
+                            checked={this.props.onChecked(object[id])}
                             onChange={this.props.onChange}
                             value={object[id].toString().trim()}
                             color="default"
