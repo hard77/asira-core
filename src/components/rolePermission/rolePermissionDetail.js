@@ -72,8 +72,6 @@ class rolePermissionDetail extends React.Component{
         const listRole = this.state.listRole;
         let newPermission = [];
 
-        console.log(listPermission)
-
         for(const keyPermission in listPermission) {
           if(
             listRole.id.toString() === listPermission[keyPermission].role_id.toString() &&
