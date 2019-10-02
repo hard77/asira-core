@@ -118,6 +118,16 @@ const kukie =new Cookies()
                  <Link to="/listrole" style={{color:"inherit",textDecoration:"none"}}>  <DropdownItem>List </DropdownItem>   </Link>                
               </DropdownMenu>
               </UncontrolledDropdown>
+
+              <UncontrolledDropdown  nav inNavbar>
+                <DropdownToggle nav caret style={{ color:"inherit",textDecoration:"none"}}>
+                <label><i className="fas fa-user-tag"></i> Role Permission </label>
+                </DropdownToggle>
+              <DropdownMenu className="menuDropDown" style={{border:"1px solid black",marginBottom:"20px"}}>
+                 <Link to="/tambahRolePermission" style={{color:"inherit",textDecoration:"none"}}><DropdownItem>Tambah</DropdownItem></Link>                   
+                 <Link to="/listRolePermission" style={{color:"inherit",textDecoration:"none"}}>  <DropdownItem>List </DropdownItem>   </Link>                
+              </DropdownMenu>
+              </UncontrolledDropdown>
            
         
             <p style={{ cursor:"pointer"}} onClick={this.logOutBtn}><label><i className="fas fa-sign-out-alt"></i> Log Out</label></p>
