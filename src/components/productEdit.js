@@ -40,7 +40,7 @@ class ProductEdit extends React.Component{
         selectedOption: null, errorMessage:null,rentangDari:0,rentangAkhir:0,
         collaterals:[],
         bankService:[],diKlik:false,rows:[],fees:[],bankServicebyID:{},financing_sector:[],asn_fee:'',
-        agunan:["Sertifikat Tanah","Sertifikat Rumah","Kios/Lapak","Deposito","BPKB Kendaraan"],check:true
+        agunan:["Sertifikat Tanah","Sertifikat Rumah","Kios/Lapak","Deposito","BPKB Kendaraan"],check:false
       };
 
       componentDidMount(){
@@ -54,13 +54,15 @@ class ProductEdit extends React.Component{
         var config = {
             headers: {'Authorization': "Bearer " + cookie.get('token')}
           };
-         //axios.get(serverUrl+`admin/service_products/[bank_id]`,config)
        axios.get(serverUrl+`admin/service_products/${id}`,config)
         .then((res)=>{
-            this.setState({rows:res.data,fees:res.data.fees,asn_fee:res.data.asn_fee,
+            console.log(res.data.status)
+            this.setState({rows:res.data,fees:res.data.fees,
+                asn_fee:res.data.asn_fee,
                 collaterals:res.data.collaterals,
                 financing_sector:res.data.financing_sector,
-                check:res.data.status ==="active"?true:false})
+                check:res.data.status ==="active"? true: false
+            })
             if (this.state.rows.service !== undefined || this.state.rows.service !== null){
                 var config = {
                     headers: {'Authorization': "Bearer " + cookie.get('token')}
@@ -108,7 +110,7 @@ class ProductEdit extends React.Component{
         var service = parseInt(this.refs.layanan.value)
         
         var fees= []
-        var status =   this.state.check ? status = "active" : status ="inactive"
+        var status =   this.state.check ?  "active" : "inactive"
         var assurance =  document.querySelector('.asuransi').checked;
         var otheragunan =  document.querySelector('.otheragunan').checked;
        
@@ -473,7 +475,7 @@ class ProductEdit extends React.Component{
                                 </td>
                                 <td>
                                 <div className="form-check-inline" style={{marginLeft:"125px"}}>
-                                        <input className="form-check-input messageCheckbox" type="checkbox" onChange={this.handleChecked} check={this.state.check}/>
+                                        <input className="form-check-input messageCheckbox" type="checkbox" onChange={this.handleChecked} checked={this.state.check}/>
                                         <label className="form-check-label">{this.state.check ? 'Aktif' : 'Non-Aktif'}</label>
                                 </div> 
                                 </td>
