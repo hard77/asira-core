@@ -39,7 +39,7 @@ class rolePermissionAdd extends React.Component{
     };
 
     componentDidMount(){
-      this.getAllRole()
+      this.getAllRole();
     }
 
     getAllRole = ()=>{
