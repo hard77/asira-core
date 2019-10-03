@@ -2,7 +2,7 @@ import React from 'react'
 import Cookies from 'universal-cookie';
 import { Redirect } from 'react-router-dom'
 import axios from 'axios'
-import { serverUrlBorrower } from './url';
+import { serverUrl } from './url';
 import swal from 'sweetalert'
 
 const cookie = new Cookies()
@@ -10,7 +10,8 @@ const cookie = new Cookies()
 class RoleAdd extends React.Component{
     state = {
         diKlik:false,
-        errorMessage:''
+        errorMessage:'',
+        check:false
        };
 
     btnCancel = ()=>{
@@ -23,8 +24,7 @@ class RoleAdd extends React.Component{
         var name = this.refs.namaRole.value
         var system = this.refs.sistem.value
         var description = this.refs.deskripsi.value
-        var status =  document.querySelector('.messageCheckbox').checked;
-        // status ? status= "active": status= "inactive"
+        var status = this.state.check
 
         if(name.trim()==="" || name ===""){
             this.setState({errorMessage:"Nama Role Kosong - Harap Cek Ulang"})
@@ -33,7 +33,7 @@ class RoleAdd extends React.Component{
         }else{
             var newData = {name,system,description,status}
             var config = {headers: {'Authorization': "Bearer " + cookie.get('token')}};
-            axios.post(serverUrlBorrower+'admin/internal_role',newData,config)
+            axios.post(serverUrl+'admin/roles',newData,config)
             .then((res)=>{
                 swal("Success","Role berhasil di tambah","success")
                 this.setState({diKlik:true})
@@ -43,6 +43,9 @@ class RoleAdd extends React.Component{
             })
          
         }
+    }
+    handleChecked = () =>{
+        this.setState({check:!this.state.check})
     }
 
     render(){
@@ -93,8 +96,8 @@ class RoleAdd extends React.Component{
                             <div className="form-group row">
                             <label className="col-sm-2 col-form-label">Status</label>
                             <div className="col-sm-10">
-                            <input className="form-check-input messageCheckbox AddStyleButtonCheckbox" value="active" type="checkbox" /> 
-                            <label style={{position:"relative",left:"17%",paddingTop:"3px"}} >Aktif</label>            
+                            <input className="form-check-input messageCheckbox AddStyleButtonCheckbox" value="active" type="checkbox" onChange={this.handleChecked} defaultChecked={this.state.check}/> 
+                            <label style={{position:"relative",left:"17%",paddingTop:"3px"}} >{ this.state.check ? "Aktif" : "Non-Aktif" }</label>            
                             </div>
 
                             <div className="form-group row">

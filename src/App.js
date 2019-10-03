@@ -3,6 +3,7 @@ import './App.css';
 import {Route,withRouter,Switch} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {keepLogin} from './1.actions'
+import {serverUrl} from './components/url'
 
 
 import Testing from './components/testing'
@@ -54,12 +55,51 @@ import RoleDetail from './components/roleDetail'
 import RoleEdit from './components/roleEdit'
 
 import Report from './components/report/report'
+import RoleAddPermission from './components/rolePermission/rolePermissionAdd'
+import RoleListPermission from './components/rolePermission/rolePermissionList'
+import RoleDetailPermission from './components/rolePermission/rolePermissionDetail'
+import RoleEditPermission from './components/rolePermission/rolePermissionEdit'
+
+import axios from 'axios'
 const kukie =new Cookies()
+
 
 
 class App extends React.Component {
   state ={loading : true , tokenClient : null , Token : null}
+  componentDidMount(){
+    this.getAuth()
+  
+  
+    }
+  getAuth = ()=>{
+    var url =serverUrl+"clientauth"
+    axios.get(url ,{
+        auth : {
+            username : 'reactkey',
+            password : 'reactsecret'
+        }
+    })
+        .then((res)=>{
+            var date = new Date();
+            date.setTime(date.getTime() + (res.data.expires*1000));
+            kukie.set('tokenAuth',res.data.token,{expires: date})
+            this.setState({loading : false})
+           
+        })
+        .catch((err)=>{
+          console.log(err)
+          setTimeout(function(){ alert("Coba reload halaman/ cek koneksi internet"); }, 5000);
+        }
+           
+        )
+  }
   render() {  
+    if(this.state.loading){
+      return(
+        <p> loading ....</p>
+      )
+    }
       return (
       
         <div>
@@ -115,7 +155,13 @@ class App extends React.Component {
                     <Route path='/editrole/:id' component={RoleEdit}></Route>
                     <Route path='/detailrole/:id' component={RoleDetail}></Route>
 
+
                     <Route path='/report' component={Report}></Route>
+
+                    <Route path='/tambahRolePermission' component={RoleAddPermission}></Route>
+                    <Route path='/listRolePermission' component={RoleListPermission}></Route>
+                    <Route path='/editRolePermission/:id' component={RoleEditPermission}></Route>
+                    <Route path='/detailRolePermission/:id' component={RoleDetailPermission}></Route>
 
                     {kukie.get('token') ?  <Route path="/login" component={Home}></Route>:  <Route path="/login" component={Login}></Route>} 
 

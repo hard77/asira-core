@@ -2,33 +2,35 @@ import React from 'react'
 import Cookies from 'universal-cookie';
 import { Redirect } from 'react-router-dom'
 import Axios from 'axios';
-import { serverUrlBorrower } from './url';
+import { serverUrl } from './url';
 import Loader from 'react-loader-spinner'
 import {Link} from 'react-router-dom'
 const cookie = new Cookies()
 
 class RoleList extends React.Component{
     state={
-        loading:true, rows:[],
+        loading:true, rows:[],errMessage:''
     }
     componentDidMount(){
         this.getAllRole()
     }
+
     getAllRole = ()=>{
         var config = {
             headers: {'Authorization': "Bearer " + cookie.get('token')}
           };
-        Axios.get(serverUrlBorrower+`admin/internal_role`,config)
+        Axios.get(serverUrl+`admin/roles`,config)
         .then((res)=>{
             console.log(res.data)
             this.setState({
                 rows:res.data.data,
-                loading:false
+                loading:false,
+                errMessage:''
             })
 
         })
         .catch((err)=>{
-            console.log(err.response)
+            this.setState({errMessage:err.toString(),loading:false})
         })
     }
     renderJSX = () => {
@@ -77,7 +79,10 @@ class RoleList extends React.Component{
                 <div className="container">
                     <div className="row">
                         <div className="col-7">
-                             <h2 className="mt-3">Role - List</h2>
+                             <h2 className="mt-3">Role - List</h2> 
+                             <div style={{color:"red"}}>
+                                {this.state.errMessage} 
+                             </div>
                         </div>
                     </div>
                    <hr/>
