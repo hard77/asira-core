@@ -155,7 +155,7 @@ class rolePermissionEdit extends React.Component{
     btnSave=()=>{
       const listRolePermission = this.state.listRolePermission;
       const dataRolePermission = {};
-      dataRolePermission.role_id = this.state.listRole.id.toString();
+      dataRolePermission.role_id = parseInt(this.state.listRole.id);
       dataRolePermission.permissions = this.constructRolePermission(listRolePermission);
 
       this.setState({loading: true})
