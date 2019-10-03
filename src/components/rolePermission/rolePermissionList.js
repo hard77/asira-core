@@ -52,9 +52,9 @@ class RolePermissionList extends React.Component{
     }
     
     getAllRole = ()=>{
-        axios.get(serverUrl+`admin/roles?page=${this.state.page}&rows=${this.state.rowsPerPage}`,config).then((res)=>{
+        axios.get(serverUrl+`admin/roles?orderby=updated_time&sort=desc`,config).then((res)=>{
             const listRole = res.data && res.data.data
-            console.log(res.data)    
+            
             this.setState({
                 listRole,
             }, () => {
@@ -76,6 +76,7 @@ class RolePermissionList extends React.Component{
             const listPermission = res.data && res.data.data ? res.data.data : res.data;
             const listRole = this.state.listRole;
             const newRole = [];
+            const rolePerPages = [];
             let totalData = 0;
 
             for(const key in listRole) {
@@ -95,11 +96,16 @@ class RolePermissionList extends React.Component{
                 }
             }
             
+            for(let i = (this.state.rowsPerPage*(this.state.page-1)); i < this.state.rowsPerPage * this.state.page; i+=1) {
+                if(newRole[i] && newRole[i].id) {
+                    rolePerPages.push(newRole[i])
+                }            
+            }
+            
             totalData = newRole.length;
 
-            console.log(newRole)
             this.setState({
-                listRole: newRole,
+                listRole: rolePerPages,
                 totalData,
                 loading:false,
             })
@@ -135,7 +141,7 @@ class RolePermissionList extends React.Component{
         var jsx = this.state.listRole.map((val,index)=>{
             return(
                 <tr key={index}>
-                    <td align="center">{this.state.page >1 ? index+1 + (this.state.dataPerhalaman*(this.state.page -1)) : index+1}</td>
+                    <td align="center">{this.state.page >1 ? (index+1 + this.state.rowsPerPage*(this.state.page-1)) : index+1}</td>
                     <td align="center">{val.id}</td>
                     <td align="center">{val.name}</td>
                     <td align="center">{val.system}</td>
