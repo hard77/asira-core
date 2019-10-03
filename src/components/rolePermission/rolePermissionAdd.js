@@ -119,7 +119,7 @@ class rolePermissionAdd extends React.Component{
       } else{
         const listRolePermission = this.state.listRolePermission;
         const dataRolePermission = {};
-        dataRolePermission.role_id = this.state.role;
+        dataRolePermission.role_id = this.state.role.toString();
         dataRolePermission.permissions = this.constructRolePermission(listRolePermission);
 
         this.setState({loading: true});
