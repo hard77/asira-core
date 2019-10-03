@@ -38,7 +38,6 @@ class rolePermissionDetail extends React.Component{
     };
 
     componentDidMount(){
-      console.log(this.props)
       this.setState({
         roleId: this.props.match.params.id,
       },() => {
@@ -49,10 +48,7 @@ class rolePermissionDetail extends React.Component{
 
     getRole = ()=>{
       axios.get(serverUrl+`admin/roles/${this.state.roleId}`,config).then((res)=>{
-        console.log(res.data)
         const listRole = res.data
-
-        console.log(listRole)
 
         this.setState({
           listRole,
@@ -60,7 +56,7 @@ class rolePermissionDetail extends React.Component{
           this.getRolePermission()
         })
       }).catch((err)=>{
-          console.log(err.response)
+          console.log(err.toString())
           this.setState({
             errorMessage : err.response && err.response.data && err.response.data.message && `Error : ${err.response.data.message.toString().toUpperCase()}`,
             loading: false,
@@ -70,17 +66,11 @@ class rolePermissionDetail extends React.Component{
     }
 
     getRolePermission = ()=>{
-      console.log(this.state.roleId)
       axios.get(serverUrl+`admin/permission?role_id=${this.state.roleId}`,config)
       .then((res)=>{
-        console.log(res.data)
         const listPermission = res.data && res.data.data;
-        console.log(listPermission)
         const listRole = this.state.listRole;
-        console.log(listRole)
-        const newPermission = [];
-        // listRole.permission = this.destructRolePermission(listPermission)
-        console.log(listRole)
+        let newPermission = [];
 
         for(const keyPermission in listPermission) {
           if(
@@ -97,13 +87,9 @@ class rolePermissionDetail extends React.Component{
           }
         }
 
-        console.log(newPermission)
-
         this.setState({
           listRolePermission: newPermission,
           loading: false,
-        },() => {
-          console.log(this.state.listRole)
         })
 
       }).catch((err)=>{
@@ -118,8 +104,6 @@ class rolePermissionDetail extends React.Component{
 
     destructRolePermissionAll = (permission) => {
       let newPermission = [];
-
-      const dataPermission = permission.split('_');
 
       for(const key in this.state.listAllRolePermission) {
         newPermission.push({
@@ -139,8 +123,8 @@ class rolePermissionDetail extends React.Component{
 
       newPermission = {
         id: this.findIdRolePermission(dataPermission),
-        name: dataPermission[0],
-        modules: dataPermission[1] || dataPermission[0],
+        modules: dataPermission[0],
+        name: dataPermission[1] || dataPermission[0],
       };
       
       return newPermission
@@ -148,14 +132,13 @@ class rolePermissionDetail extends React.Component{
 
     findIdRolePermission = (dataPermission) => {
       let idPermission = 0;
-      console.log(dataPermission)
+      
       for(const key in this.state.listAllRolePermission) {
         if(
           this.state.listAllRolePermission[key].modules.toString().toLowerCase().trim() === dataPermission[0].toString().toLowerCase().trim() && 
           dataPermission[1] &&
           this.state.listAllRolePermission[key].name.toString().toLowerCase().trim() === dataPermission[1].toString().toLowerCase().trim()
         ) {
-          console.log('test')
           idPermission = this.state.listAllRolePermission[key].id;
         }
       }
@@ -168,9 +151,6 @@ class rolePermissionDetail extends React.Component{
     }
     componentWillReceiveProps(newProps){
         this.setState({errorMessage:newProps.error})
-    }
-    btnSave=()=>{
-
     }
 
     checkingRole = (role, idRolePermission) => {
@@ -218,7 +198,7 @@ class rolePermissionDetail extends React.Component{
             modules: modules,
           });
         }
-        console.log(profileUserNew)
+        
         this.setState({
           listRolePermission: profileUserNew,
         });
@@ -243,7 +223,7 @@ class rolePermissionDetail extends React.Component{
         } else if(cookie.get('token')){
             return(
                 <div className="container mt-4">
-                 <h3>Role Permission - Tambah</h3>
+                 <h3>Role Permission - Detail</h3>
                  
                  <hr/>
                  
@@ -253,7 +233,7 @@ class rolePermissionDetail extends React.Component{
                         Role Name
                       </label>
                       <label className="col-sm-4 col-form-label" style={{lineHeight:3.5}}>
-                        {this.state.role && this.state.role.name}
+                        {this.state.listRole && this.state.listRole.name}
                       </label>               
                     </div>
 
@@ -279,9 +259,8 @@ class rolePermissionDetail extends React.Component{
                     </div>
                     
                     <div className="form-group row">
-                        <div className="col-sm-12 ml-3 mt-3">
-                          <input type="button" value="Ubah" className="btn btn-success" onClick={this.btnSave} />
-                          <input type="button" value="Batal" className="btn ml-2" onClick={this.btnCancel} style={{backgroundColor:"grey",color:"white"}}/>
+                        <div className="col-sm-12 mt-3">
+                          <input type="button" value="Batal" className="btn" onClick={this.btnCancel} style={{backgroundColor:"grey",color:"white"}}/>
                         </div>
                     </div>
                     
@@ -303,56 +282,8 @@ export function mapDispatchToProps(dispatch) {
     //   getSourceTransaction: () => {
     //     dispatch(sourceTransactionRequest());
     //   },
-    //   getApplication: () => {
-    //     dispatch(applicationRequest());
-    //   },
-    //   getSecurityAdministrator: (application) => {
-    //     dispatch(securityAdministratorRequest(application));
-    //   },
-    //   getToken: (application) => {
-    //     dispatch(rpsTokenRequest(application));
-    //   },
-    //   getTokenUpdate: (application) => {
-    //     dispatch(rpsTokenUpdateRequest(application));
-    //   },
-    //   getAction: (application) => {
-    //     dispatch(rpsActionRequest(application));
-    //   },
-    //   getProfileUserId: (application) => {
-    //     dispatch(profileUserIdRequest(application));
-    //   },
-    //   getCurrency: () => {
-    //     dispatch(currencyRequest());
-    //   },
-    //   getKanwil: () => {
-    //     dispatch(kanwilRequest());
-    //   },
-    //   getKCU: (kanwil) => {
-    //     dispatch(kcuRequest(kanwil));
-    //   },
-    //   getBranch: (kodeKcu) => {
-    //     dispatch(branchRequest(kodeKcu));
-    //   },
     //   handleRedirect: (route) => {
     //     dispatch(push(route));
-    //   },
-    //   handleCreaterpsTransaction: (rpsTransaction) => {
-    //     dispatch(rpsTransactionCreate(rpsTransaction));
-    //   },
-    //   handleUpdaterpsTransaction: (rpsTransaction) => {
-    //     dispatch(rpsTransactionUpdate(rpsTransaction));
-    //   },
-    //   handleGetrpsUserIdDetail: (rpsUserId) => {
-    //     dispatch(rpsUserIdDetail(rpsUserId));
-    //   },
-    //   handleGetDetailProfileUser: (rpsUserId) => {
-    //     dispatch(rpsProfileUserDetail(rpsUserId));
-    //   },
-    //   handleDelete: (rpsUserId) => {
-    //     dispatch(rpsUserIdDelete(rpsUserId));
-    //   },
-    //   handleSetMessage: (message) => {
-    //     dispatch(setAlert(message));
     //   },
     };
 }
@@ -360,21 +291,6 @@ export function mapDispatchToProps(dispatch) {
 export const mapStateToProps = createStructuredSelector({
   // user: getUserState(),
   // menu: getMenu(),
-  // rpsUserIdDetailNew: getrpsUserIdDetail(),
-  // profileUserDetail: getrpsProfileUserDetail(),
-  // listSourceTransaction: getListSourceTransaction(),
-  // listAction: getListAction(),
-  // listToken: getListToken(),
-  // listEmployee: getListEmployee(),
-  // listBranch: getListBranch(),
-  // listApplication: getListApplication(),
-  // listSecurityAdministrator: getListSecurityAdministrator(),
-  // listCurrency: getListCurrency(),
-  // listprofileUserId: getListProfileUserId(),
-  // listKanwil: getListKanwil(),
-  // listKCU: getListKCU(),
-  // message: getMessageValue(),
-  // redirect: getRedirectValue(),
   // fetching: getFetchStatus(),
 });
 
@@ -384,14 +300,9 @@ const withConnect = connect(
 );
 
 const withStyle = withStyles(styles);
-// const withReducer = injectReducer({ key: 'rpsTransaction', reducer });
-// const withSaga = injectSaga({ key: 'rpsTransaction', saga });
 
 export default compose(
-    // withReducer,
     withConnect,
-    // withSaga,
     withStyle,
     withRouter
   )(rolePermissionDetail);
-// export default RoleAdd;
