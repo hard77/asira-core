@@ -45,13 +45,10 @@ class RolePermissionList extends React.Component{
     }
     componentDidMount(){
         this.getAllRole();
-
-        console.log(this.props)
     }
     
     getAllRole = ()=>{
         axios.get(serverUrl+`admin/roles`,config).then((res)=>{
-          console.log(res.data)
           const listRole = res.data && res.data.data
   
           this.setState({
@@ -60,7 +57,7 @@ class RolePermissionList extends React.Component{
             this.getAllRolePermission()
           })
         }).catch((err)=>{
-            console.log(err.response)
+            console.log(err.toString())
             this.setState({
               errorMessage : err.response && err.response.data && err.response.data.message && `Error : ${err.response.data.message.toString().toUpperCase()}`,
               loading: false,
@@ -73,7 +70,6 @@ class RolePermissionList extends React.Component{
         axios.get(serverUrl+`admin/permission`,config)
         .then((res)=>{
             const listPermission = res.data && res.data.data;
-            console.log(listPermission)
             const listRole = this.state.listRole;
             const newRole = [];
 
@@ -97,12 +93,10 @@ class RolePermissionList extends React.Component{
             this.setState({
                 listRole: newRole,
                 loading:false,
-            },() => {
-                console.log(this.state.listRole)
             })
 
         }).catch((err)=>{
-            console.log(err.response)
+            console.log(err.toString())
             this.setState({
               errorMessage : err.response && err.response.data && err.response.data.message && `Error : ${err.response.data.message.toString().toUpperCase()}`,
               loading: false,
