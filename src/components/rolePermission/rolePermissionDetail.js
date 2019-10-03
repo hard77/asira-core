@@ -123,8 +123,8 @@ class rolePermissionDetail extends React.Component{
 
       newPermission = {
         id: this.findIdRolePermission(dataPermission),
-        modules: dataPermission[0],
-        name: dataPermission[1] || dataPermission[0],
+        name: dataPermission[0],
+        modules: dataPermission[1] || dataPermission[0],
       };
       
       return newPermission
