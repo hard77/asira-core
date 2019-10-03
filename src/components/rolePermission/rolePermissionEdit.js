@@ -4,6 +4,7 @@ import { Redirect } from 'react-router-dom'
 import axios from 'axios'
 import { serverUrl } from '../url';
 import CheckBox from '../subComponent/CheckBox';
+import Loader from 'react-loader-spinner'
 import swal from 'sweetalert';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
@@ -30,52 +31,107 @@ class rolePermissionEdit extends React.Component{
       errorMessage:'',
       listAllRolePermission,
       listRolePermission: [],
-      role : {},
-      idRole: 0,
+      listRole : {},
+      roleId: 0,
+      loading: true,
+      disabled:true,
     };
 
     componentDidMount(){
       this.setState({
-        idRole: this.props.match.params.id,
+        roleId: this.props.match.params.id,
       },() => {
-        this.getRolePermission()
+        this.getRole()
+      })
+    }
+
+    getRole = ()=>{
+      axios.get(serverUrl+`admin/roles/${this.state.roleId}`,config).then((res)=>{
+        const listRole = res.data
+
+        this.setState({
+          listRole,
+        }, () => {
+          this.getRolePermission()
+        })
+      }).catch((err)=>{
+          console.log(err.toString())
+          this.setState({
+            errorMessage : err.response && err.response.data && err.response.data.message && `Error : ${err.response.data.message.toString().toUpperCase()}`,
+            loading: false,
+            disabled: true,
+          })
       })
     }
 
     getRolePermission = ()=>{
-      axios.get(serverUrl+`admin/permission/${this.state.idRole}`,config).then((res)=>{
-        const rolePermission = res.data && res.data.data;
-        console.log(rolePermission)
+      axios.get(serverUrl+`admin/permission?role_id=${this.state.roleId}`,config)
+      .then((res)=>{
+        const listPermission = res.data && res.data.data;
+        const listRole = this.state.listRole;
+        let newPermission = [];
+
+        for(const keyPermission in listPermission) {
+          if(
+            listRole.id.toString() === listPermission[keyPermission].role_id.toString() &&
+            listPermission[keyPermission].permissions.toString().trim().length !== 0
+          ) {
+            if(listPermission[keyPermission].permissions.toString().trim().toLowerCase() === 'all') {
+              newPermission = this.destructRolePermissionAll();
+              break;
+            } else {
+              newPermission.push(this.destructRolePermission(listPermission[keyPermission].permissions))
+            }
+            
+          }
+        }
+
         this.setState({
-          role: rolePermission.name,
-          listRolePermission: this.destructRolePermission(rolePermission.permission),
+          listRolePermission: newPermission,
           loading: false,
+          disabled: false,
         })
+
       }).catch((err)=>{
-          console.log(err.response)
+        console.log(err.toString())
+        this.setState({
+          errorMessage : err.response && err.response.data && err.response.data.message && `Error : ${err.response.data.message.toString().toUpperCase()}`,
+          loading: false,
+          disabled: true,
+        })
       })
     }
 
-    destructRolePermission = (permission) => {
-      const newPermission = [];
+    destructRolePermissionAll = (permission) => {
+      let newPermission = [];
 
-      for(const key in permission) {
-        const dataPermission = permission[key].split('_');
-        newPermission.push(
-          {
-            id: this.findIdRolePermission(dataPermission),
-            modules: dataPermission[0],
-            name: dataPermission[1] || dataPermission[0],
-          }
-        );
+      for(const key in this.state.listAllRolePermission) {
+        newPermission.push({
+          id: this.state.listAllRolePermission[key].id,
+          name: this.state.listAllRolePermission[key].name,
+          modules: this.state.listAllRolePermission[key].modules,
+        });
       }
 
       return newPermission
     }
 
+    destructRolePermission = (permission) => {
+      let newPermission = {};
+      const dataPermission = permission.split('_');
+
+      newPermission = {
+        id: this.findIdRolePermission(dataPermission),
+        modules: dataPermission[0],
+        name: dataPermission[1] || dataPermission[0],
+      };
+      
+      return newPermission
+    }
+
     findIdRolePermission = (dataPermission) => {
       let idPermission = 0;
-
+      
       for(const key in this.state.listAllRolePermission) {
         if(
           this.state.listAllRolePermission[key].modules.toString().toLowerCase().trim() === dataPermission[0].toString().toLowerCase().trim() && 
@@ -97,23 +153,25 @@ class rolePermissionEdit extends React.Component{
     }
 
     btnSave=()=>{
-        if(this.state.listRolePermission.length && this.state.listRolePermission.length === 0) {
-          this.setState({errorMessage:"Data Role Permission Tidak Boleh Kosong"})
-        } else{
-          const listRolePermission = this.state.listRolePermission;
-          const dataRolePermission = {};
-          dataRolePermission.role_id = this.state.role.role_id;
-          dataRolePermission.permission = this.constructRolePermission(listRolePermission);
+      const listRolePermission = this.state.listRolePermission;
+      const dataRolePermission = {};
+      dataRolePermission.role_id = this.state.listRole.id.toString();
+      dataRolePermission.permissions = this.constructRolePermission(listRolePermission);
 
-          console.log(dataRolePermission)
-          
-          axios.patch(serverUrl+`admin/permission/${this.state.idRole}`,dataRolePermission,config).then((res)=>{
-            swal("Success","Role Permission berhasil di ubah","success")
-            this.setState({diKlik:true})
-          }).catch((err)=>{
-              console.log(err.toString())
-          })
-        }
+      this.setState({loading: true})
+      
+      axios.patch(serverUrl+`admin/permission`,dataRolePermission,config).then((res)=>{
+        swal("Success","Role Permission berhasil di ubah","success")
+        this.setState({diKlik:true})
+      }).catch((err)=>{
+        console.log(err.toString())
+        this.setState({
+          errorMessage : err.response && err.response.data && err.response.data.message && `Error : ${err.response.data.message.toString().toUpperCase()}`,
+          loading: false,
+          disabled: false,
+        })
+      })
+        
     }
 
     constructRolePermission = (rolePermission) => {
@@ -170,7 +228,7 @@ class rolePermissionEdit extends React.Component{
           modules: modules,
         });
       }
-      console.log(profileUserNew)
+      
       this.setState({
         listRolePermission: profileUserNew,
       });
@@ -179,11 +237,23 @@ class rolePermissionEdit extends React.Component{
     render(){
         if(this.state.diKlik){
             return <Redirect to='/listRolePermission'/>            
-        }
-        if(cookie.get('token')){
+        } else if (this.state.loading){
+          return  (
+            <div  key="zz">
+              <div align="center" colSpan={6}>
+                <Loader 
+                  type="Circles"
+                  color="#00BFFF"
+                  height="40"	
+                  width="40"
+                />   
+              </div>
+            </div>
+          )
+        } else if(cookie.get('token')){
             return(
                 <div className="container mt-4">
-                 <h3>Role Permission - Tambah</h3>
+                 <h3>Role Permission - Ubah</h3>
                  
                  <hr/>
                  
@@ -193,7 +263,7 @@ class rolePermissionEdit extends React.Component{
                         Role Name
                       </label>
                       <label className="col-sm-4 col-form-label" style={{lineHeight:3.5}}>
-                        {this.state.role && this.state.role.name}
+                        {this.state.listRole && this.state.listRole.name}
                       </label>               
                     </div>
 
@@ -228,8 +298,7 @@ class rolePermissionEdit extends React.Component{
                 
                 </div>
             )
-        }
-        if(!cookie.get('token')){
+        }else if(!cookie.get('token')){
           return (
               <Redirect to='/login' />
           )    
@@ -242,57 +311,8 @@ export function mapDispatchToProps(dispatch) {
     return {
     //   getSourceTransaction: () => {
     //     dispatch(sourceTransactionRequest());
-    //   },
-    //   getApplication: () => {
-    //     dispatch(applicationRequest());
-    //   },
-    //   getSecurityAdministrator: (application) => {
-    //     dispatch(securityAdministratorRequest(application));
-    //   },
-    //   getToken: (application) => {
-    //     dispatch(rpsTokenRequest(application));
-    //   },
-    //   getTokenUpdate: (application) => {
-    //     dispatch(rpsTokenUpdateRequest(application));
-    //   },
-    //   getAction: (application) => {
-    //     dispatch(rpsActionRequest(application));
-    //   },
-    //   getProfileUserId: (application) => {
-    //     dispatch(profileUserIdRequest(application));
-    //   },
-    //   getCurrency: () => {
-    //     dispatch(currencyRequest());
-    //   },
-    //   getKanwil: () => {
-    //     dispatch(kanwilRequest());
-    //   },
-    //   getKCU: (kanwil) => {
-    //     dispatch(kcuRequest(kanwil));
-    //   },
-    //   getBranch: (kodeKcu) => {
-    //     dispatch(branchRequest(kodeKcu));
-    //   },
     //   handleRedirect: (route) => {
     //     dispatch(push(route));
-    //   },
-    //   handleCreaterpsTransaction: (rpsTransaction) => {
-    //     dispatch(rpsTransactionCreate(rpsTransaction));
-    //   },
-    //   handleUpdaterpsTransaction: (rpsTransaction) => {
-    //     dispatch(rpsTransactionUpdate(rpsTransaction));
-    //   },
-    //   handleGetrpsUserIdDetail: (rpsUserId) => {
-    //     dispatch(rpsUserIdDetail(rpsUserId));
-    //   },
-    //   handleGetDetailProfileUser: (rpsUserId) => {
-    //     dispatch(rpsProfileUserDetail(rpsUserId));
-    //   },
-    //   handleDelete: (rpsUserId) => {
-    //     dispatch(rpsUserIdDelete(rpsUserId));
-    //   },
-    //   handleSetMessage: (message) => {
-    //     dispatch(setAlert(message));
     //   },
     };
 }
@@ -300,22 +320,6 @@ export function mapDispatchToProps(dispatch) {
 export const mapStateToProps = createStructuredSelector({
   // user: getUserState(),
   // menu: getMenu(),
-  // rpsUserIdDetailNew: getrpsUserIdDetail(),
-  // profileUserDetail: getrpsProfileUserDetail(),
-  // listSourceTransaction: getListSourceTransaction(),
-  // listAction: getListAction(),
-  // listToken: getListToken(),
-  // listEmployee: getListEmployee(),
-  // listBranch: getListBranch(),
-  // listApplication: getListApplication(),
-  // listSecurityAdministrator: getListSecurityAdministrator(),
-  // listCurrency: getListCurrency(),
-  // listprofileUserId: getListProfileUserId(),
-  // listKanwil: getListKanwil(),
-  // listKCU: getListKCU(),
-  // message: getMessageValue(),
-  // redirect: getRedirectValue(),
-  // fetching: getFetchStatus(),
 });
 
 const withConnect = connect(
@@ -324,14 +328,9 @@ const withConnect = connect(
 );
 
 const withStyle = withStyles(styles);
-// const withReducer = injectReducer({ key: 'rpsTransaction', reducer });
-// const withSaga = injectSaga({ key: 'rpsTransaction', saga });
 
 export default compose(
-    // withReducer,
     withConnect,
-    // withSaga,
     withStyle,
     withRouter
   )(rolePermissionEdit);
-// export default RoleAdd;
