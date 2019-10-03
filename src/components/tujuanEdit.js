@@ -85,7 +85,7 @@ class TujuanEdit extends React.Component{
                             <label className="col-sm-3 col-form-label">Status</label>
                             <div className="col-sm-9">
                             <input className="form-check-input messageCheckbox AddStyleButtonCheckbox" type="checkbox" onChange={this.handleChecked} checked={this.state.check} /> 
-                            <label style={{position:"relative",left:"18%",paddingTop:"3px"}}>{this.state.check ? 'Aktif' : 'Non-Aktif'}</label>           
+                            <label style={{position:"relative",left:"18%",paddingTop:"3px"}}>{this.state.check ? 'Aktif' : 'Tidak Aktif'}</label>           
                             </div>
                     </div>
                     

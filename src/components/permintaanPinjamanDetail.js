@@ -137,10 +137,10 @@ class Main extends React.Component{
                                     <td>Status Pinjaman</td>
                                     <td>: {
                                     this.state.status === "processing"?
-                                        <label style={{color:"blue"}}>{this.state.status}</label>
+                                        <label style={{color:"blue"}}>Diproses</label>
                                     : this.state.status === "approved"?
-                                    <label style={{color:"green"}}>{this.state.status}</label>:
-                                    <label style={{color:"red"}}>{this.state.status}</label>
+                                    <label style={{color:"green"}}>Diterima</label>:
+                                    <label style={{color:"red"}}>Ditolak</label>
                                     
                                     }</td>
                                 </tr>

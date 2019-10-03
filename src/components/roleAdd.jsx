@@ -97,7 +97,7 @@ class RoleAdd extends React.Component{
                             <label className="col-sm-2 col-form-label">Status</label>
                             <div className="col-sm-10">
                             <input className="form-check-input messageCheckbox AddStyleButtonCheckbox" value="active" type="checkbox" onChange={this.handleChecked} defaultChecked={this.state.check}/> 
-                            <label style={{position:"relative",left:"17%",paddingTop:"3px"}} >{ this.state.check ? "Aktif" : "Non-Aktif" }</label>            
+                            <label style={{position:"relative",left:"17%",paddingTop:"3px"}} >{ this.state.check ? "Aktif" : "Tidak Aktif" }</label>            
                             </div>
 
                             <div className="form-group row">

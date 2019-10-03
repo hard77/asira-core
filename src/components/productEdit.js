@@ -476,7 +476,7 @@ class ProductEdit extends React.Component{
                                 <td>
                                 <div className="form-check-inline" style={{marginLeft:"125px"}}>
                                         <input className="form-check-input messageCheckbox" type="checkbox" onChange={this.handleChecked} checked={this.state.check}/>
-                                        <label className="form-check-label">{this.state.check ? 'Aktif' : 'Non-Aktif'}</label>
+                                        <label className="form-check-label">{this.state.check ? 'Aktif' : 'Tidak Aktif'}</label>
                                 </div> 
                                 </td>
                             </tr>
