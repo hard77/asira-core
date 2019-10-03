@@ -6,6 +6,8 @@ import { serverUrl } from '../url';
 import Loader from 'react-loader-spinner'
 import {Link} from 'react-router-dom'
 // import SubTable from './../subComponent/SubTable'
+import localeInfo from 'rc-pagination/lib/locale/id_ID'
+import Pagination from 'rc-pagination';
 const cookie = new Cookies()
 
 const config = {
@@ -41,6 +43,8 @@ class RolePermissionList extends React.Component{
         this.state = {
             loading:true, 
             listRole: [],
+            page: 1,
+            rowsPerPage: 10,
         }
     }
     componentDidMount(){
@@ -48,14 +52,14 @@ class RolePermissionList extends React.Component{
     }
     
     getAllRole = ()=>{
-        axios.get(serverUrl+`admin/roles`,config).then((res)=>{
-          const listRole = res.data && res.data.data
-  
-          this.setState({
-            listRole,
-          }, () => {
-            this.getAllRolePermission()
-          })
+        axios.get(serverUrl+`admin/roles?page=${this.state.page}&rows=${this.state.rowsPerPage}`,config).then((res)=>{
+            const listRole = res.data && res.data.data
+            console.log(res.data)    
+            this.setState({
+                listRole,
+            }, () => {
+                this.getAllRolePermission()
+            })
         }).catch((err)=>{
             console.log(err.toString())
             this.setState({
@@ -72,6 +76,7 @@ class RolePermissionList extends React.Component{
             const listPermission = res.data && res.data.data ? res.data.data : res.data;
             const listRole = this.state.listRole;
             const newRole = [];
+            let totalData = 0;
 
             for(const key in listRole) {
                 const rolePerLine = listRole[key];
@@ -89,9 +94,13 @@ class RolePermissionList extends React.Component{
                     newRole.push(rolePerLine);
                 }
             }
+            
+            totalData = newRole.length;
 
+            console.log(newRole)
             this.setState({
                 listRole: newRole,
+                totalData,
                 loading:false,
             })
 
@@ -126,20 +135,20 @@ class RolePermissionList extends React.Component{
         var jsx = this.state.listRole.map((val,index)=>{
             return(
                 <tr key={index}>
-                <td align="center">{this.state.page >1 ? index+1 + (this.state.dataPerhalaman*(this.state.page -1)) : index+1}</td>
-                <td align="center">{val.id}</td>
-                <td align="center">{val.name}</td>
-                <td align="center">{val.system}</td>
-                <td align="center">{val.status ? "Aktif" : "Tidak Aktif"}</td>
-                <td align="center">
-                    <Link to={`/editRolePermission/${val.id}`} className="mr-2">
-                        <i className="fas fa-edit" style={{color:"black",fontSize:"18px"}}/>
-                    </Link>
-                    <Link to={`/detailRolePermission/${val.id}`} >
-                        <i className="fas fa-eye" style={{color:"black",fontSize:"18px"}}/>
-                    </Link>
-                </td>
-        </tr>  
+                    <td align="center">{this.state.page >1 ? index+1 + (this.state.dataPerhalaman*(this.state.page -1)) : index+1}</td>
+                    <td align="center">{val.id}</td>
+                    <td align="center">{val.name}</td>
+                    <td align="center">{val.system}</td>
+                    <td align="center">{val.status ? "Aktif" : "Tidak Aktif"}</td>
+                    <td align="center">
+                        <Link to={`/editRolePermission/${val.id}`} className="mr-2">
+                            <i className="fas fa-edit" style={{color:"black",fontSize:"18px"}}/>
+                        </Link>
+                        <Link to={`/detailRolePermission/${val.id}`} >
+                            <i className="fas fa-eye" style={{color:"black",fontSize:"18px"}}/>
+                        </Link>
+                    </td>
+                </tr>  
             )
                    
         })
@@ -147,6 +156,18 @@ class RolePermissionList extends React.Component{
         return jsx;
 
     }
+
+    onChangePage = (current, pageSize) => {
+        this.setState({
+            loading:true,
+            page:current,
+        }, () => {
+            this.getAllRole();
+        })
+    }
+    
+
+
     render(){
         
         
@@ -189,6 +210,17 @@ class RolePermissionList extends React.Component{
                           {this.renderJSX()}
                        </tbody>
                    </table>
+                   <hr></hr>
+                    <nav className="navbar" style={{float:"right"}}> 
+
+                        <Pagination className="ant-pagination"  
+                            showTotal={(total, range) => `${range[0]} - ${range[1]} of ${total} items`}
+                            total={this.state.totalData}
+                            pageSize={this.state.rowsPerPage}
+                            onChange={this.onChangePage}
+                            locale={localeInfo}
+                        />     
+                    </nav>
                 </div>
             )
         }
