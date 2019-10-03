@@ -68,7 +68,7 @@ class rolePermissionDetail extends React.Component{
     getRolePermission = ()=>{
       axios.get(serverUrl+`admin/permission?role_id=${this.state.roleId}`,config)
       .then((res)=>{
-        const listPermission = res.data && res.data.data;
+        const listPermission = res.data && res.data.data ? res.data.data : res.data;
         const listRole = this.state.listRole;
         let newPermission = [];
 
