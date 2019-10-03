@@ -130,7 +130,7 @@ class RolePermissionList extends React.Component{
                 <td align="center">{val.id}</td>
                 <td align="center">{val.name}</td>
                 <td align="center">{val.system}</td>
-                <td align="center">{val.status ? "Active" : "Inactive"}</td>
+                <td align="center">{val.status ? "Aktif" : "Tidak Aktif"}</td>
                 <td align="center">
                     <Link to={`/editRolePermission/${val.id}`} className="mr-2">
                         <i className="fas fa-edit" style={{color:"black",fontSize:"18px"}}/>
