@@ -70,6 +70,7 @@ class rolePermissionEdit extends React.Component{
         const listPermission = res.data && res.data.data ? res.data.data : res.data;
         const listRole = this.state.listRole;
         let newPermission = [];
+        let flag = false;
 
         for(const keyPermission in listPermission) {
           if(
@@ -78,6 +79,7 @@ class rolePermissionEdit extends React.Component{
           ) {
             if(listPermission[keyPermission].permissions.toString().trim().toLowerCase() === 'all') {
               newPermission = this.destructRolePermissionAll();
+              flag = true;
               break;
             } else {
               newPermission.push(this.destructRolePermission(listPermission[keyPermission].permissions))
@@ -89,7 +91,7 @@ class rolePermissionEdit extends React.Component{
         this.setState({
           listRolePermission: newPermission,
           loading: false,
-          disabled: false,
+          disabled: flag,
         })
 
       }).catch((err)=>{
