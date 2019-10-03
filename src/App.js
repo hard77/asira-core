@@ -54,6 +54,7 @@ import RoleList from './components/roleList'
 import RoleDetail from './components/roleDetail'
 import RoleEdit from './components/roleEdit'
 
+import Report from './components/report/report'
 import RoleAddPermission from './components/rolePermission/rolePermissionAdd'
 import RoleListPermission from './components/rolePermission/rolePermissionList'
 import RoleDetailPermission from './components/rolePermission/rolePermissionDetail'
@@ -154,11 +155,13 @@ class App extends React.Component {
                     <Route path='/editrole/:id' component={RoleEdit}></Route>
                     <Route path='/detailrole/:id' component={RoleDetail}></Route>
 
+
+                    <Route path='/report' component={Report}></Route>
+
                     <Route path='/tambahRolePermission' component={RoleAddPermission}></Route>
                     <Route path='/listRolePermission' component={RoleListPermission}></Route>
                     <Route path='/editRolePermission/:id' component={RoleEditPermission}></Route>
                     <Route path='/detailRolePermission/:id' component={RoleDetailPermission}></Route>
-
 
                     {kukie.get('token') ?  <Route path="/login" component={Home}></Route>:  <Route path="/login" component={Login}></Route>} 
 
