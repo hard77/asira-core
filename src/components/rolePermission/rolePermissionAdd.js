@@ -100,7 +100,7 @@ class rolePermissionAdd extends React.Component{
         this.setState({
           errorMessage : err.response && err.response.data && err.response.data.message && `Error : ${err.response.data.message.toString().toUpperCase()}`,
           loading: false,
-          disabled: true,
+          disabled: true
         })
       })
     }
@@ -119,7 +119,7 @@ class rolePermissionAdd extends React.Component{
       } else{
         const listRolePermission = this.state.listRolePermission;
         const dataRolePermission = {};
-        dataRolePermission.role_id = this.state.role.toString();
+        dataRolePermission.role_id = parseInt(this.state.role);
         dataRolePermission.permissions = this.constructRolePermission(listRolePermission);
 
         this.setState({loading: true});
