@@ -45,16 +45,9 @@ class rolePermissionAdd extends React.Component{
     getAllRole = ()=>{
       axios.get(serverUrl+`admin/roles`,config).then((res)=>{
         const listRole = res.data && res.data.data;
-        const newRole = []
-
-        for(const key in listRole) {
-          if(listRole[key].status) {
-            newRole.push(listRole[key])
-          }
-        }
 
         this.setState({
-          listRole: newRole,
+          listRole,
         }, () => {
           this.getAllRolePermission()
         })
