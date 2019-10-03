@@ -119,6 +119,8 @@ const kukie =new Cookies()
               </DropdownMenu>
               </UncontrolledDropdown>
 
+            <Link to="/report"><label><i className="far fa-newspaper"></i> Report</label></Link>
+
               <UncontrolledDropdown  nav inNavbar>
                 <DropdownToggle nav caret style={{ color:"inherit",textDecoration:"none"}}>
                 <label><i className="fas fa-user-tag"></i> Role Permission </label>
