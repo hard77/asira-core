@@ -20,9 +20,6 @@ const styles = (theme) => ({
   });
 
 const cookie = new Cookies();
-const config = {
-  headers: {'Authorization': "Bearer " + cookie.get('token')}
-};
 
 
 class rolePermissionEdit extends React.Component{
@@ -46,6 +43,10 @@ class rolePermissionEdit extends React.Component{
     }
 
     getRole = ()=>{
+      const config = {
+        headers: {'Authorization': "Bearer " + cookie.get('token')}
+      };
+
       axios.get(serverUrl+`admin/roles/${this.state.roleId}`,config).then((res)=>{
         const listRole = res.data
 
@@ -65,6 +66,10 @@ class rolePermissionEdit extends React.Component{
     }
 
     getRolePermission = ()=>{
+      const config = {
+        headers: {'Authorization': "Bearer " + cookie.get('token')}
+      };
+
       axios.get(serverUrl+`admin/permission?role_id=${this.state.roleId}`,config)
       .then((res)=>{
         const listPermission = res.data && res.data.data ? res.data.data : res.data;
@@ -161,6 +166,10 @@ class rolePermissionEdit extends React.Component{
       dataRolePermission.permissions = this.constructRolePermission(listRolePermission);
 
       this.setState({loading: true})
+
+      const config = {
+        headers: {'Authorization': "Bearer " + cookie.get('token')}
+      };
       
       axios.patch(serverUrl+`admin/permission`,dataRolePermission,config).then((res)=>{
         swal("Success","Role Permission berhasil di ubah","success")
