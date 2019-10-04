@@ -22,9 +22,7 @@ const styles = (theme) => ({
 
 const cookie = new Cookies();
 
-const config = {
-  headers: {'Authorization': "Bearer " + cookie.get('token')}
-};
+
 
 class rolePermissionAdd extends React.Component{
     state = {
@@ -43,6 +41,10 @@ class rolePermissionAdd extends React.Component{
     }
 
     getAllRole = ()=>{
+      const config = {
+        headers: {'Authorization': "Bearer " + cookie.get('token')}
+      };
+
       axios.get(serverUrl+`admin/roles`,config).then((res)=>{
         const listRole = res.data && res.data.data;
 
@@ -62,6 +64,10 @@ class rolePermissionAdd extends React.Component{
     }
 
     getAllRolePermission = ()=>{
+      const config = {
+        headers: {'Authorization': "Bearer " + cookie.get('token')}
+      };
+
       axios.get(serverUrl+`admin/permission`,config)
       .then((res)=>{
           const listPermission = res.data && res.data.data ? res.data.data : res.data;
@@ -123,6 +129,11 @@ class rolePermissionAdd extends React.Component{
         dataRolePermission.permissions = this.constructRolePermission(listRolePermission);
 
         this.setState({loading: true});
+        
+        const config = {
+          headers: {'Authorization': "Bearer " + cookie.get('token')}
+        };
+
         axios.post(serverUrl+'admin/permission',dataRolePermission,config).then((res)=>{
           swal("Success","Role Permission berhasil di tambah","success")
           this.setState({diKlik:true})
