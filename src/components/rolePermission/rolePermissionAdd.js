@@ -94,6 +94,20 @@ class rolePermissionAdd extends React.Component{
               newRole.push(rolePerLine);
             }
           }
+
+          if(newRole.length && newRole.length !== 0) {
+            this.setState({
+              role,
+              listRole: newRole,
+              loading:false,
+            })
+          } else {
+            this.setState({
+              disabled:true,
+              errorMessage: 'Data Role yang belum di setup tidak ditemukan',
+              loading:false,
+            })
+          }
           
           this.setState({
             role,
@@ -121,7 +135,9 @@ class rolePermissionAdd extends React.Component{
 
     btnSave=()=>{
       if(this.state.listRolePermission.length === 0) {
-        this.setState({errorMessage:"Error : Data Role Permission Tidak Boleh Kosong"})
+        this.setState({errorMessage:"ERROR : Data Role Permission Tidak Boleh Kosong"})
+      } else if(this.state.listRole.length === 0 || this.state.role === 0) {
+        this.setState({errorMessage:"ERROR : Data Role Tidak Boleh Kosong"})
       } else{
         const listRolePermission = this.state.listRolePermission;
         const dataRolePermission = {};
