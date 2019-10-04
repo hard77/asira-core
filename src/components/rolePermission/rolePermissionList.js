@@ -10,10 +10,6 @@ import localeInfo from 'rc-pagination/lib/locale/id_ID'
 import Pagination from 'rc-pagination';
 const cookie = new Cookies()
 
-const config = {
-    headers: {'Authorization': "Bearer " + cookie.get('token')}
-};
-
 // const columnDataRole = [
 //     {
 //         id: 'id',
@@ -52,6 +48,10 @@ class RolePermissionList extends React.Component{
     }
     
     getAllRole = ()=>{
+        const config = {
+            headers: {'Authorization': "Bearer " + cookie.get('token')}
+        };
+
         axios.get(serverUrl+`admin/roles?orderby=updated_time&sort=desc`,config).then((res)=>{
             const listRole = res.data && res.data.data
             
@@ -71,6 +71,10 @@ class RolePermissionList extends React.Component{
     }
   
     getAllRolePermission = ()=>{
+        const config = {
+            headers: {'Authorization': "Bearer " + cookie.get('token')}
+        };
+
         axios.get(serverUrl+`admin/permission`,config)
         .then((res)=>{
             const listPermission = res.data && res.data.data ? res.data.data : res.data;
