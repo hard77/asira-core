@@ -19,10 +19,6 @@ const styles = (theme) => ({
   });
 
 const cookie = new Cookies();
-const config = {
-  headers: {'Authorization': "Bearer " + cookie.get('token')}
-};
-
 
 class rolePermissionDetail extends React.Component{
     state = {
@@ -47,6 +43,10 @@ class rolePermissionDetail extends React.Component{
     }
 
     getRole = ()=>{
+      const config = {
+        headers: {'Authorization': "Bearer " + cookie.get('token')}
+      };
+
       axios.get(serverUrl+`admin/roles/${this.state.roleId}`,config).then((res)=>{
         const listRole = res.data
 
@@ -66,6 +66,10 @@ class rolePermissionDetail extends React.Component{
     }
 
     getRolePermission = ()=>{
+      const config = {
+        headers: {'Authorization': "Bearer " + cookie.get('token')}
+      };
+      
       axios.get(serverUrl+`admin/permission?role_id=${this.state.roleId}`,config)
       .then((res)=>{
         const listPermission = res.data && res.data.data ? res.data.data : res.data;
