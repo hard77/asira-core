@@ -38,6 +38,7 @@ const kukie =new Cookies()
   logOutBtn =()=>{ 
     kukie.remove("tokenGeo")
     kukie.remove("token")
+    kukie.remove("tokenAuth")
     this.setState({isLogin:true})
   }
   
@@ -115,6 +116,18 @@ const kukie =new Cookies()
               <DropdownMenu className="menuDropDown" style={{border:"1px solid black",marginBottom:"20px"}}>
                  <Link to="/tambahrole" style={{color:"inherit",textDecoration:"none"}}><DropdownItem>Tambah</DropdownItem></Link>                   
                  <Link to="/listrole" style={{color:"inherit",textDecoration:"none"}}>  <DropdownItem>List </DropdownItem>   </Link>                
+              </DropdownMenu>
+              </UncontrolledDropdown>
+
+            <Link to="/report"><label><i className="far fa-newspaper"></i> Report</label></Link>
+
+              <UncontrolledDropdown  nav inNavbar>
+                <DropdownToggle nav caret style={{ color:"inherit",textDecoration:"none"}}>
+                <label><i className="fas fa-user-tag"></i> Role Permission </label>
+                </DropdownToggle>
+              <DropdownMenu className="menuDropDown" style={{border:"1px solid black",marginBottom:"20px"}}>
+                 <Link to="/tambahRolePermission" style={{color:"inherit",textDecoration:"none"}}><DropdownItem>Tambah</DropdownItem></Link>                   
+                 <Link to="/listRolePermission" style={{color:"inherit",textDecoration:"none"}}>  <DropdownItem>List </DropdownItem>   </Link>                
               </DropdownMenu>
               </UncontrolledDropdown>
            

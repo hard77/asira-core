@@ -13,8 +13,9 @@ class LayananEdit extends React.Component{
         base64img:null,
         errorMessage:'',
         diKlik:false,
-        rows:[],imageVal:''
-    
+        rows:[],
+        imageVal:'',
+        check: true,
     }
     componentWillReceiveProps(newProps){
         this.setState({errorMessage:newProps.error})
@@ -29,7 +30,7 @@ class LayananEdit extends React.Component{
         axios.get(serverUrl+`admin/bank_services/${id}`,config)
         .then((res)=>{
             console.log(res.data)
-            this.setState({rows:res.data})
+            this.setState({rows:res.data, check: res.data && res.data.status && res.data.status ==='active' ? true : false})
             if(this.state.rows.image_id !== undefined || this.state.rows.image_id !== null){
                 axios.get(serverUrl+`admin/image/${this.state.rows.image_id}`,config)
                 .then((res)=>{
@@ -63,8 +64,7 @@ class LayananEdit extends React.Component{
     btnEditLayanan = ()=>{
         var id = this.props.match.params.id
         var name = this.refs.namaLayanan.value ? this.refs.namaLayanan.value : this.refs.namaLayanan.placeholder
-        var status =  document.querySelector('.messageCheckbox').checked;
-        status ? status= "active": status= "inactive"
+        var status = this.state.check ? "active": "inactive"
         
         if(name.trim()===""||name===""){
             this.setState({errorMessage:"Nama Layanan Kosong - Harap Cek Ulang"})
@@ -79,7 +79,7 @@ class LayananEdit extends React.Component{
                     reader.onload =  () => {           
                         var arr = reader.result.split(",")   
                         var image = arr[1].toString()
-                        var newData = {name,status,image}
+                        var newData = {name,image,status}
                         var config = {headers: {'Authorization': "Bearer " + cookie.get('token')}};
                         axios.patch(serverUrl+`admin/bank_services/${id}`,newData,config)
                         .then((res)=>{
@@ -114,12 +114,17 @@ class LayananEdit extends React.Component{
         this.setState({diKlik:true})
     }
 
+    handleChecked = () => {
+        this.setState({check : !this.state.check})
+    }
+
     render(){
         if(this.state.diKlik){
             return <Redirect to='/listlayanan'/>            
 
         }
         if(cookie.get('token')){
+            console.log(this.state.check)
             return(
                 <div className="container">
                    <h2 className="mt-3">Layanan - Ubah</h2>
@@ -133,7 +138,7 @@ class LayananEdit extends React.Component{
                    <div className="form-group row">
                             <label className="col-sm-3 col-form-label">Nama Layanan</label>
                             <div className="col-sm-9">
-                            <input type="text" placeholder={this.state.rows.name} style={{width:"50%",marginLeft:"100px",height:"35px",borderRadius:"3px"}} ref="namaLayanan"></input>                            
+                            <input disabled type="text" placeholder={this.state.rows.name} style={{width:"50%",marginLeft:"100px",height:"35px",borderRadius:"3px"}} ref="namaLayanan"></input>                            
                             </div>
                     </div>
                     <div className="form-group row">
@@ -147,11 +152,8 @@ class LayananEdit extends React.Component{
                     <div className="form-group row">
                             <label className="col-sm-3 col-form-label">Status</label>
                             <div className="col-sm-9">
-                            {this.state.rows.status ==="active"?<input className="form-check-input messageCheckbox AddStyleButtonCheckbox" value="active" type="checkbox" defaultChecked/>   :
-                        <input className="form-check-input messageCheckbox AddStyleButtonCheckbox" value="active" type="checkbox"/> 
-                        }
-                            
-                            <label style={{position:"relative",left:"130px",paddingTop:"3px"}} >Aktif</label>           
+                            <input className="form-check-input messageCheckbox AddStyleButtonCheckbox" type="checkbox" onChange={this.handleChecked} checked={this.state.check} /> 
+                            <label style={{position:"relative",left:"18%",paddingTop:"3px"}}>{this.state.check ? 'Aktif' : 'Tidak Aktif'}</label>           
                             </div>
                     </div>
                     <div className="form-group row">

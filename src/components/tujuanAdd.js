@@ -10,7 +10,7 @@ const cookie = new Cookies()
 class TujuanAdd extends React.Component{
     state={
         errorMessage:'',
-        diKlik:false
+        diKlik:false,check:false
     }
 
     componentWillReceiveProps(newProps){
@@ -19,10 +19,8 @@ class TujuanAdd extends React.Component{
     
     btnSimpanLayanan = ()=>{
         var name =this.refs.tujuan.value
-        var status =  document.querySelector('.messageCheckbox').checked;
+        var status =  this.state.check?"active":"inactive"
 
-        status ? status= "active": status= "inactive"
-      
         if(name==="" || name.trim()===""){
             this.setState({errorMessage:"Tujuan field Kosong -  Harap cek ulang"})
         }else{
@@ -38,7 +36,9 @@ class TujuanAdd extends React.Component{
     }
         
     
-
+    handleChecked=(e)=>{
+        this.setState({check:!this.state.check})
+    }
     btnCancel = ()=>{
         this.setState({diKlik:true})
     }
@@ -69,8 +69,8 @@ class TujuanAdd extends React.Component{
                     <div className="form-group row">
                             <label className="col-sm-3 col-form-label">Status</label>
                             <div className="col-sm-9">
-                            <input className="form-check-input messageCheckbox AddStyleButtonCheckbox" value="active" type="checkbox" /> 
-                            <label style={{position:"relative",left:"130px",paddingTop:"3px"}} >Aktif</label>           
+                            <input className="form-check-input messageCheckbox AddStyleButtonCheckbox" type="checkbox" onChange={this.handleChecked} defaultChecked={this.state.check} /> 
+                            <label style={{position:"relative",left:"18%",paddingTop:"3px"}}>{this.state.check ? 'Aktif' : 'Tidak Aktif'}</label>        
                             </div>
                     </div>
                     <div className="form-group row">

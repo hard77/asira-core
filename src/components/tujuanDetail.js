@@ -54,7 +54,7 @@ class TujuanDetail extends React.Component{
                         <div className="form-group row">
                             <label className="col-sm-4 col-form-label">Status</label>
                             <div className="col-sm-8">
-                            : {this.state.rows.status}
+                            : {this.state.rows.status==="active"?"Aktif":"Tidak Aktif"}
                         
                             </div>
                         </div>

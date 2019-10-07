@@ -38,7 +38,7 @@ const customStyles = {
 class ProductAdd extends React.Component{
     state = {
         selectedOption: null, errorMessage:null,rentangDari:0,rentangAkhir:0,
-        bankService:[],diKlik:false
+        bankService:[],diKlik:false,check:false
       };
 
       componentDidMount(){
@@ -63,11 +63,10 @@ class ProductAdd extends React.Component{
         var service = parseInt(this.refs.layanan.value)
         
         var fees= []
-        var status =  document.querySelector('.messageCheckbox').checked;
+        var status =  this.state.check?"active":"inactive"
         var assurance =  document.querySelector('.asuransi').checked;
         var otheragunan =  document.querySelector('.otheragunan').checked;
        
-        status = status ? status = "active" : status ="inactive"
         assurance = assurance ? assurance = this.refs.asuransi.value : assurance=""
         otheragunan = otheragunan ? otheragunan = this.refs.lainnya.value : otheragunan =""
     
@@ -175,7 +174,9 @@ class ProductAdd extends React.Component{
       componentWillReceiveProps(newProps){
         this.setState({errorMessage:newProps.error})
        }
-  
+       handleChecked = ()=>{
+        this.setState({check:!this.state.check})
+       }
     render(){
         if(this.state.diKlik){
             return <Redirect to='/listproduct'/>            
@@ -374,8 +375,8 @@ class ProductAdd extends React.Component{
                                 </td>
                                 <td>
                                 <div className="form-check-inline" style={{marginLeft:"125px"}}>
-                                            <input className="form-check-input messageCheckbox" type="checkbox" id="BPKB" value="koperasi"/>
-                                            <label className="form-check-label">Aktif</label>
+                                            <input className="form-check-input messageCheckbox" type="checkbox" onChange={this.handleChecked} defaultChecked={this.state.check}/>
+                                            <label className="form-check-label">{this.state.check ? 'Aktif' : 'Tidak Aktif'}</label>
                                 </div> 
                                 </td>
                             </tr>

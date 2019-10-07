@@ -185,7 +185,7 @@ class PermintaanPinjaman extends React.Component {
               <td align="center"> {val.service} </td>
               <td align="center"> {val.product} </td> */}
               <td align="center"><Moment date={val.created_time} format=" DD  MMMM  YYYY" /></td>
-              <td align="center">{val.status}</td>
+              <td align="center">{val.status ==="approved"?"Diterima":val.status==="rejected"?"Ditolak":"Diproses"}</td>
               <td align="center">
               <Link style={{textDecoration:"none"}} to={`/permintaanpinjamanDetail/${val.id}/${val.owner.Int64}`}>
               <i className="fas fa-eye" style={{color:"black",fontSize:"28px",marginRight:"10px"}}/>

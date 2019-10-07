@@ -1,8 +1,9 @@
 import React from 'react'
 import Cookies from 'universal-cookie';
 import { Redirect } from 'react-router-dom'
-import {serverUrlBorrower} from './url'
+import {serverUrlBorrower, serverUrl} from './url'
 import Moment from 'react-moment';
+import { GlobalFunction } from './globalFunction'
 
 import Axios from 'axios';
 const cookie = new Cookies()
@@ -11,10 +12,7 @@ var config = {
   };
 
 class Main extends React.Component{
-    state = {rows:{},items:[],borrowerDetail:{},status:'',borrower_info:{}}
-
-    formatMoney=(number)=>
-    { return number.toLocaleString('in-RP', {style : 'currency', currency: 'IDR'})}
+    state = {rows:{},items:[],borrowerDetail:{},status:'',borrower_info:{},productInfo:{}}
 
     componentDidMount(){
         this.getDataDetail()
@@ -32,14 +30,39 @@ class Main extends React.Component{
             .then((res)=>{
                 console.log(res.data)
                 this.setState({rows:res.data,items:res.data.fees,status:res.data.status,borrower_info:res.data.borrower_info})
+                this.getProductDetail(this.state.rows.product)
+
             })
             .catch((err)=>console.log(err))
         
     
     }
 
+    getProductDetail =(id)=>{
+        Axios.get(serverUrl+`admin/service_products/${id}`,config)
+        .then((res)=>{
+            console.log(res.data)
+            this.setState({productInfo:res.data})
+        })
+        .catch((err)=>console.log(err))
+    }
+    renderAdminFee = ()=>{
+        var jsx = this.state.items.map((val,index)=>{
+            return (
+            <tr key={index}>
+                <td>{val.description}</td>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                <td>{val.amount}</td>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                <td>{String(val.amount).includes("%")  ?
+                    GlobalFunction.formatMoney(parseInt(val.amount.slice(0,val.amount.indexOf("%")))*this.state.rows.loan_amount/100):
+                    GlobalFunction.formatMoney(parseInt(val.amount))}</td>
+            </tr>
+            )
+        })
+        return jsx
+    }
     
-   
     getDataBorrower =()=>{
         var idBorrower = this.props.match.params.idBorrower
         config = {
@@ -69,7 +92,7 @@ class Main extends React.Component{
             return (
                     <tr key={index}>
                     <td>{val.description}</td>
-                    <td>: {this.formatMoney(parseInt(val.amount))}</td>
+                    <td>: {GlobalFunction.formatMoney(parseInt(val.amount))}</td>
                     </tr>
             )
         })
@@ -114,10 +137,10 @@ class Main extends React.Component{
                                     <td>Status Pinjaman</td>
                                     <td>: {
                                     this.state.status === "processing"?
-                                        <label style={{color:"blue"}}>{this.state.status}</label>
+                                        <label style={{color:"blue"}}>Diproses</label>
                                     : this.state.status === "approved"?
-                                    <label style={{color:"green"}}>{this.state.status}</label>:
-                                    <label style={{color:"red"}}>{this.state.status}</label>
+                                    <label style={{color:"green"}}>Diterima</label>:
+                                    <label style={{color:"red"}}>Ditolak</label>
                                     
                                     }</td>
                                 </tr>
@@ -136,30 +159,52 @@ class Main extends React.Component{
                                 <tbody>
                                 <tr>
                                     <td>Pinjaman Pokok</td>
-                                    <td>: {this.formatMoney(parseInt(this.state.rows.loan_amount))}</td>
+                                    <td>: {GlobalFunction.formatMoney(parseInt(this.state.rows.loan_amount))}</td>
                                 </tr>
                                 <tr>
                                     <td>Tenor (Bulan)</td>
                                     <td>: {this.state.rows.installment}</td>
                                 </tr>
-                                
-                                 
-                                   {this.getBiayaAdmin()}
-                                
-                                <tr>
-                                    <td>Bunga (%)</td>
-                                    <td>: {this.state.rows.interest}</td>
-                                </tr>
                                 <tr>
                                     <td>Total Pinjaman</td>
-                                    <td>: {this.formatMoney(parseInt(this.state.rows.total_loan))}</td>
+                                    <td>: {GlobalFunction.formatMoney(parseInt(this.state.rows.total_loan))}</td>
                                 </tr>
                                 <tr>
                                     <td>Angsuran Perbulan</td>
-                                    <td>: {this.formatMoney(parseInt(this.state.rows.layaway_plan))}</td>
+                                    <td>: {GlobalFunction.formatMoney(parseInt(this.state.rows.layaway_plan))}</td>
                                 </tr>
                                 </tbody>
                                 
+                            </table>
+                            <table className="mt-2">
+                                <thead>
+                                <tr >
+                                    <th className="text-center" ></th>
+                                    <th></th>
+                                    <th className="text-center">(%)</th>
+                                    <th></th>
+                                    <th className="text-center">(Jumlah)</th>
+                                </tr>   
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Imbal Hasil/ Bunga</td>
+                                        <td></td>
+                                        <td>{this.state.rows.interest}%</td>
+                                        <td></td>
+                                        <td>{this.state.rows &&  this.state.rows.interest && this.state.rows.loan_amount?GlobalFunction.formatMoney(parseInt(this.state.rows.interest)*parseInt(this.state.rows.loan_amount)/100) :null}</td>
+                                    </tr>
+                                    {this.renderAdminFee()}
+                                    <tr>
+                                        <td>Convenience Fee</td>
+                                        <td></td>
+                                        <td>{this.state.productInfo.asn_fee}</td>
+                                        <td></td>
+                                        <td>{this.state.productInfo.asn_fee ?
+                                           GlobalFunction.formatMoney(parseInt(this.state.productInfo.asn_fee.slice(0,this.state.productInfo.asn_fee.indexOf("%"))*this.state.rows.loan_amount/100)):
+                                            null}</td>
+                                    </tr>
+                                </tbody>
                             </table>
                         </div>
                         <div className="col-12 col-md-6">
@@ -210,14 +255,14 @@ class Main extends React.Component{
                                 <tr>
                                     <td>Pendapatan perbulan</td>
                                     <td>: {this.state.borrowerDetail.monthly_income ?
-                                        this.formatMoney(parseInt(this.state.borrowerDetail.monthly_income))
+                                        GlobalFunction.formatMoney(parseInt(this.state.borrowerDetail.monthly_income))
                                         : 0
                                         }</td>
                                 </tr>
                                 <tr>
                                     <td>Penghasilan lain lain(jika ada)</td>
                                     <td>: {this.state.borrowerDetail.other_income ?
-                                        this.formatMoney(parseInt(this.state.borrowerDetail.other_income)):0}</td>
+                                        GlobalFunction.formatMoney(parseInt(this.state.borrowerDetail.other_income)):0}</td>
                                 </tr>
                                 <tr>
                                     <td>Sumber Penghasilan lain lain</td>
@@ -227,7 +272,7 @@ class Main extends React.Component{
                                
                                 </tbody>
                             </table>
-                            <input type="button" onClick={this.btnBack}  className="mt-2 btn btn-info" value="Back"></input>
+                            <input type="button" onClick={this.btnBack}  className="mt-2 btn btn-secondary" value="Kembali"></input>
                         </div>
             </div>
              

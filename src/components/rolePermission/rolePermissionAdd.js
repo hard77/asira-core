@@ -22,9 +22,7 @@ const styles = (theme) => ({
 
 const cookie = new Cookies();
 
-const config = {
-  headers: {'Authorization': "Bearer " + cookie.get('token')}
-};
+
 
 class rolePermissionAdd extends React.Component{
     state = {
@@ -43,6 +41,10 @@ class rolePermissionAdd extends React.Component{
     }
 
     getAllRole = ()=>{
+      const config = {
+        headers: {'Authorization': "Bearer " + cookie.get('token')}
+      };
+
       axios.get(serverUrl+`admin/roles`,config).then((res)=>{
         const listRole = res.data && res.data.data;
 
@@ -62,9 +64,13 @@ class rolePermissionAdd extends React.Component{
     }
 
     getAllRolePermission = ()=>{
+      const config = {
+        headers: {'Authorization': "Bearer " + cookie.get('token')}
+      };
+
       axios.get(serverUrl+`admin/permission`,config)
       .then((res)=>{
-          const listPermission = res.data && res.data.data;
+          const listPermission = res.data && res.data.data ? res.data.data : res.data;
           const listRole = this.state.listRole;
           const newRole = [];
           let role = 0;
@@ -88,6 +94,20 @@ class rolePermissionAdd extends React.Component{
               newRole.push(rolePerLine);
             }
           }
+
+          if(newRole.length && newRole.length !== 0) {
+            this.setState({
+              role,
+              listRole: newRole,
+              loading:false,
+            })
+          } else {
+            this.setState({
+              disabled:true,
+              errorMessage: 'Data Role yang belum di setup tidak ditemukan',
+              loading:false,
+            })
+          }
           
           this.setState({
             role,
@@ -100,7 +120,7 @@ class rolePermissionAdd extends React.Component{
         this.setState({
           errorMessage : err.response && err.response.data && err.response.data.message && `Error : ${err.response.data.message.toString().toUpperCase()}`,
           loading: false,
-          disabled: true,
+          disabled: true
         })
       })
     }
@@ -115,14 +135,21 @@ class rolePermissionAdd extends React.Component{
 
     btnSave=()=>{
       if(this.state.listRolePermission.length === 0) {
-        this.setState({errorMessage:"Error : Data Role Permission Tidak Boleh Kosong"})
+        this.setState({errorMessage:"ERROR : Data Role Permission Tidak Boleh Kosong"})
+      } else if(this.state.listRole.length === 0 || this.state.role === 0) {
+        this.setState({errorMessage:"ERROR : Data Role Tidak Boleh Kosong"})
       } else{
         const listRolePermission = this.state.listRolePermission;
         const dataRolePermission = {};
-        dataRolePermission.role_id = this.state.role.toString();
+        dataRolePermission.role_id = parseInt(this.state.role);
         dataRolePermission.permissions = this.constructRolePermission(listRolePermission);
 
         this.setState({loading: true});
+        
+        const config = {
+          headers: {'Authorization': "Bearer " + cookie.get('token')}
+        };
+
         axios.post(serverUrl+'admin/permission',dataRolePermission,config).then((res)=>{
           swal("Success","Role Permission berhasil di tambah","success")
           this.setState({diKlik:true})
