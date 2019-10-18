@@ -3,6 +3,7 @@ FROM node
 
 # set working directory
 RUN mkdir /usr/src/app
+RUN apk --no-cache add curl
 #copy all files from current directory to docker
 COPY . /usr/src/app
 
