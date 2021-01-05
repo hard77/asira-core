@@ -6,7 +6,7 @@
     "@material-ui/core": "^4.4.3",
     "@material-ui/icons": "^4.4.3",
     "@material-ui/styles": "^4.4.3",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "base-64": "^0.1.0",
     "cors": "^2.8.5",
     "date-and-time": "^0.8.1",
